@@ -1,0 +1,173 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>Utilities.sikuli</h2> <a href="Utilities.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+
+UNIT_CENTER_LOCATIONS = [
+        Location(<span class="dig">823</span>, <span class="dig">739</span>),
+        Location(<span class="dig">818</span>, <span class="dig">845</span>),
+        Location(<span class="dig">818</span>, <span class="dig">950</span>),
+        Location(<span class="dig">1105</span>, <span class="dig">741</span>),
+        Location(<span class="dig">1101</span>, <span class="dig">846</span>),
+        Location(<span class="dig">1104</span>, <span class="dig">950</span>)]
+MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</span>,<span class="dig">548</span>,<span class="dig">290</span>)
+<span class="kw">def</span> isAttacking():
+    myRobot = JRobot()
+    currentColor = myRobot.getPixelColor(<span class="dig">1080</span>, <span class="dig">1052</span>)
+    notAttackingColor = Color(<span class="dig">0x00</span>,<span class="dig">0x41</span>,<span class="dig">0x6F</span>)
+    <span class="cmt"># if not attacking: java.awt.Color[r=0,g=65,b=111]</span>
+    <span class="cmt"># if attacking: java.awt.Color[r=0,g=25,b=44]</span>
+    <span class="kw">if</span>  myRobot.getPixelColor(<span class="dig">1080</span>, <span class="dig">1052</span>).getRGB() == notAttackingColor.getRGB():
+        <span class="kw">print</span> <span class="str">"ohohohohoh not attacking"</span>
+        <span class="kw">return</span> False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"seems attacking"</span>
+        <span class="kw">return</span> True
+
+<span class="kw">def</span> isBloodLowerThanHalf(unitNum): <span class="cmt">#unitNum is 1 based</span>
+    HP_Half_Locations = [Location(<span class="dig">788</span>, <span class="dig">775</span>), Location(<span class="dig">786</span>, <span class="dig">879</span>), Location(<span class="dig">786</span>, <span class="dig">983</span>),
+            Location(<span class="dig">1072</span>, <span class="dig">776</span>), Location(<span class="dig">1073</span>, <span class="dig">879</span>), Location(<span class="dig">1074</span>, <span class="dig">983</span>)]
+    targetUnit = HP_Half_Locations[unitNum - <span class="dig">1</span>]
+    myRobot = JRobot()
+    <span class="kw">if</span> myRobot.getPixelColor(targetUnit.x, targetUnit.y).getGreen() &lt; <span class="dig">10</span>:
+        <span class="cmt">#print "unit ", unitNum, " needs help"</span>
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="cmt">#print "unit ", unitNum, " is fine"</span>
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> defense(unitNum): <span class="cmt">#unitNum is 1 based</span>
+    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>])
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, <span class="dig">100</span>)
+    mouseUp(Button.LEFT)
+
+<span class="kw">def</span> openMagicMenu(unitNum): <span class="cmt">#unitNum is 1 based</span>
+    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>])
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">100</span>, <span class="dig">0</span>)
+    mouseUp(Button.LEFT)
+
+<span class="kw">def</span> scrollMenuDown():
+    mouseMove(Location(<span class="dig">893</span>, <span class="dig">957</span>))
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    mouseUp(Button.LEFT)
+
+<span class="kw">def</span> findTheMagic(targetMagic):
+    <span class="cmt"># start looking</span>
+    scrollCount = <span class="dig">0</span>
+    MAX_SCROLL_COUNT = <span class="dig">5</span>
+    <span class="kw">while</span> <span class="kw">not</span> MAGIC_MENU_REGION.exists(targetMagic):
+        scrollCount = scrollCount + <span class="dig">1</span>
+        <span class="kw">if</span> scrollCount &gt; MAX_SCROLL_COUNT:
+            <span class="cmt"># not found</span>
+            <span class="kw">return</span>
+        scrollMenuDown()
+    findResult = MAGIC_MENU_REGION.<span class="skw">find</span>(targetMagic)
+    <span class="kw">if</span> findResult != None:
+        <span class="kw">return</span> findResult.getTarget()
+    <span class="kw">else</span>:
+        <span class="kw">return</span> None
+
+<span class="kw">def</span> findMagicMiddleCure(unitNum):
+    openMagicMenu(<span class="dig">3</span>)
+
+    targetMagic = <img src="1477172791051.png" />
+    result = findTheMagic(targetMagic)
+    <span class="kw">if</span> result == None:
+        <span class="cmt"># can't find, return to main menu</span>
+        <span class="skw">click</span>(Location(<span class="dig">1180</span>, <span class="dig">1030</span>))
+    <span class="kw">return</span> result
+
+<span class="kw">def</span> isAnyoneHPLow():
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">1</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">2</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">3</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">4</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">5</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">6</span>):
+        <span class="kw">return</span> True
+
+<span class="kw">if</span> isAnyoneHPLow():
+    <span class="kw">print</span> <span class="str">"need magic"</span>
+<span class="kw">else</span>:
+    <span class="kw">print</span> <span class="str">"everyone okay"</span>
+</pre>
+</body>
+</html>

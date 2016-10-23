@@ -1,0 +1,201 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>Explore.sikuli</h2> <a href="Explore.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+moveCount = <span class="dig">0</span>
+
+<span class="kw">def</span> Cure():
+    UnitHP_01 = Region(<span class="dig">771</span>,<span class="dig">769</span>,<span class="dig">26</span>,<span class="dig">13</span>)
+    UnitHP_02 = Region(<span class="dig">775</span>,<span class="dig">874</span>,<span class="dig">23</span>,<span class="dig">12</span>)
+    UnitHP_03 = Region(<span class="dig">774</span>,<span class="dig">978</span>,<span class="dig">22</span>,<span class="dig">10</span>)
+    UnitHP_04 = Region(<span class="dig">1062</span>,<span class="dig">770</span>,<span class="dig">23</span>,<span class="dig">12</span>)
+    UnitHP_05 = Region(<span class="dig">1058</span>,<span class="dig">875</span>,<span class="dig">25</span>,<span class="dig">14</span>)
+    EmptyBlood = <img src="EmptyBlood.png" />
+    shouldCure = False
+    <span class="kw">if</span> UnitHP_01.exists(EmptyBlood):
+        <span class="kw">print</span> <span class="str">"User 1 need cure"</span>
+        shouldCure = True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"User 1 is okay"</span>
+    <span class="kw">if</span> UnitHP_02.exists(EmptyBlood):
+        <span class="kw">print</span> <span class="str">"User 2 need cure"</span>
+        shouldCure = True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"User 2 is okay"</span>
+    <span class="kw">if</span> UnitHP_03.exists(EmptyBlood):
+        <span class="kw">print</span> <span class="str">"User 3 need cure"</span>
+        shouldCure = True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"User 3 is okay"</span>
+    <span class="kw">if</span> UnitHP_04.exists(EmptyBlood):
+        <span class="kw">print</span> <span class="str">"User 4 need cure"</span>
+        shouldCure = True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"User 4 is okay"</span>
+    <span class="kw">if</span> UnitHP_05.exists(EmptyBlood):
+        <span class="kw">print</span> <span class="str">"User 5 need cure"</span>
+        shouldCure = True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"User 5 is okay"</span>
+    <span class="kw">if</span> <span class="kw">not</span> shouldCure:
+        <span class="kw">return</span>
+
+    CureRegion = Region(<span class="dig">679</span>,<span class="dig">687</span>,<span class="dig">138</span>,<span class="dig">98</span>)
+    CureRegion.mouseMove(SummonRegion)
+    CureRegion.mouseDown(Button.LEFT)
+    CureRegion.mouseMove(SummonRegion.offset(<span class="dig">150</span>,<span class="dig">0</span>))
+    CureRegion.mouseUp(Button.LEFT)
+
+    MagicRegion = Region(<span class="dig">678</span>,<span class="dig">683</span>,<span class="dig">561</span>,<span class="dig">302</span>)
+    MagicMiddleCure = <img src="MagicMiddleCure.png" />
+    MagicRegion.mouseMove(Location(<span class="dig">958</span>, <span class="dig">786</span>))
+    moveDownCount = <span class="dig">0</span>
+    <span class="kw">while</span> True:
+        moveDownCount = moveDownCount + <span class="dig">1</span>
+        MagicRegion.mouseDown(Button.LEFT)
+        MagicRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">50</span>)
+        MagicRegion.mouseUp(Button.LEFT)
+        <span class="kw">if</span> MagicRegion.exists(MagicMiddleCure):
+            <span class="skw">click</span>(getLastMatch())
+            <span class="skw">wait</span>(<span class="dig">0.5</span>)
+            <span class="skw">click</span>(Location(<span class="dig">805</span>, <span class="dig">738</span>))
+            <span class="kw">break</span>
+        <span class="kw">if</span> moveDownCount == <span class="dig">10</span>:
+            <span class="kw">print</span> <span class="str">"Failed to find middle cure magic"</span>
+            exit
+<span class="kw">def</span> Battle():
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    MenuRegion = Region(<span class="dig">1146</span>,<span class="dig">979</span>,<span class="dig">112</span>,<span class="dig">99</span>)
+    <span class="kw">if</span> MenuRegion.exists(<img src="1476748187876.png" />):
+        <span class="kw">print</span> <span class="str">"not in battle..."</span>
+        <span class="kw">return</span>
+    <span class="cmt"># In Battle</span>
+    <span class="kw">print</span> <span class="str">"Fight!!"</span>
+    <span class="cmt"># Cure() now working</span>
+    <span class="kw">global</span> moveCount
+    moveCount = <span class="dig">0</span>
+    AutoRegion = Region(<span class="dig">679</span>,<span class="dig">1014</span>,<span class="dig">129</span>,<span class="dig">57</span>)
+    <span class="kw">while</span> <span class="kw">not</span> AutoRegion.exists(<img src="1476748460074.png" />):
+        <span class="kw">print</span> <span class="str">"waiting auto"</span>
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="skw">click</span>(Location(<span class="dig">783</span>, <span class="dig">518</span>))
+    <span class="skw">click</span>(Location(<span class="dig">908</span>, <span class="dig">462</span>))
+    <span class="cmt">#click(Location(822, 409))</span>
+    <span class="cmt">#click(Location(959, 445))</span>
+    <span class="cmt"># summon if available    </span>
+    SummonRegion = Region(<span class="dig">970</span>,<span class="dig">704</span>,<span class="dig">75</span>,<span class="dig">56</span>)
+    SummonRegion.mouseMove(SummonRegion)
+    SummonRegion.mouseDown(Button.LEFT)
+    SummonRegion.mouseMove(SummonRegion.offset(<span class="dig">150</span>,<span class="dig">0</span>))
+    SummonRegion.mouseUp(Button.LEFT)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">if</span> SummonRegion.exists(<img src="1476749894805.png" />):
+        <span class="skw">click</span>(Location(<span class="dig">1181</span>, <span class="dig">1028</span>)) <span class="cmt"># go back</span>
+    <span class="kw">else</span>:
+        <span class="skw">click</span>(Location(<span class="dig">1086</span>, <span class="dig">734</span>))
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+
+    <span class="cmt"># start Battle</span>
+    <span class="skw">click</span>(AutoRegion)
+    <span class="cmt"># Battle Ends</span>
+    ResultRegion = Region(<span class="dig">860</span>,<span class="dig">349</span>,<span class="dig">194</span>,<span class="dig">52</span>)
+    <span class="kw">while</span> <span class="kw">not</span> ResultRegion.exists(<img src="1476748616317.png" />):
+        <span class="kw">print</span> <span class="str">"waiting for battle to end"</span>
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"Battle Ended"</span>
+    <span class="kw">while</span> <span class="kw">not</span> MenuRegion.exists(<img src="1476748187876.png" />):
+        <span class="skw">click</span>(Location(<span class="dig">778</span>, <span class="dig">455</span>))
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">return</span>
+
+
+
+<span class="kw">def</span> MoveAround():
+    <span class="kw">global</span> moveCount
+    moveCount = moveCount + <span class="dig">1</span>
+    MoveRegion = Region(<span class="dig">859</span>,<span class="dig">451</span>,<span class="dig">231</span>,<span class="dig">183</span>)
+    <span class="kw">print</span> <span class="str">"moving around.."</span>, moveCount
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(100,0))</span>
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(-100,0))</span>
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,<span class="dig">100</span>))
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,-<span class="dig">100</span>))
+    Battle()
+
+<span class="kw">while</span> True:
+    MoveAround()
+    <span class="kw">print</span> <span class="str">"one round finished"</span>
+    <span class="kw">if</span> moveCount &gt; <span class="dig">1000</span>:
+        <span class="kw">break</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+<span class="kw">print</span> <span class="str">"end"</span>
+</pre>
+</body>
+</html>

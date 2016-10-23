@@ -1,0 +1,143 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>Test.sikuli</h2> <a href="Test.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> Utilities
+reload(Utilities)
+count = <span class="dig">0</span>
+<span class="kw">while</span> True:
+    count = count + <span class="dig">1</span>
+    <span class="kw">if</span> Utilities.isAttacking():
+        <span class="kw">print</span> <span class="str">"attacking -------"</span>
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"not attacking ------"</span>
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="kw">if</span> count &gt; <span class="dig">10</span>:
+        <span class="kw">break</span>;
+
+exit
+
+
+testRegion = Region(<span class="dig">1276</span>,<span class="dig">448</span>,<span class="dig">82</span>,<span class="dig">62</span>)
+Settings.OcrTextRead = True <span class="cmt">#to switch on the Region.text() function</span>
+<span class="kw">print</span> testRegion.text()
+exit
+
+MyColor = getPixelColor(Location(<span class="dig">785</span>, <span class="dig">776</span>))
+<span class="kw">print</span> MyColor
+exit
+
+UnitHP_01 = Region(<span class="dig">776</span>,<span class="dig">768</span>,<span class="dig">22</span>,<span class="dig">14</span>)
+UnitHP_02 = Region(<span class="dig">786</span>,<span class="dig">872</span>,<span class="dig">27</span>,<span class="dig">16</span>)
+UnitHP_03 = Region(<span class="dig">772</span>,<span class="dig">977</span>,<span class="dig">25</span>,<span class="dig">13</span>)
+UnitHP_04 = Region(<span class="dig">1061</span>,<span class="dig">768</span>,<span class="dig">25</span>,<span class="dig">15</span>)
+UnitHP_05 = Region(<span class="dig">1059</span>,<span class="dig">874</span>,<span class="dig">26</span>,<span class="dig">14</span>)
+
+EmptyBlood = <img src="EmptyBlood.png" />
+shouldCure = False
+<span class="kw">if</span> UnitHP_01.exists(EmptyBlood):
+    <span class="kw">print</span> <span class="str">"User 1 need cure"</span>
+    shouldCure = True
+<span class="kw">if</span> UnitHP_02.exists(EmptyBlood):
+    <span class="kw">print</span> <span class="str">"User 2 need cure"</span>
+    shouldCure = True
+<span class="kw">if</span> UnitHP_03.exists(EmptyBlood):
+    <span class="kw">print</span> <span class="str">"User 3 need cure"</span>
+    shouldCure = True
+<span class="kw">if</span> UnitHP_04.exists(EmptyBlood):
+    <span class="kw">print</span> <span class="str">"User 4 need cure"</span>
+    shouldCure = True
+<span class="kw">if</span> UnitHP_05.exists(EmptyBlood):
+    <span class="kw">print</span> <span class="str">"User 5 need cure"</span>
+    shouldCure = True
+
+<span class="kw">if</span> <span class="kw">not</span> shouldCure:
+    <span class="kw">print</span> <span class="str">"-------------------------"</span>
+<span class="kw">else</span>:
+    <span class="kw">print</span> <span class="str">"should cure"</span>
+
+
+
+MagicRegion = Region(<span class="dig">668</span>,<span class="dig">682</span>,<span class="dig">577</span>,<span class="dig">303</span>)
+MagicMiddleCure = <img src="MagicMiddleCure.png" />
+MagicRegion.mouseMove(Location(<span class="dig">958</span>, <span class="dig">786</span>))
+<span class="kw">while</span> True:
+    MagicRegion.mouseDown(Button.LEFT)
+    MagicRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">50</span>)
+    MagicRegion.mouseUp(Button.LEFT)
+    <span class="kw">if</span> MagicRegion.exists(MagicMiddleCure):
+        <span class="skw">click</span>(getLastMatch())
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="skw">click</span>(Location(<span class="dig">805</span>, <span class="dig">738</span>))
+        <span class="kw">break</span>
+</pre>
+</body>
+</html>
