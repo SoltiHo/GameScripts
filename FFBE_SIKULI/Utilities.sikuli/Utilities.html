@@ -72,6 +72,7 @@
 <pre class="sikuli-code">
 <span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
 <span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+<span class="kw">from</span> sikuli <span class="kw">import</span> *
 
 UNIT_CENTER_LOCATIONS = [
         Location(<span class="dig">823</span>, <span class="dig">739</span>),
@@ -80,7 +81,17 @@ UNIT_CENTER_LOCATIONS = [
         Location(<span class="dig">1105</span>, <span class="dig">741</span>),
         Location(<span class="dig">1101</span>, <span class="dig">846</span>),
         Location(<span class="dig">1104</span>, <span class="dig">950</span>)]
+
+UNIT_SWORD_REGIONS = [
+        Region(<span class="dig">673</span>,<span class="dig">668</span>,<span class="dig">43</span>,<span class="dig">46</span>),
+        Region(<span class="dig">672</span>,<span class="dig">769</span>,<span class="dig">44</span>,<span class="dig">48</span>),
+        Region(<span class="dig">671</span>,<span class="dig">875</span>,<span class="dig">44</span>,<span class="dig">44</span>),
+        Region(<span class="dig">958</span>,<span class="dig">667</span>,<span class="dig">42</span>,<span class="dig">46</span>),
+        Region(<span class="dig">958</span>,<span class="dig">768</span>,<span class="dig">43</span>,<span class="dig">50</span>),
+        Region(<span class="dig">956</span>,<span class="dig">890</span>,<span class="dig">45</span>,<span class="dig">49</span>)]
+
 MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</span>,<span class="dig">548</span>,<span class="dig">290</span>)
+
 <span class="kw">def</span> isAttacking():
     myRobot = JRobot()
     currentColor = myRobot.getPixelColor(<span class="dig">1080</span>, <span class="dig">1052</span>)
@@ -141,7 +152,7 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
         <span class="kw">return</span> None
 
 <span class="kw">def</span> findMagicMiddleCure(unitNum):
-    openMagicMenu(<span class="dig">3</span>)
+    openMagicMenu(unitNum)
 
     targetMagic = <img src="1477172791051.png" />
     result = findTheMagic(targetMagic)
@@ -149,6 +160,73 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
         <span class="cmt"># can't find, return to main menu</span>
         <span class="skw">click</span>(Location(<span class="dig">1180</span>, <span class="dig">1030</span>))
     <span class="kw">return</span> result
+
+<span class="kw">def</span> doMiddleCureIfNeeded():
+    <span class="kw">if</span> isAnyoneHPLow():
+        curerNum = doMiddleCureIfAvailable();
+        <span class="kw">if</span> curerNum == <span class="dig">0</span>:
+            <span class="kw">print</span> <span class="str">"Warning!!! need cure but not available. Exiting"</span>
+            exit(<span class="dig">1</span>)
+
+<span class="kw">def</span> doMiddleCureIfAvailable():
+    <span class="cmt"># return the unitNum who does the middle cure.  0 means not found</span>
+    curerNum = <span class="dig">0</span>
+    result = None
+    <span class="kw">while</span> True:
+        <span class="kw">if</span> isUnitAlive(<span class="dig">1</span>):
+            result = findMagicMiddleCure(<span class="dig">1</span>)
+        <span class="kw">if</span> result != None:
+            curerNum = <span class="dig">1</span>
+            <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"uint 1 can't cure"</span>
+
+        <span class="kw">if</span> isUnitAlive(<span class="dig">2</span>):
+            result = findMagicMiddleCure(<span class="dig">2</span>)
+        <span class="kw">if</span> result != None:
+            curerNum = <span class="dig">2</span>
+            <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"uint 2 can't cure"</span>
+
+        <span class="kw">if</span> isUnitAlive(<span class="dig">3</span>):
+            result = findMagicMiddleCure(<span class="dig">3</span>)
+        <span class="kw">if</span> result != None:
+            curerNum = <span class="dig">3</span>
+            <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"uint 3 can't cure"</span>
+
+        <span class="kw">if</span> isUnitAlive(<span class="dig">4</span>):
+            result = findMagicMiddleCure(<span class="dig">4</span>)
+        <span class="kw">if</span> result != None:
+            curerNum = <span class="dig">4</span>
+            <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"uint 4 can't cure"</span>
+
+        <span class="kw">if</span> isUnitAlive(<span class="dig">5</span>):
+            result = findMagicMiddleCure(<span class="dig">5</span>)
+        <span class="kw">if</span> result != None:
+            curerNum = <span class="dig">5</span>
+            <span class="kw">break</span>
+        <span class="kw">else</span>:
+            <span class="kw">print</span> <span class="str">"uint 5 can't cure"</span>
+
+    <span class="kw">if</span> curerNum != <span class="dig">0</span>:
+        <span class="skw">click</span>(result)
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[curerNum - <span class="dig">1</span>])
+    <span class="kw">return</span> curerNum
+
+<span class="kw">def</span> isUnitAlive(unitNum):
+    swordRegion = UNIT_SWORD_REGIONS[unitNum - <span class="dig">1</span>]
+    <span class="kw">if</span> swordRegion.exists(<img src="1477850868137.png" />):
+        <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" is alive"</span>
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" died"</span>
+        <span class="kw">return</span> False
 
 <span class="kw">def</span> isAnyoneHPLow():
     <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">1</span>):
@@ -164,10 +242,28 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
     <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">6</span>):
         <span class="kw">return</span> True
 
-<span class="kw">if</span> isAnyoneHPLow():
-    <span class="kw">print</span> <span class="str">"need magic"</span>
-<span class="kw">else</span>:
-    <span class="kw">print</span> <span class="str">"everyone okay"</span>
+<span class="kw">def</span> manuallyKickOff():
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">0</span>])
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">1</span>])
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">2</span>])
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">3</span>])
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">4</span>])
+    <span class="skw">click</span>(UNIT_CENTER_LOCATIONS[<span class="dig">5</span>])
+
+<span class="kw">def</span> summonIfAvailable(unitNum):
+    <span class="kw">if</span> <span class="kw">not</span> isUnitAlive(unitNum):
+        <span class="kw">return</span> False
+    summonRegion = Region(<span class="dig">978</span>,<span class="dig">712</span>,<span class="dig">52</span>,<span class="dig">39</span>)
+    openMagicMenu(unitNum)
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    summoned = False
+    <span class="kw">if</span> summonRegion.exists(<img src="1477852401573.png" />):
+        <span class="skw">click</span>(Location(<span class="dig">1181</span>, <span class="dig">1028</span>)) <span class="cmt"># go back</span>
+    <span class="kw">else</span>:
+        summoned = True
+        <span class="skw">click</span>(Location(<span class="dig">1086</span>, <span class="dig">734</span>))
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="kw">return</span> summoned
 </pre>
 </body>
 </html>

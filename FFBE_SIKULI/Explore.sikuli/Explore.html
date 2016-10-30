@@ -71,66 +71,8 @@
 </div>
 <pre class="sikuli-code">
 moveCount = <span class="dig">0</span>
+SUMMON_NUM = <span class="dig">4</span>
 
-<span class="kw">def</span> Cure():
-    UnitHP_01 = Region(<span class="dig">771</span>,<span class="dig">769</span>,<span class="dig">26</span>,<span class="dig">13</span>)
-    UnitHP_02 = Region(<span class="dig">775</span>,<span class="dig">874</span>,<span class="dig">23</span>,<span class="dig">12</span>)
-    UnitHP_03 = Region(<span class="dig">774</span>,<span class="dig">978</span>,<span class="dig">22</span>,<span class="dig">10</span>)
-    UnitHP_04 = Region(<span class="dig">1062</span>,<span class="dig">770</span>,<span class="dig">23</span>,<span class="dig">12</span>)
-    UnitHP_05 = Region(<span class="dig">1058</span>,<span class="dig">875</span>,<span class="dig">25</span>,<span class="dig">14</span>)
-    EmptyBlood = <img src="EmptyBlood.png" />
-    shouldCure = False
-    <span class="kw">if</span> UnitHP_01.exists(EmptyBlood):
-        <span class="kw">print</span> <span class="str">"User 1 need cure"</span>
-        shouldCure = True
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">"User 1 is okay"</span>
-    <span class="kw">if</span> UnitHP_02.exists(EmptyBlood):
-        <span class="kw">print</span> <span class="str">"User 2 need cure"</span>
-        shouldCure = True
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">"User 2 is okay"</span>
-    <span class="kw">if</span> UnitHP_03.exists(EmptyBlood):
-        <span class="kw">print</span> <span class="str">"User 3 need cure"</span>
-        shouldCure = True
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">"User 3 is okay"</span>
-    <span class="kw">if</span> UnitHP_04.exists(EmptyBlood):
-        <span class="kw">print</span> <span class="str">"User 4 need cure"</span>
-        shouldCure = True
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">"User 4 is okay"</span>
-    <span class="kw">if</span> UnitHP_05.exists(EmptyBlood):
-        <span class="kw">print</span> <span class="str">"User 5 need cure"</span>
-        shouldCure = True
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">"User 5 is okay"</span>
-    <span class="kw">if</span> <span class="kw">not</span> shouldCure:
-        <span class="kw">return</span>
-
-    CureRegion = Region(<span class="dig">679</span>,<span class="dig">687</span>,<span class="dig">138</span>,<span class="dig">98</span>)
-    CureRegion.mouseMove(SummonRegion)
-    CureRegion.mouseDown(Button.LEFT)
-    CureRegion.mouseMove(SummonRegion.offset(<span class="dig">150</span>,<span class="dig">0</span>))
-    CureRegion.mouseUp(Button.LEFT)
-
-    MagicRegion = Region(<span class="dig">678</span>,<span class="dig">683</span>,<span class="dig">561</span>,<span class="dig">302</span>)
-    MagicMiddleCure = <img src="MagicMiddleCure.png" />
-    MagicRegion.mouseMove(Location(<span class="dig">958</span>, <span class="dig">786</span>))
-    moveDownCount = <span class="dig">0</span>
-    <span class="kw">while</span> True:
-        moveDownCount = moveDownCount + <span class="dig">1</span>
-        MagicRegion.mouseDown(Button.LEFT)
-        MagicRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">50</span>)
-        MagicRegion.mouseUp(Button.LEFT)
-        <span class="kw">if</span> MagicRegion.exists(MagicMiddleCure):
-            <span class="skw">click</span>(getLastMatch())
-            <span class="skw">wait</span>(<span class="dig">0.5</span>)
-            <span class="skw">click</span>(Location(<span class="dig">805</span>, <span class="dig">738</span>))
-            <span class="kw">break</span>
-        <span class="kw">if</span> moveDownCount == <span class="dig">10</span>:
-            <span class="kw">print</span> <span class="str">"Failed to find middle cure magic"</span>
-            exit
 <span class="kw">def</span> Battle():
     <span class="skw">wait</span>(<span class="dig">1</span>)
     MenuRegion = Region(<span class="dig">1146</span>,<span class="dig">979</span>,<span class="dig">112</span>,<span class="dig">99</span>)
@@ -150,18 +92,12 @@ moveCount = <span class="dig">0</span>
     <span class="skw">click</span>(Location(<span class="dig">908</span>, <span class="dig">462</span>))
     <span class="cmt">#click(Location(822, 409))</span>
     <span class="cmt">#click(Location(959, 445))</span>
+
     <span class="cmt"># summon if available    </span>
-    SummonRegion = Region(<span class="dig">970</span>,<span class="dig">704</span>,<span class="dig">75</span>,<span class="dig">56</span>)
-    SummonRegion.mouseMove(SummonRegion)
-    SummonRegion.mouseDown(Button.LEFT)
-    SummonRegion.mouseMove(SummonRegion.offset(<span class="dig">150</span>,<span class="dig">0</span>))
-    SummonRegion.mouseUp(Button.LEFT)
-    <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">if</span> SummonRegion.exists(<img src="1476749894805.png" />):
-        <span class="skw">click</span>(Location(<span class="dig">1181</span>, <span class="dig">1028</span>)) <span class="cmt"># go back</span>
-    <span class="kw">else</span>:
-        <span class="skw">click</span>(Location(<span class="dig">1086</span>, <span class="dig">734</span>))
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    Utilities.summonIfAvailable(SUMMON_NUM)
+
+    <span class="cmt"># Cure if needed</span>
+    Utilities.doMiddleCureIfNeeded()
 
     <span class="cmt"># start Battle</span>
     <span class="skw">click</span>(AutoRegion)
