@@ -1,6 +1,9 @@
 moveCount = 0
 SUMMON_NUM = 4
 
+import Utilities
+reload(Utilities)
+
 def Battle():
     wait(1)
     MenuRegion = Region(1146,979,112,99)
