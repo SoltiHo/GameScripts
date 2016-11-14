@@ -1,0 +1,156 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>TrainLB.sikuli</h2> <a href="TrainLB.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="cmt"># To run this script, AUTO LB can be ON.</span>
+TARGET_LB_TYPE = <span class="dig">1</span>  <span class="cmt"># 1 is attack, 2 is others\</span>
+<span class="kw">import</span> Utilities
+reload(Utilities)
+
+
+
+<span class="kw">def</span> doOffensiveLB():
+    openMagicMenu(<span class="dig">5</span>)
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable(True):
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"offensive LB isn't available"</span>
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> doDefensiveLB():
+    openMagicMenu(<span class="dig">5</span>)
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable(True):
+        Utilities.defense(<span class="dig">1</span>)
+        Utilities.defense(<span class="dig">2</span>)
+        Utilities.defense(<span class="dig">3</span>)
+        Utilities.defense(<span class="dig">4</span>)
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"defensive LB isn't available"</span>
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> doLBaccordingToType():
+    LB_EXECUTED = False
+    <span class="kw">if</span> TARGET_LB_TYPE != <span class="dig">1</span>:
+        LB_EXECUTED = doDefensiveLB()
+    <span class="kw">else</span>:
+        LB_DEXECUTED = doOffensiveLB()
+    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    Utilities.manuallyKickOff()
+    <span class="kw">return</span> LB_EXECUTED
+
+LastTransferredUnitIdx = <span class="dig">3</span>
+
+openMagicMenu(<span class="dig">5</span>)
+<span class="skw">wait</span>(<span class="dig">0.5</span>)
+<span class="kw">if</span> Utilities.isLBAvailable(True):
+    <span class="kw">if</span> <span class="kw">not</span> doLBaccordingToType():
+        <span class="kw">print</span> <span class="str">"Error, LB should be ready but not"</span>
+        exit(<span class="dig">1</span>)
+<span class="kw">else</span>:
+    <span class="cmt"># Target LB is not available, see if anyone can transfer</span>
+    Utilities.closeMagicMenu()
+    checkCount = <span class="dig">0</span>
+    ToCheckUnitIdx = (LastTransferredUnitIdx + <span class="dig">1</span>) % <span class="dig">4</span>
+    <span class="kw">while</span> checkCount &lt; <span class="dig">4</span>:
+        checkCount = checkCount + <span class="dig">1</span>
+        Utilities.openMagicMenu(ToCheckUnitIdx + <span class="dig">1</span>)
+        <span class="kw">print</span> <span class="str">"Checking unit num "</span>, ToCheckUnitIdx + <span class="dig">1</span>
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+        <span class="kw">if</span> Utilities.isLBAvailable(False):
+            <span class="cmt"># LB available, find transfer magic</span>
+            magicTransfer = <img src="MagicTransfer.png" />
+            result = findTheMagic(magicTransfer)
+            <span class="kw">if</span> result != None:
+                <span class="skw">click</span>(result)
+                <span class="skw">wait</span>(<span class="dig">0.5</span>)
+                <span class="skw">click</span>(Location(<span class="dig">1044</span>, <span class="dig">835</span>))
+                <span class="skw">wait</span>(<span class="dig">0.5</span>)
+                <span class="skw">click</span>(Utilities.UNIT_CENTER_LOCATIONS[ToCheckUnitIdx])
+                <span class="skw">wait</span>(<span class="dig">0.5</span>)
+                LastTransferredUnitIdx = ToCheckUnitIdx
+                <span class="kw">break</span>
+        ToCheckUnitIdx = (ToCheckUnitIdx + <span class="dig">1</span>) % <span class="dig">4</span>
+        Utilities.closeMagicMenu()
+    <span class="kw">if</span> checkCount &lt; <span class="dig">4</span>:
+        <span class="cmt"># transferred</span>
+        <span class="kw">if</span> <span class="kw">not</span> doLBaccordingToType():
+            <span class="kw">print</span> <span class="str">"Error, LB should be ready but not"</span>
+            exit(<span class="dig">1</span>)
+    <span class="kw">else</span>:
+        <span class="cmt"># no one can transfer</span>
+        <span class="cmt"># just do normal kickoff</span>
+        Utilities.manuallyKickOff()
+</pre>
+</body>
+</html>

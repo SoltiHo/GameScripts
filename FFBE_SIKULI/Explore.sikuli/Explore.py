@@ -1,5 +1,5 @@
 moveCount = 0
-SUMMON_NUM = 4
+SUMMON_NUM = 5
 
 import Utilities
 reload(Utilities)

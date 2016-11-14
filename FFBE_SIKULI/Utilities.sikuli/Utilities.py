@@ -1,5 +1,6 @@
 import java.awt.Robot as JRobot
 import java.awt.Color as Color
+import java.awt.event.InputEvent as InputEvent
 from sikuli import *
 
 UNIT_CENTER_LOCATIONS = [
@@ -56,6 +57,9 @@ def openMagicMenu(unitNum): #unitNum is 1 based
     mouseDown(Button.LEFT)
     mouseMove(100, 0)
     mouseUp(Button.LEFT)
+
+def closeMagicMenu():
+    click(Location(1175, 1012))
 
 def scrollMenuDown():
     mouseMove(Location(893, 957))
@@ -157,26 +161,64 @@ def isUnitAlive(unitNum):
         return False
     
 def isAnyoneHPLow():
-    if isBloodLowerThanHalf(1):
+    if isBloodLowerThanHalf(1) and isUnitAlive(1):
+        print "unit 1 need cure"
         return True
-    if isBloodLowerThanHalf(2):
+    if isBloodLowerThanHalf(2) and isUnitAlive(2):
+        print "unit 2 need cure"
         return True
-    if isBloodLowerThanHalf(3):
+    if isBloodLowerThanHalf(3) and isUnitAlive(3):
+        print "unit 3 need cure"
         return True
-    if isBloodLowerThanHalf(4):
+    if isBloodLowerThanHalf(4) and isUnitAlive(4):
+        print "unit 4 need cure"
         return True
-    if isBloodLowerThanHalf(5):
+    if isBloodLowerThanHalf(5) and isUnitAlive(5):
+        print "unit 5 need cure"
         return True
-    if isBloodLowerThanHalf(6):
+    if isBloodLowerThanHalf(6) and isUnitAlive(6):
+        print "unit 6 need cure"
         return True
 
 def manuallyKickOff():
-    click(UNIT_CENTER_LOCATIONS[0])
-    click(UNIT_CENTER_LOCATIONS[1])
-    click(UNIT_CENTER_LOCATIONS[2])
-    click(UNIT_CENTER_LOCATIONS[3])
-    click(UNIT_CENTER_LOCATIONS[4])
-    click(UNIT_CENTER_LOCATIONS[5])
+    myRobot = JRobot()
+    myRobot.mouseMove(823,739)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(818,845)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(818,950)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1105,741)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1101,846)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1104,950)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot = JRobot()
+    myRobot.mouseMove(823,739)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(818,845)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(818,950)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1105,741)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1101,846)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(1104,950)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def summonIfAvailable(unitNum):
     if not isUnitAlive(unitNum):
@@ -192,3 +234,21 @@ def summonIfAvailable(unitNum):
         click(Location(1086, 734))
     wait(0.5)
     return summoned        
+
+def isLBAvailable(toClick):
+    myRobot = JRobot()
+    # LB not available: [r=56,g=26,b=0]
+    # available: [r=112,g=53,b=0]
+    currentColor = myRobot.getPixelColor(906, 707)
+    print currentColor
+    if  myRobot.getPixelColor(906, 707).getRed() >= 100:
+        print "LB available"
+        if toClick == True:
+            click(Location(906,707))
+        return True
+    else:
+        print "LB not ready"
+        return False
+
+myRobot = JRobot() 
+print myRobot.getPixelColor(1052, 1022)
