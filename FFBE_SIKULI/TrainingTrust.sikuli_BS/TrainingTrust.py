@@ -1,3 +1,6 @@
+import java.awt.Color as Color
+import java.awt.Robot as JRobot
+import java.awt.event.InputEvent as InputEvent
 import Utilities
 reload(Utilities)
 DeepestSwordRegion = Region(680,506,51,45)
@@ -94,11 +97,11 @@ while True:
         wait(1)
 
     # Close Mission
-    CloseMissionRegion = Region(733,637,363,338)
-    while CloseMissionRegion.exists("1475571605121.png"):
-        click("1475571605121.png")
+    CloseMissionRegion = Region(726,620,180,87)
+    while CloseMissionRegion.exists("1479197182789.png"):
+        click(CloseMissionRegion)
         wait(1)
 
-    remaining = 300 - (time.time() - start)
-    if remaining > 0: wait(remaining)
+    remaining = 181 - (time.time() - start)
+    #if remaining > 0: wait(remaining)
 

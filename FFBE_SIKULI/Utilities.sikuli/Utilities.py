@@ -11,6 +11,12 @@ UNIT_CENTER_LOCATIONS = [
         Location(1101, 846),
         Location(1104, 950)]
 
+UNIT_LB_TOP_LOCATIONS = [
+        Location(942, 724),
+        Location(938, 833),
+        Location(940, 941),
+        Location(1241, 724),
+        Location(1238, 834)]
 UNIT_SWORD_REGIONS = [
         Region(673,668,43,46),
         Region(672,769,44,48),
@@ -21,6 +27,9 @@ UNIT_SWORD_REGIONS = [
 
 MAGIC_MENU_REGION = Region(683,686,548,290)
 
+MAGIC_MENU_REGION_BS = Region(670,662,576,299)
+
+
 def isAttacking():
     myRobot = JRobot()
     currentColor = myRobot.getPixelColor(1080, 1052)
@@ -28,6 +37,16 @@ def isAttacking():
     # if not attacking: java.awt.Color[r=0,g=65,b=111]
     # if attacking: java.awt.Color[r=0,g=25,b=44]
     if  myRobot.getPixelColor(1080, 1052).getRGB() == notAttackingColor.getRGB():
+        print "ohohohohoh not attacking"
+        return False
+    else:
+        print "seems attacking"
+        return True
+
+def isAttacking_BS():
+    NotAttackingColor = Color(0x00,0x77,0x93)
+    myRobot = JRobot()
+    if myRobot.getPixelColor(1052, 1022) == NotAttackingColor:
         print "ohohohohoh not attacking"
         return False
     else:
@@ -78,6 +97,22 @@ def findTheMagic(targetMagic):
             return
         scrollMenuDown()
     findResult = MAGIC_MENU_REGION.find(targetMagic)
+    if findResult != None: 
+        return findResult.getTarget()
+    else:    
+        return None
+
+def findTheMagic_BS(targetMagic):
+    # start looking
+    scrollCount = 0
+    MAX_SCROLL_COUNT = 5
+    while not MAGIC_MENU_REGION_BS.exists(targetMagic):
+        scrollCount = scrollCount + 1
+        if scrollCount > MAX_SCROLL_COUNT:
+            # not found
+            return
+        scrollMenuDown()
+    findResult = MAGIC_MENU_REGION_BS.find(targetMagic)
     if findResult != None: 
         return findResult.getTarget()
     else:    
@@ -200,7 +235,6 @@ def manuallyKickOff():
     myRobot.mouseMove(1104,950)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-    myRobot = JRobot()
     myRobot.mouseMove(823,739)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
@@ -250,5 +284,64 @@ def isLBAvailable(toClick):
         print "LB not ready"
         return False
 
-myRobot = JRobot() 
-print myRobot.getPixelColor(1052, 1022)
+def isLBAvailable_BS(toClick):
+    myRobot = JRobot()
+    if  myRobot.getPixelColor(833, 687).getRed() >= 100:
+        print "LB available"
+        if toClick == True:
+            click(Location(833, 687))
+        return True
+    else:
+        print "LB not ready"
+        return False
+
+def moveAround():
+    MoveRegion = Region(859,451,231,183)
+    #dragDrop(MoveRegion, MoveRegion.offset(100,0))
+    #dragDrop(MoveRegion, MoveRegion.offset(-100,0))
+    dragDrop(MoveRegion, MoveRegion.offset(0,100))
+    dragDrop(MoveRegion, MoveRegion.offset(0,-100))
+
+def moveUp():
+    myRobot = JRobot()
+    myRobot.mouseMove(960, 449)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def moveDown():
+    myRobot = JRobot()
+    myRobot.mouseMove(963, 554)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def moveLeft():
+    myRobot = JRobot()
+    myRobot.mouseMove(912, 519)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def moveRight():
+    myRobot = JRobot()
+    myRobot.mouseMove(1003, 518)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def isInBattle():
+    # (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]
+    myRobot = JRobot()
+    if myRobot.getPixelColor(1231, 998).getRed() > 230:
+        return False
+    else:
+        return True
+
+def lookHavingLB(unitNum):
+    myRobot = JRobot()
+    if myRobot.getPixelColor( \
+            UNIT_LB_TOP_LOCATIONS[unitNum - 1].getX(), \
+            UNIT_LB_TOP_LOCATIONS[unitNum - 1].getY()).getRed() > 150:
+        print "unit ", unitNum, " looks having LB"
+        return True
+    else:
+        print "unit ", unitNum, " no LB"        
+        return False
+

@@ -83,6 +83,12 @@ UNIT_CENTER_LOCATIONS = [
         Location(<span class="dig">1101</span>, <span class="dig">846</span>),
         Location(<span class="dig">1104</span>, <span class="dig">950</span>)]
 
+UNIT_LB_TOP_LOCATIONS = [
+        Location(<span class="dig">942</span>, <span class="dig">724</span>),
+        Location(<span class="dig">938</span>, <span class="dig">833</span>),
+        Location(<span class="dig">940</span>, <span class="dig">941</span>),
+        Location(<span class="dig">1241</span>, <span class="dig">724</span>),
+        Location(<span class="dig">1238</span>, <span class="dig">834</span>)]
 UNIT_SWORD_REGIONS = [
         Region(<span class="dig">673</span>,<span class="dig">668</span>,<span class="dig">43</span>,<span class="dig">46</span>),
         Region(<span class="dig">672</span>,<span class="dig">769</span>,<span class="dig">44</span>,<span class="dig">48</span>),
@@ -93,6 +99,9 @@ UNIT_SWORD_REGIONS = [
 
 MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</span>,<span class="dig">548</span>,<span class="dig">290</span>)
 
+MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662</span>,<span class="dig">576</span>,<span class="dig">299</span>)
+
+
 <span class="kw">def</span> isAttacking():
     myRobot = JRobot()
     currentColor = myRobot.getPixelColor(<span class="dig">1080</span>, <span class="dig">1052</span>)
@@ -100,6 +109,16 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
     <span class="cmt"># if not attacking: java.awt.Color[r=0,g=65,b=111]</span>
     <span class="cmt"># if attacking: java.awt.Color[r=0,g=25,b=44]</span>
     <span class="kw">if</span>  myRobot.getPixelColor(<span class="dig">1080</span>, <span class="dig">1052</span>).getRGB() == notAttackingColor.getRGB():
+        <span class="kw">print</span> <span class="str">"ohohohohoh not attacking"</span>
+        <span class="kw">return</span> False
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"seems attacking"</span>
+        <span class="kw">return</span> True
+
+<span class="kw">def</span> isAttacking_BS():
+    NotAttackingColor = Color(<span class="dig">0x00</span>,<span class="dig">0x77</span>,<span class="dig">0x93</span>)
+    myRobot = JRobot()
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1052</span>, <span class="dig">1022</span>) == NotAttackingColor:
         <span class="kw">print</span> <span class="str">"ohohohohoh not attacking"</span>
         <span class="kw">return</span> False
     <span class="kw">else</span>:
@@ -150,6 +169,22 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
             <span class="kw">return</span>
         scrollMenuDown()
     findResult = MAGIC_MENU_REGION.<span class="skw">find</span>(targetMagic)
+    <span class="kw">if</span> findResult != None:
+        <span class="kw">return</span> findResult.getTarget()
+    <span class="kw">else</span>:
+        <span class="kw">return</span> None
+
+<span class="kw">def</span> findTheMagic_BS(targetMagic):
+    <span class="cmt"># start looking</span>
+    scrollCount = <span class="dig">0</span>
+    MAX_SCROLL_COUNT = <span class="dig">5</span>
+    <span class="kw">while</span> <span class="kw">not</span> MAGIC_MENU_REGION_BS.exists(targetMagic):
+        scrollCount = scrollCount + <span class="dig">1</span>
+        <span class="kw">if</span> scrollCount &gt; MAX_SCROLL_COUNT:
+            <span class="cmt"># not found</span>
+            <span class="kw">return</span>
+        scrollMenuDown()
+    findResult = MAGIC_MENU_REGION_BS.<span class="skw">find</span>(targetMagic)
     <span class="kw">if</span> findResult != None:
         <span class="kw">return</span> findResult.getTarget()
     <span class="kw">else</span>:
@@ -272,7 +307,6 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
     myRobot.mouseMove(<span class="dig">1104</span>,<span class="dig">950</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-    myRobot = JRobot()
     myRobot.mouseMove(<span class="dig">823</span>,<span class="dig">739</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
@@ -322,8 +356,66 @@ MAGIC_MENU_REGION = Region(<span class="dig">683</span>,<span class="dig">686</s
         <span class="kw">print</span> <span class="str">"LB not ready"</span>
         <span class="kw">return</span> False
 
-myRobot = JRobot()
-<span class="kw">print</span> myRobot.getPixelColor(<span class="dig">1052</span>, <span class="dig">1022</span>)
+<span class="kw">def</span> isLBAvailable_BS(toClick):
+    myRobot = JRobot()
+    <span class="kw">if</span>  myRobot.getPixelColor(<span class="dig">833</span>, <span class="dig">687</span>).getRed() &gt;= <span class="dig">100</span>:
+        <span class="kw">print</span> <span class="str">"LB available"</span>
+        <span class="kw">if</span> toClick == True:
+            <span class="skw">click</span>(Location(<span class="dig">833</span>, <span class="dig">687</span>))
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"LB not ready"</span>
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> moveAround():
+    MoveRegion = Region(<span class="dig">859</span>,<span class="dig">451</span>,<span class="dig">231</span>,<span class="dig">183</span>)
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(100,0))</span>
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(-100,0))</span>
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,<span class="dig">100</span>))
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,-<span class="dig">100</span>))
+
+<span class="kw">def</span> moveUp():
+    myRobot = JRobot()
+    myRobot.mouseMove(<span class="dig">960</span>, <span class="dig">449</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> moveDown():
+    myRobot = JRobot()
+    myRobot.mouseMove(<span class="dig">963</span>, <span class="dig">554</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> moveLeft():
+    myRobot = JRobot()
+    myRobot.mouseMove(<span class="dig">912</span>, <span class="dig">519</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> moveRight():
+    myRobot = JRobot()
+    myRobot.mouseMove(<span class="dig">1003</span>, <span class="dig">518</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> isInBattle():
+    <span class="cmt"># (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]</span>
+    myRobot = JRobot()
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1231</span>, <span class="dig">998</span>).getRed() &gt; <span class="dig">230</span>:
+        <span class="kw">return</span> False
+    <span class="kw">else</span>:
+        <span class="kw">return</span> True
+
+<span class="kw">def</span> lookHavingLB(unitNum):
+    myRobot = JRobot()
+    <span class="kw">if</span> myRobot.getPixelColor( \
+            UNIT_LB_TOP_LOCATIONS[unitNum - <span class="dig">1</span>].getX(), \
+            UNIT_LB_TOP_LOCATIONS[unitNum - <span class="dig">1</span>].getY()).getRed() &gt; <span class="dig">150</span>:
+        <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" looks having LB"</span>
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" no LB"</span>
+        <span class="kw">return</span> False
 </pre>
 </body>
 </html>
