@@ -3,6 +3,7 @@ import java.awt.Color as Color
 import java.awt.event.InputEvent as InputEvent
 from sikuli import *
 
+myRobot = JRobot()
 UNIT_CENTER_LOCATIONS = [
         Location(823, 739),
         Location(818, 845),
@@ -18,12 +19,12 @@ UNIT_LB_TOP_LOCATIONS = [
         Location(1241, 724),
         Location(1238, 834)]
 UNIT_SWORD_REGIONS = [
-        Region(673,668,43,46),
-        Region(672,769,44,48),
-        Region(671,875,44,44),
-        Region(958,667,42,46),
-        Region(958,768,43,50),
-        Region(956,890,45,49)]
+        Region(657,640,52,56),
+        Region(657,752,48,54),
+        Region(657,861,49,50),
+        Region(957,645,47,47),
+        Region(959,753,44,48),
+        Region(958,860,45,49)]
 
 MAGIC_MENU_REGION = Region(683,686,548,290)
 
@@ -31,7 +32,6 @@ MAGIC_MENU_REGION_BS = Region(670,662,576,299)
 
 
 def isAttacking():
-    myRobot = JRobot()
     currentColor = myRobot.getPixelColor(1080, 1052)
     notAttackingColor = Color(0x00,0x41,0x6F)
     # if not attacking: java.awt.Color[r=0,g=65,b=111]
@@ -45,7 +45,6 @@ def isAttacking():
 
 def isAttacking_BS():
     NotAttackingColor = Color(0x00,0x77,0x93)
-    myRobot = JRobot()
     if myRobot.getPixelColor(1052, 1022) == NotAttackingColor:
         print "ohohohohoh not attacking"
         return False
@@ -53,11 +52,12 @@ def isAttacking_BS():
         print "seems attacking"
         return True
 
+
+
 def isBloodLowerThanHalf(unitNum): #unitNum is 1 based
-    HP_Half_Locations = [Location(788, 775), Location(786, 879), Location(786, 983),
-            Location(1072, 776), Location(1073, 879), Location(1074, 983)]
+    HP_Half_Locations = [Location(777, 759), Location(778, 868), Location(774, 978),
+            Location(1076, 759), Location(1076, 868), Location(1076, 977)]
     targetUnit = HP_Half_Locations[unitNum - 1]
-    myRobot = JRobot()
     if myRobot.getPixelColor(targetUnit.x, targetUnit.y).getGreen() < 10:
         #print "unit ", unitNum, " needs help"
         return True
@@ -81,10 +81,11 @@ def closeMagicMenu():
     click(Location(1175, 1012))
 
 def scrollMenuDown():
-    mouseMove(Location(893, 957))
-    mouseDown(Button.LEFT)
-    mouseMove(0, -270)
-    mouseUp(Button.LEFT)
+    moveRegion = Region(917,671,44,292)
+    myRobot.mouseMove(893,957)
+    moveRegion.mouseDown(Button.LEFT)
+    moveRegion.mouseMove(0, -270)
+    moveRegion.mouseUp(Button.LEFT)
 
 def findTheMagic(targetMagic):
     # start looking
@@ -106,12 +107,15 @@ def findTheMagic_BS(targetMagic):
     # start looking
     scrollCount = 0
     MAX_SCROLL_COUNT = 5
+    start = time.time()
     while not MAGIC_MENU_REGION_BS.exists(targetMagic):
+        print "search took ", time.time() - start
         scrollCount = scrollCount + 1
         if scrollCount > MAX_SCROLL_COUNT:
             # not found
             return
         scrollMenuDown()
+        start = time.time()
     findResult = MAGIC_MENU_REGION_BS.find(targetMagic)
     if findResult != None: 
         return findResult.getTarget()
@@ -216,7 +220,6 @@ def isAnyoneHPLow():
         return True
 
 def manuallyKickOff():
-    myRobot = JRobot()
     myRobot.mouseMove(823,739)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
@@ -257,7 +260,7 @@ def manuallyKickOff():
 def summonIfAvailable(unitNum):
     if not isUnitAlive(unitNum):
         return False
-    summonRegion = Region(978,712,52,39)
+    summonRegion = Region(968,675,79,87)
     openMagicMenu(unitNum)
     wait(0.5)
     summoned = False
@@ -270,7 +273,6 @@ def summonIfAvailable(unitNum):
     return summoned        
 
 def isLBAvailable(toClick):
-    myRobot = JRobot()
     # LB not available: [r=56,g=26,b=0]
     # available: [r=112,g=53,b=0]
     currentColor = myRobot.getPixelColor(906, 707)
@@ -285,7 +287,6 @@ def isLBAvailable(toClick):
         return False
 
 def isLBAvailable_BS(toClick):
-    myRobot = JRobot()
     if  myRobot.getPixelColor(833, 687).getRed() >= 100:
         print "LB available"
         if toClick == True:
@@ -299,49 +300,53 @@ def moveAround():
     MoveRegion = Region(859,451,231,183)
     #dragDrop(MoveRegion, MoveRegion.offset(100,0))
     #dragDrop(MoveRegion, MoveRegion.offset(-100,0))
-    dragDrop(MoveRegion, MoveRegion.offset(0,100))
-    dragDrop(MoveRegion, MoveRegion.offset(0,-100))
-
+    #dragDrop(MoveRegion, MoveRegion.offset(0,100))
+    #dragDrop(MoveRegion, MoveRegion.offset(0,-100))
+    myRobot.mouseMove(961, 494)
+    MoveRegion.mouseDown(Button.LEFT)
+    MoveRegion.mouseMove(0, -270)
+    myRobot.delay(500)
+    MoveRegion.mouseMove(0, 540)
+    myRobot.delay(500)
+    MoveRegion.mouseUp(Button.LEFT)
+    
 def moveUp():
-    myRobot = JRobot()
     myRobot.mouseMove(960, 449)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveDown():
-    myRobot = JRobot()
     myRobot.mouseMove(963, 554)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveLeft():
-    myRobot = JRobot()
     myRobot.mouseMove(912, 519)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveRight():
-    myRobot = JRobot()
-    myRobot.mouseMove(1003, 518)
+    myRobot.mouseMove(1007, 516)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def isInBattle():
     # (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]
-    myRobot = JRobot()
     if myRobot.getPixelColor(1231, 998).getRed() > 230:
         return False
     else:
         return True
 
 def lookHavingLB(unitNum):
-    myRobot = JRobot()
     if myRobot.getPixelColor( \
             UNIT_LB_TOP_LOCATIONS[unitNum - 1].getX(), \
             UNIT_LB_TOP_LOCATIONS[unitNum - 1].getY()).getRed() > 150:
         print "unit ", unitNum, " looks having LB"
         return True
     else:
-        print "unit ", unitNum, " no LB"        
+        print "unit ", unitNum, " no LB"   
         return False
 
+
+
+print myRobot.getPixelColor(1135, 1030)

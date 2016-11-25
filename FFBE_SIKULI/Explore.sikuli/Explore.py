@@ -33,8 +33,8 @@ def Battle():
     # start Battle
     click(AutoRegion)
     # Battle Ends
-    ResultRegion = Region(860,349,194,52)
-    while not ResultRegion.exists("1476748616317.png"):
+    ResultRegion = Region(837,299,235,73)
+    while not ResultRegion.exists("1479949016541.png"):
         print "waiting for battle to end"
         wait(1)
     print "Battle Ended"

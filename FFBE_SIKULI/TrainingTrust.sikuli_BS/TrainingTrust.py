@@ -102,6 +102,6 @@ while True:
         click(CloseMissionRegion)
         wait(1)
 
-    remaining = 181 - (time.time() - start)
-    #if remaining > 0: wait(remaining)
+    remaining = 300 - (time.time() - start)
+    if remaining > 0: wait(remaining)
 

@@ -1,0 +1,335 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>WalkEarthTemple.sikuli</h2> <a href="WalkEarthTemple.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> Utilities
+<span class="kw">import</span> TrainLB <span class="kw">as</span> LB
+
+reload(Utilities)
+reload(LB)
+myRobot = JRobot()
+
+
+missionNextStepRegion = Region(<span class="dig">914</span>,<span class="dig">909</span>,<span class="dig">90</span>,<span class="dig">44</span>)
+missionNextStepPicture = <img src="1479022885841.png" />
+FollowerRegion = Region(<span class="dig">768</span>,<span class="dig">209</span>,<span class="dig">139</span>,<span class="dig">47</span>)
+LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,<span class="dig">107</span>,<span class="dig">65</span>)
+<span class="kw">while</span> True:
+    start = time.time()
+    <span class="cmt"># enter the explore</span>
+    <span class="cmt"># java.awt.Color[r=20,g=78,b=45]   (700, 389)</span>
+    exploreColor = Color(<span class="dig">0x14</span>, <span class="dig">0x4E</span>, <span class="dig">0x2D</span>)
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">700</span>,<span class="dig">389</span>) == exploreColor:
+        <span class="kw">print</span> <span class="str">"waiting for explore color"</span>
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">700</span>,<span class="dig">389</span>) == exploreColor:
+        <span class="skw">click</span>(Location(<span class="dig">700</span>,<span class="dig">389</span>))
+        <span class="kw">print</span> <span class="str">"clicking explore"</span>
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="cmt"># Dismiss mission description    </span>
+    <span class="cmt"># java.awt.Color[r=0,g=54,b=142] (1010, 946)</span>
+    dismissColor = Color(<span class="dig">0x00</span>, <span class="dig">0x36</span>, <span class="dig">0x8E</span>)
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
+        <span class="kw">print</span> <span class="str">"waiting for dismissColor"</span>
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
+        <span class="skw">click</span>(Location(<span class="dig">1010</span>, <span class="dig">946</span>))
+        myRobot.delay(<span class="dig">500</span>)
+
+
+    <span class="kw">while</span> <span class="kw">not</span> FollowerRegion.exists(<img src="1479022675016.png" />):
+        <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting follower"</span>
+        <span class="skw">click</span>(missionNextStepRegion)
+        myRobot.delay(<span class="dig">500</span>)
+
+    <span class="cmt"># choose no follower</span>
+    tempCounter = <span class="dig">0</span>
+    <span class="kw">while</span> tempCounter &lt; <span class="dig">15</span>:
+        Utilities.scrollMenuDown()
+        tempCounter = tempCounter + <span class="dig">1</span>
+    <span class="skw">click</span>(Location(<span class="dig">953</span>, <span class="dig">993</span>))
+
+    <span class="cmt"># ready to launch</span>
+    <span class="kw">while</span> <span class="kw">not</span> LaunchRegion.exists(<img src="1479022755293.png" />):
+        <span class="skw">click</span>(Location(<span class="dig">810</span>, <span class="dig">404</span>))
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="skw">click</span>(LaunchRegion)
+    <span class="skw">wait</span>(<span class="dig">3</span>)
+    <span class="cmt"># make sure entered the explore</span>
+    <span class="cmt">#java.awt.Color[r=57,g=114,b=194] (1135, 1030)</span>
+    switchMapColor = Color(<span class="dig">0x39</span>, <span class="dig">0x72</span>, <span class="dig">0xC2</span>)
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">1135</span>, <span class="dig">1030</span>) == switchMapColor:
+        <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">646</span>))
+        <span class="kw">print</span> <span class="str">"waiting for switch map"</span>
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+
+    <span class="cmt"># start training</span>
+    LB.doTrainLB()
+    <span class="skw">wait</span>(<span class="dig">3</span>)
+    <span class="cmt"># return to reference point</span>
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, <span class="dig">270</span>)
+    myRobot.delay(<span class="dig">3000</span>)
+    mouseUp(Button.LEFT)
+    Utilities.moveUp()
+    myRobot.delay(<span class="dig">2000</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">7</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">16</span>:
+        Utilities.moveLeft()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">20</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">32</span>:
+        Utilities.moveRight()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">16</span>:
+        Utilities.moveDown()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">3</span>:
+        Utilities.moveRight()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    Utilities.moveDown()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveUp()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveLeft()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveLeft()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveLeft()
+    myRobot.delay(<span class="dig">300</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">37</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    Utilities.moveRight()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveRight()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveRight()
+    myRobot.delay(<span class="dig">300</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">5</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">2</span>:
+        Utilities.moveLeft()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">4</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    Utilities.moveLeft()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveUp()
+    myRobot.delay(<span class="dig">300</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">12</span>:
+        Utilities.moveUp()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">16</span>:
+        Utilities.moveDown()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">3</span>:
+        Utilities.moveRight()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">5</span>:
+        Utilities.moveDown()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">19</span>:
+        Utilities.moveLeft()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    myRobot.delay(<span class="dig">3000</span>)
+    mouseUp(Button.LEFT)
+
+    <span class="skw">click</span>(Location(<span class="dig">1121</span>, <span class="dig">291</span>))
+    <span class="skw">wait</span>(<span class="dig">3</span>)
+    <span class="skw">click</span>(Location(<span class="dig">1121</span>, <span class="dig">291</span>))
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    LB.doBattle()
+    <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">583</span>))
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">583</span>))
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">583</span>))
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="skw">click</span>(Location(<span class="dig">1142</span>, <span class="dig">292</span>))
+
+    <span class="cmt"># The last mine</span>
+    <span class="skw">wait</span>(<span class="dig">2</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">3</span>:
+        Utilities.moveLeft()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+    Utilities.moveDown()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveDown()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveUp()
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.moveUp()
+    myRobot.delay(<span class="dig">300</span>)
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> count &lt; <span class="dig">3</span>:
+        Utilities.moveRight()
+        myRobot.delay(<span class="dig">300</span>)
+        count = count + <span class="dig">1</span>
+
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    myRobot.delay(<span class="dig">3000</span>)
+    mouseUp(Button.LEFT)
+
+    <span class="skw">click</span>(Location(<span class="dig">1162</span>, <span class="dig">291</span>))
+    <span class="skw">wait</span>(<span class="dig">5</span>)
+
+    <span class="cmt">#1st next step</span>
+    NextStepRegion = Region(<span class="dig">862</span>,<span class="dig">837</span>,<span class="dig">206</span>,<span class="dig">120</span>)
+    <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
+        <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting 1st next step"</span>
+        <span class="skw">click</span>(Location(<span class="dig">712</span>, <span class="dig">745</span>))
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": 1st next step found"</span>
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
+        <span class="skw">click</span>(NextStepRegion)
+
+    <span class="cmt"># 2nd next step </span>
+    <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079794939.png" />,<span class="dig">1</span>):
+        <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting 2nd next step"</span>
+        <span class="skw">click</span>(Location(<span class="dig">712</span>, <span class="dig">745</span>))
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> NextStepRegion.exists(<img src="1479079794939.png" />,<span class="dig">1</span>):
+        <span class="skw">click</span>(NextStepRegion)
+
+    <span class="cmt"># Friends</span>
+    FriendApplyRegion = Region(<span class="dig">750</span>,<span class="dig">747</span>,<span class="dig">124</span>,<span class="dig">79</span>)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> FriendApplyRegion.exists(<img src="1479081918270.png" />):
+        <span class="skw">click</span>(FriendApplyRegion)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+
+    <span class="cmt"># Close Mission</span>
+    CloseMissionRegion = Region(<span class="dig">726</span>,<span class="dig">620</span>,<span class="dig">180</span>,<span class="dig">87</span>)
+    <span class="kw">while</span> CloseMissionRegion.exists(<img src="1479197182789.png" />):
+        <span class="skw">click</span>(CloseMissionRegion)
+        <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">print</span> <span class="str">"one round training took "</span>, time.time() - start
+    remaining = <span class="dig">900</span> - (time.time() - start)
+    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
+</pre>
+</body>
+</html>
