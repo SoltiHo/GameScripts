@@ -138,10 +138,12 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">return</span> False
 
 <span class="kw">def</span> defense(unitNum): <span class="cmt">#unitNum is 1 based</span>
-    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>])
-    mouseDown(Button.LEFT)
-    mouseMove(<span class="dig">0</span>, <span class="dig">100</span>)
-    mouseUp(Button.LEFT)
+    center_x = UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>].getX()
+    center_y = UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>].getY()
+    myRobot.mouseMove(center_x, center_y)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(center_x, center_y + <span class="dig">100</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 <span class="kw">def</span> openMagicMenu(unitNum): <span class="cmt">#unitNum is 1 based</span>
     mouseMove(UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>])
@@ -158,6 +160,26 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     moveRegion.mouseDown(Button.LEFT)
     moveRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
     moveRegion.mouseUp(Button.LEFT)
+
+<span class="kw">def</span> scrollMenuDown_fast():
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">955</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    <span class="cmt">#myRobot.delay(100)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">905</span>)
+    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">855</span>)
+    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">805</span>)
+    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">755</span>)
+    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">705</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">655</span>)
+    myRobot.delay(<span class="dig">200</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">660</span>)
+    myRobot.delay(<span class="dig">350</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 <span class="kw">def</span> findTheMagic(targetMagic):
     <span class="cmt"># start looking</span>
@@ -421,7 +443,9 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
 
 
 
-<span class="kw">print</span> myRobot.getPixelColor(<span class="dig">1135</span>, <span class="dig">1030</span>)
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="kw">print</span> <span class="str">"test"</span>
+    scrollMenuDown_fast()
 </pre>
 </body>
 </html>

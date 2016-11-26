@@ -66,10 +66,12 @@ def isBloodLowerThanHalf(unitNum): #unitNum is 1 based
         return False
 
 def defense(unitNum): #unitNum is 1 based
-    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - 1])
-    mouseDown(Button.LEFT)
-    mouseMove(0, 100)
-    mouseUp(Button.LEFT)
+    center_x = UNIT_CENTER_LOCATIONS[unitNum - 1].getX()
+    center_y = UNIT_CENTER_LOCATIONS[unitNum - 1].getY()
+    myRobot.mouseMove(center_x, center_y)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(center_x, center_y + 100)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def openMagicMenu(unitNum): #unitNum is 1 based
     mouseMove(UNIT_CENTER_LOCATIONS[unitNum - 1])
@@ -86,6 +88,26 @@ def scrollMenuDown():
     moveRegion.mouseDown(Button.LEFT)
     moveRegion.mouseMove(0, -270)
     moveRegion.mouseUp(Button.LEFT)
+
+def scrollMenuDown_fast():
+    myRobot.mouseMove(935, 955)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    #myRobot.delay(100)
+    myRobot.mouseMove(935, 905)
+    #myRobot.delay(150)
+    myRobot.mouseMove(935, 855)
+    #myRobot.delay(150)
+    myRobot.mouseMove(935, 805)
+    #myRobot.delay(150)
+    myRobot.mouseMove(935, 755)
+    #myRobot.delay(150)
+    myRobot.mouseMove(935, 705)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 655)
+    myRobot.delay(200)
+    myRobot.mouseMove(935, 660)
+    myRobot.delay(350)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def findTheMagic(targetMagic):
     # start looking
@@ -349,4 +371,6 @@ def lookHavingLB(unitNum):
 
 
 
-print myRobot.getPixelColor(1135, 1030)
+if __name__ == "__main__":
+    print "test"
+    scrollMenuDown_fast()

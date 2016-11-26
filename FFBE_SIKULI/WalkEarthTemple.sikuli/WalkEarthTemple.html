@@ -111,10 +111,7 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
         myRobot.delay(<span class="dig">500</span>)
 
     <span class="cmt"># choose no follower</span>
-    tempCounter = <span class="dig">0</span>
-    <span class="kw">while</span> tempCounter &lt; <span class="dig">15</span>:
-        Utilities.scrollMenuDown()
-        tempCounter = tempCounter + <span class="dig">1</span>
+    wheel(noFollowerRegion, WHEEL_DOWN, <span class="dig">100</span>)
     <span class="skw">click</span>(Location(<span class="dig">953</span>, <span class="dig">993</span>))
 
     <span class="cmt"># ready to launch</span>

@@ -40,10 +40,7 @@ while True:
         myRobot.delay(500)
 
     # choose no follower
-    tempCounter = 0
-    while tempCounter < 15:       
-        Utilities.scrollMenuDown()
-        tempCounter = tempCounter + 1
+    wheel(noFollowerRegion, WHEEL_DOWN, 100)
     click(Location(953, 993))
 
     # ready to launch

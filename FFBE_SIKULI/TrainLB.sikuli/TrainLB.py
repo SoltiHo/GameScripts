@@ -1,5 +1,6 @@
 # To run this script, AUTO LB can be ON.
-TARGET_LB_TYPE = 1  # 1 is attack, 2 is others\
+TARGET_LB_TYPE = 2  # 1 is attack, 2 is others\
+TARGET_LB_SELECT_TEAM = True
 BATTLE_COUNT_MAX = 14
 
 numLBUsed = 0
@@ -13,41 +14,39 @@ reload(Utilities)
 
 myRobot = JRobot()
 def selectTransferUnit1():
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    Utilities.scrollMenuDown()
-    myRobot.delay(200)    
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    myRobot.mouseMove(721, 804)
+    myRobot.mouseMove(788, 940)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit2():
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    myRobot.mouseMove(730, 892)
+    myRobot.mouseMove(759, 817)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit3():
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    myRobot.mouseMove(1041, 842)
+    myRobot.mouseMove(1051, 834)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit4():
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    Utilities.scrollMenuDown()
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(200)
-    myRobot.mouseMove(1034, 889)
+    myRobot.mouseMove(1035, 808)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
@@ -67,17 +66,36 @@ def doOffensiveLB(toSelectTargetLB):
         return True
 
 def doDefensiveLB(toSelectTargetLB):
-    openMagicMenu(5)
-    wait(1)
-    if Utilities.isLBAvailable_BS(True):
-        Utilities.defense(1)
-        Utilities.defense(2)
-        Utilities.defense(3)
-        Utilities.defense(4)
-        return True
+    if toSelectTargetLB:
+        Utilities.openMagicMenu(5)
+        wait(1)
+        if Utilities.isLBAvailable_BS(True):
+            myRobot.delay(1000)
+            click(Location(1068, 830)) # select team
+            myRobot.delay(1000)
+            Utilities.defense(1)
+            myRobot.delay(500)
+            Utilities.defense(2)
+            myRobot.delay(500)
+            Utilities.defense(3)
+            myRobot.delay(500)
+            Utilities.defense(4)
+            myRobot.delay(500)
+            return True
+        else:
+            print "defensive LB isn't available"
+            return False
     else:
-        print "defensive LB isn't available"
-        return False
+        print "targetLB is already selected"
+        Utilities.defense(1)
+        myRobot.delay(500)
+        Utilities.defense(2)
+        myRobot.delay(500)
+        Utilities.defense(3)
+        myRobot.delay(500)
+        Utilities.defense(4)
+        myRobot.delay(500)
+        return True
 
 def doLBaccordingToType(toSelectTargetLB):
     LB_EXECUTED = False
@@ -90,6 +108,12 @@ def doLBaccordingToType(toSelectTargetLB):
     global numLBUsed
     if LB_EXECUTED:
         numLBUsed = numLBUsed + 1
+    myRobot.mouseMove(890, 366)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(752, 485)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     Utilities.manuallyKickOff()
     return LB_EXECUTED
 
@@ -102,6 +126,9 @@ def setRoundCommads():
         Utilities.openMagicMenu(5)
         wait(1)
         if Utilities.isLBAvailable_BS(True):
+            myRobot.delay(1000)
+            click(Location(1068, 830)) # select team
+            myRobot.delay(1000)
             targetLBavailable = True
         else:
             Utilities.closeMagicMenu()
@@ -122,7 +149,7 @@ def setRoundCommads():
             if Utilities.lookHavingLB(ToCheckUnitIdx + 1):
                 Utilities.openMagicMenu(ToCheckUnitIdx + 1)
                 print "Checking unit num ", ToCheckUnitIdx + 1
-                #wait(0.5)
+                myRobot.delay(500)
                 if Utilities.isLBAvailable_BS(False):
                     print "unit ", ToCheckUnitIdx + 1, " has LB available"
                     myRobot.delay(500)
@@ -136,11 +163,11 @@ def setRoundCommads():
                     else:
                         selectTransferUnit4()
 
-                    myRobot.delay(500)
+                    myRobot.delay(1000)
                     click(Location(1044, 835))
-                    myRobot.delay(500)
+                    myRobot.delay(1000)
                     click(Utilities.UNIT_CENTER_LOCATIONS[ToCheckUnitIdx])
-                    myRobot.delay(500)
+                    myRobot.delay(1000)
                     LastTransferredUnitIdx = ToCheckUnitIdx
                     break
                 Utilities.closeMagicMenu()
@@ -157,14 +184,19 @@ def setRoundCommads():
             # no one can transfer
             # just do normal kickoff
             print "ready to kickoff"
+            myRobot.mouseMove(890, 366)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            myRobot.mouseMove(752, 485)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
             Utilities.manuallyKickOff()
 
 def doBattle():
     ResultRColor =  Color(0xBF,0xD1,0xDC) #java.awt.Color[r=191,g=209,b=220]
     #click(Location(883, 428))
     wait(1)
-    click(Location(890, 366))
-    click(Location(752, 485))
+
     while True:
         wait(1)
         if myRobot.getPixelColor(868, 340) == ResultRColor:
@@ -176,6 +208,7 @@ def doBattle():
         wait(1)
         while Utilities.isAttacking_BS() and myRobot.getPixelColor(868, 340) != ResultRColor:
             print "round in progress"
+            click(Location(712, 745))
             wait(1)
         print "checking if battle ends..."
         if myRobot.getPixelColor(868, 340) == ResultRColor:
@@ -202,4 +235,6 @@ def doTrainLB():
     print "during which ", numLBUsed, " LB was used"    
 
 if __name__ == "__main__":
+    #doBattle()
+    #selectTransferUnit4()
     doTrainLB()
