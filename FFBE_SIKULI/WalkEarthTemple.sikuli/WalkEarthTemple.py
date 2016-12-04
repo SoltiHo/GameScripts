@@ -1,4 +1,5 @@
-
+import java.awt.Robot as JRobot
+import java.awt.Color as Color
 import Utilities
 import TrainLB as LB
 
@@ -40,7 +41,7 @@ while True:
         myRobot.delay(500)
 
     # choose no follower
-    wheel(noFollowerRegion, WHEEL_DOWN, 100)
+    wheel(WHEEL_DOWN, 100)
     click(Location(953, 993))
 
     # ready to launch
@@ -58,7 +59,7 @@ while True:
         wait(1)
 
     # start training
-    LB.doTrainLB()
+    [LB_time, num_LB_used] = LB.doTrainLB()
     wait(3)
     # return to reference point
     myRobot.mouseMove(961, 494)
@@ -226,7 +227,8 @@ while True:
     NextStepRegion = Region(862,837,206,120)
     while not NextStepRegion.exists("1479079732102.png",1):
         print "iteration ", count, ": waiting 1st next step"
-        click(Location(712, 745))
+        click(Location(963, 625))
+        Utilities.handleCommunicationError()
         wait(1)
     print "iteration ", count, ": 1st next step found"
     wait(1)
@@ -253,6 +255,7 @@ while True:
     while CloseMissionRegion.exists("1479197182789.png"):
         click(CloseMissionRegion)
         wait(1)
-    print "one round training took ", time.time() - start
+    total_time = time.time() - start
+    Utilities.log('LB', str(total_time) + ',' + str(LB_time) + ',' + str(num_LB_used))
     remaining = 900 - (time.time() - start)
     if remaining > 0: wait(remaining)

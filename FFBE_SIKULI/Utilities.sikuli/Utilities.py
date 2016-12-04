@@ -1,6 +1,7 @@
 import java.awt.Robot as JRobot
 import java.awt.Color as Color
 import java.awt.event.InputEvent as InputEvent
+import time
 from sikuli import *
 
 myRobot = JRobot()
@@ -369,8 +370,26 @@ def lookHavingLB(unitNum):
         print "unit ", unitNum, " no LB"   
         return False
 
+def handleCommunicationError():
+    # detect communication error
+    OColor = Color(242, 245, 248)
+    KColor = Color(255, 255, 255)
+    EdgeColor = Color(254, 254, 254)
+    isCommunicationError = myRobot.getPixelColor(943, 620) == OColor and \
+            myRobot.getPixelColor(969, 621) == KColor and \
+            myRobot.getPixelColor(1178, 703) == EdgeColor
+    if isCommunicationError:
+        print "Communication Error detected, clicking OK"
+        myRobot.mouseMove(943, 620)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-
+def log(event_type, event_message):
+    log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
+    with open('C:\Users\Solti\Dropbox\Misc\GameLogs\FFBE.csv', 'a') as f:
+        f.write(log_msg)
 if __name__ == "__main__":
-    print "test"
-    scrollMenuDown_fast()
+    a = 3.13454
+    b = 5
+    stringA = str(a) + ',' + str(b)
+    print stringA

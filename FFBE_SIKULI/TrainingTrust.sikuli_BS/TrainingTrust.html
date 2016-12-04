@@ -75,25 +75,34 @@
 <span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
 <span class="kw">import</span> Utilities
 reload(Utilities)
-DeepestSwordRegion = Region(<span class="dig">680</span>,<span class="dig">506</span>,<span class="dig">51</span>,<span class="dig">45</span>)
-SwordPicture = <img src="1479022584013.png" />
-missionNextStepRegion = Region(<span class="dig">914</span>,<span class="dig">909</span>,<span class="dig">90</span>,<span class="dig">44</span>)
+
+myRobot = JRobot()
+
 missionNextStepPicture = <img src="1479022885841.png" />
 count = <span class="dig">0</span>
 <span class="kw">while</span> True:
     start = time.time()
     count = count + <span class="dig">1</span>
 
-    <span class="kw">while</span> <span class="kw">not</span> DeepestSwordRegion.exists(SwordPicture,<span class="dig">1</span>):
-        <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting deepest sword"</span>
+    <span class="cmt"># sword color = [r=98,g=4,b=7]   (702, 511)</span>
+    swordColor = Color(<span class="dig">0x62</span>, <span class="dig">0x04</span>, <span class="dig">0x07</span>)
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">702</span>,<span class="dig">511</span>) == swordColor:
+        <span class="kw">print</span> <span class="str">"waiting for sword color"</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="skw">click</span>(DeepestSwordRegion)
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">702</span>,<span class="dig">511</span>) == swordColor:
+        <span class="skw">click</span>(Location(<span class="dig">702</span>,<span class="dig">511</span>))
+        <span class="kw">print</span> <span class="str">"clicking sword"</span>
+        <span class="skw">wait</span>(<span class="dig">0.5</span>)
 
     <span class="cmt"># Dismiss mission description    </span>
-    <span class="kw">while</span> <span class="kw">not</span> missionNextStepRegion.exists(missionNextStepPicture,<span class="dig">1</span>):
-        <span class="skw">click</span>(DeepestSwordRegion)
+    <span class="cmt"># java.awt.Color[r=0,g=54,b=142] (1010, 946)</span>
+    dismissColor = Color(<span class="dig">0x00</span>, <span class="dig">0x36</span>, <span class="dig">0x8E</span>)
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
+        <span class="kw">print</span> <span class="str">"waiting for dismissColor"</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
+        <span class="skw">click</span>(Location(<span class="dig">1010</span>, <span class="dig">946</span>))
+        myRobot.delay(<span class="dig">500</span>)
 
     <span class="cmt"># choose follower</span>
     FollowerRegion = Region(<span class="dig">768</span>,<span class="dig">209</span>,<span class="dig">139</span>,<span class="dig">47</span>)
@@ -147,6 +156,7 @@ count = <span class="dig">0</span>
     <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
         <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting 1st next step"</span>
         <span class="skw">click</span>(Location(<span class="dig">712</span>, <span class="dig">745</span>))
+        Utilities.handleCommunicationError()
         <span class="skw">wait</span>(<span class="dig">1</span>)
     <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": 1st next step found"</span>
     <span class="skw">wait</span>(<span class="dig">1</span>)
@@ -174,9 +184,8 @@ count = <span class="dig">0</span>
         <span class="skw">click</span>(CloseMissionRegion)
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
-    <span class="cmt">#remaining = 300 - (time.time() - start)</span>
-    <span class="cmt">#if remaining &gt; 0: wait(remaining)</span>
-
+    remaining = <span class="dig">300</span> - (time.time() - start)
+    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
 </pre>
 </body>
 </html>

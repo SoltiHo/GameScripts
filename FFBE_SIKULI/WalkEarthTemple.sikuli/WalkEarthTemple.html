@@ -70,6 +70,8 @@
 <h2>WalkEarthTemple.sikuli</h2> <a href="WalkEarthTemple.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
 <span class="kw">import</span> Utilities
 <span class="kw">import</span> TrainLB <span class="kw">as</span> LB
 
@@ -111,7 +113,7 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
         myRobot.delay(<span class="dig">500</span>)
 
     <span class="cmt"># choose no follower</span>
-    wheel(noFollowerRegion, WHEEL_DOWN, <span class="dig">100</span>)
+    wheel(WHEEL_DOWN, <span class="dig">100</span>)
     <span class="skw">click</span>(Location(<span class="dig">953</span>, <span class="dig">993</span>))
 
     <span class="cmt"># ready to launch</span>
@@ -129,7 +131,7 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
     <span class="cmt"># start training</span>
-    LB.doTrainLB()
+    [LB_time, num_LB_used] = LB.doTrainLB()
     <span class="skw">wait</span>(<span class="dig">3</span>)
     <span class="cmt"># return to reference point</span>
     myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
@@ -297,7 +299,8 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
     NextStepRegion = Region(<span class="dig">862</span>,<span class="dig">837</span>,<span class="dig">206</span>,<span class="dig">120</span>)
     <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
         <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": waiting 1st next step"</span>
-        <span class="skw">click</span>(Location(<span class="dig">712</span>, <span class="dig">745</span>))
+        <span class="skw">click</span>(Location(<span class="dig">963</span>, <span class="dig">625</span>))
+        Utilities.handleCommunicationError()
         <span class="skw">wait</span>(<span class="dig">1</span>)
     <span class="kw">print</span> <span class="str">"iteration "</span>, count, <span class="str">": 1st next step found"</span>
     <span class="skw">wait</span>(<span class="dig">1</span>)
@@ -324,7 +327,8 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
     <span class="kw">while</span> CloseMissionRegion.exists(<img src="1479197182789.png" />):
         <span class="skw">click</span>(CloseMissionRegion)
         <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">print</span> <span class="str">"one round training took "</span>, time.time() - start
+    total_time = time.time() - start
+    Utilities.log(<span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(LB_time) + <span class="str">','</span> + str(num_LB_used))
     remaining = <span class="dig">900</span> - (time.time() - start)
     <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
 </pre>

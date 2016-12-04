@@ -87,38 +87,42 @@ reload(Utilities)
 myRobot = JRobot()
 <span class="kw">def</span> selectTransferUnit1():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">300</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">300</span>)
     myRobot.mouseMove(<span class="dig">788</span>, <span class="dig">940</span>)
+    myRobot.delay(<span class="dig">300</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> selectTransferUnit2():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">300</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
-    myRobot.mouseMove(<span class="dig">759</span>, <span class="dig">817</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">759</span>, <span class="dig">837</span>)
+    myRobot.delay(<span class="dig">300</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> selectTransferUnit3():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
-    myRobot.mouseMove(<span class="dig">1051</span>, <span class="dig">834</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">780</span>, <span class="dig">922</span>)
+    myRobot.delay(<span class="dig">300</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> selectTransferUnit4():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">300</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">200</span>)
-    myRobot.mouseMove(<span class="dig">1035</span>, <span class="dig">808</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">780</span>, <span class="dig">940</span>)
+    myRobot.delay(<span class="dig">300</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
@@ -139,6 +143,7 @@ myRobot = JRobot()
 
 <span class="kw">def</span> doDefensiveLB(toSelectTargetLB):
     <span class="kw">if</span> toSelectTargetLB:
+        <span class="skw">wait</span>(<span class="dig">1</span>)
         Utilities.openMagicMenu(<span class="dig">5</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
@@ -280,7 +285,7 @@ LastTransferredUnitIdx = <span class="dig">3</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">while</span> Utilities.isAttacking_BS() <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">868</span>, <span class="dig">340</span>) != ResultRColor:
             <span class="kw">print</span> <span class="str">"round in progress"</span>
-            <span class="skw">click</span>(Location(<span class="dig">712</span>, <span class="dig">745</span>))
+            <span class="cmt">#click(Location(712, 745))</span>
             <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">print</span> <span class="str">"checking if battle ends..."</span>
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">868</span>, <span class="dig">340</span>) == ResultRColor:
@@ -303,12 +308,13 @@ LastTransferredUnitIdx = <span class="dig">3</span>
             <span class="kw">if</span> battleCount == BATTLE_COUNT_MAX:
                 <span class="kw">break</span>
         <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">print</span> <span class="str">"finished, took "</span>, time.time() - start, <span class="str">" seconds to complete "</span>, battleCount, <span class="str">" battles"</span>
-    <span class="kw">print</span> <span class="str">"during which "</span>, numLBUsed, <span class="str">" LB was used"</span>
+    TimeSpent = time.time() - start
+    <span class="kw">return</span> [TimeSpent, numLBUsed]
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#doBattle()</span>
     <span class="cmt">#selectTransferUnit4()</span>
+    <span class="skw">wait</span>(<span class="dig">13</span>)
     doTrainLB()
 </pre>
 </body>

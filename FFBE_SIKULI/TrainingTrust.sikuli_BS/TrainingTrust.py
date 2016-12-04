@@ -3,25 +3,34 @@ import java.awt.Robot as JRobot
 import java.awt.event.InputEvent as InputEvent
 import Utilities
 reload(Utilities)
-DeepestSwordRegion = Region(680,506,51,45)
-SwordPicture = "1479022584013.png"
-missionNextStepRegion = Region(914,909,90,44)
+
+myRobot = JRobot()
+
 missionNextStepPicture = "1479022885841.png"
 count = 0
 while True:
     start = time.time()
     count = count + 1
 
-    while not DeepestSwordRegion.exists(SwordPicture,1):
-        print "iteration ", count, ": waiting deepest sword"
+    # sword color = [r=98,g=4,b=7]   (702, 511)
+    swordColor = Color(0x62, 0x04, 0x07)
+    while not myRobot.getPixelColor(702,511) == swordColor:
+        print "waiting for sword color"
         wait(1)
-    click(DeepestSwordRegion)
-    wait(0.5)
+    while myRobot.getPixelColor(702,511) == swordColor:
+        click(Location(702,511))
+        print "clicking sword"
+        wait(0.5)
 
     # Dismiss mission description    
-    while not missionNextStepRegion.exists(missionNextStepPicture,1):
-        click(DeepestSwordRegion)
+    # java.awt.Color[r=0,g=54,b=142] (1010, 946)
+    dismissColor = Color(0x00, 0x36, 0x8E)
+    while not myRobot.getPixelColor(1010, 946) == dismissColor:
+        print "waiting for dismissColor"
         wait(1)
+    while myRobot.getPixelColor(1010, 946) == dismissColor:
+        click(Location(1010, 946))
+        myRobot.delay(500)
     
     # choose follower
     FollowerRegion = Region(768,209,139,47)
@@ -75,6 +84,7 @@ while True:
     while not NextStepRegion.exists("1479079732102.png",1):
         print "iteration ", count, ": waiting 1st next step"
         click(Location(712, 745))
+        Utilities.handleCommunicationError()
         wait(1)
     print "iteration ", count, ": 1st next step found"
     wait(1)
@@ -102,6 +112,6 @@ while True:
         click(CloseMissionRegion)
         wait(1)
 
-    #remaining = 300 - (time.time() - start)
-    #if remaining > 0: wait(remaining)
+    remaining = 300 - (time.time() - start)
+    if remaining > 0: wait(remaining)
 

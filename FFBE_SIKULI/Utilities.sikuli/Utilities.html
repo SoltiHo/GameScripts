@@ -73,6 +73,7 @@
 <span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
 <span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
 <span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
+<span class="kw">import</span> time
 <span class="kw">from</span> sikuli <span class="kw">import</span> *
 
 myRobot = JRobot()
@@ -441,11 +442,29 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" no LB"</span>
         <span class="kw">return</span> False
 
+<span class="kw">def</span> handleCommunicationError():
+    <span class="cmt"># detect communication error</span>
+    OColor = Color(<span class="dig">242</span>, <span class="dig">245</span>, <span class="dig">248</span>)
+    KColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>)
+    EdgeColor = Color(<span class="dig">254</span>, <span class="dig">254</span>, <span class="dig">254</span>)
+    isCommunicationError = myRobot.getPixelColor(<span class="dig">943</span>, <span class="dig">620</span>) == OColor <span class="kw">and</span> \
+            myRobot.getPixelColor(<span class="dig">969</span>, <span class="dig">621</span>) == KColor <span class="kw">and</span> \
+            myRobot.getPixelColor(<span class="dig">1178</span>, <span class="dig">703</span>) == EdgeColor
+    <span class="kw">if</span> isCommunicationError:
+        <span class="kw">print</span> <span class="str">"Communication Error detected, clicking OK"</span>
+        myRobot.mouseMove(<span class="dig">943</span>, <span class="dig">620</span>)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-
+<span class="kw">def</span> log(event_type, event_message):
+    log_msg = time.strftime(<span class="str">'%d/%m/%Y'</span>) + <span class="str">','</span> + time.strftime(<span class="str">'%H:%M:%S'</span>) + <span class="str">','</span> + event_type + <span class="str">','</span> + event_message + <span class="str">'\n'</span>
+    <span class="kw">with</span> open(<span class="str">'C:\Users\Solti\Dropbox\Misc\GameLogs\FFBE.csv'</span>, <span class="str">'a'</span>) <span class="kw">as</span> f:
+        f.write(log_msg)
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="kw">print</span> <span class="str">"test"</span>
-    scrollMenuDown_fast()
+    a = <span class="dig">3.13454</span>
+    b = <span class="dig">5</span>
+    stringA = str(a) + <span class="str">','</span> + str(b)
+    <span class="kw">print</span> stringA
 </pre>
 </body>
 </html>

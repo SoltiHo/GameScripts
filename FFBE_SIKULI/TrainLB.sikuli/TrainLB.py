@@ -15,38 +15,42 @@ reload(Utilities)
 myRobot = JRobot()
 def selectTransferUnit1():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
+    myRobot.delay(300)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
+    myRobot.delay(300)
     myRobot.mouseMove(788, 940)
+    myRobot.delay(300)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit2():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
+    myRobot.delay(300)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
-    myRobot.mouseMove(759, 817)
+    myRobot.delay(300)
+    myRobot.mouseMove(759, 837)
+    myRobot.delay(300)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit3():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
-    myRobot.mouseMove(1051, 834)
+    myRobot.delay(300)
+    myRobot.mouseMove(780, 922)
+    myRobot.delay(300)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
 def selectTransferUnit4():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
+    myRobot.delay(300)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(200)
-    myRobot.mouseMove(1035, 808)
+    myRobot.delay(300)
+    myRobot.mouseMove(780, 940)
+    myRobot.delay(300)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
@@ -67,6 +71,7 @@ def doOffensiveLB(toSelectTargetLB):
 
 def doDefensiveLB(toSelectTargetLB):
     if toSelectTargetLB:
+        wait(1)
         Utilities.openMagicMenu(5)
         wait(1)
         if Utilities.isLBAvailable_BS(True):
@@ -208,7 +213,7 @@ def doBattle():
         wait(1)
         while Utilities.isAttacking_BS() and myRobot.getPixelColor(868, 340) != ResultRColor:
             print "round in progress"
-            click(Location(712, 745))
+            #click(Location(712, 745))
             wait(1)
         print "checking if battle ends..."
         if myRobot.getPixelColor(868, 340) == ResultRColor:
@@ -231,10 +236,11 @@ def doTrainLB():
             if battleCount == BATTLE_COUNT_MAX:
                 break
         wait(1)
-    print "finished, took ", time.time() - start, " seconds to complete ", battleCount, " battles"
-    print "during which ", numLBUsed, " LB was used"    
+    TimeSpent = time.time() - start
+    return [TimeSpent, numLBUsed]
 
 if __name__ == "__main__":
     #doBattle()
     #selectTransferUnit4()
+    wait(13)
     doTrainLB()
