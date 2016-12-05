@@ -293,8 +293,16 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
     mouseUp(Button.LEFT)
 
     <span class="skw">click</span>(Location(<span class="dig">1162</span>, <span class="dig">291</span>))
-    <span class="skw">wait</span>(<span class="dig">5</span>)
+    <span class="skw">wait</span>(<span class="dig">3</span>)
 
+    Utilities.handleMissionEnd()
+
+    total_time = time.time() - start
+    Utilities.log(<span class="str">'LbLog.csv'</span>, <span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(LB_time) + <span class="str">','</span> + str(num_LB_used))
+    remaining = <span class="dig">900</span> - (time.time() - start)
+    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
+
+<span class="kw">def</span> backupCode():
     <span class="cmt">#1st next step</span>
     NextStepRegion = Region(<span class="dig">862</span>,<span class="dig">837</span>,<span class="dig">206</span>,<span class="dig">120</span>)
     <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
@@ -327,10 +335,6 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
     <span class="kw">while</span> CloseMissionRegion.exists(<img src="1479197182789.png" />):
         <span class="skw">click</span>(CloseMissionRegion)
         <span class="skw">wait</span>(<span class="dig">1</span>)
-    total_time = time.time() - start
-    Utilities.log(<span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(LB_time) + <span class="str">','</span> + str(num_LB_used))
-    remaining = <span class="dig">900</span> - (time.time() - start)
-    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
 </pre>
 </body>
 </html>

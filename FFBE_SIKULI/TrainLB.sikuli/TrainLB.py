@@ -86,6 +86,8 @@ def doDefensiveLB(toSelectTargetLB):
             myRobot.delay(500)
             Utilities.defense(4)
             myRobot.delay(500)
+            Utilities.defense(6)
+            myRobot.delay(500)
             return True
         else:
             print "defensive LB isn't available"
@@ -225,6 +227,7 @@ def doTrainLB():
     start = time.time()
     battleCount = 0
     global numLBUsed
+    numLBUsed = 0
     while True:
         Utilities.moveAround()
         #wait(1)

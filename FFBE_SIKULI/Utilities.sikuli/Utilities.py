@@ -384,12 +384,65 @@ def handleCommunicationError():
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-def log(event_type, event_message):
+def log(log_filename, event_type, event_message):
+    log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
     log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
-    with open('C:\Users\Solti\Dropbox\Misc\GameLogs\FFBE.csv', 'a') as f:
+    with open(log_file, 'a') as f:
         f.write(log_msg)
+
+def handleMissionEnd():
+    # star color = java.awt.Color[r=254,g=237,b=56] (1140, 332)
+    starColor = Color(254, 237, 56)
+    firstNextStepIsDone = False
+    secondNextStepIsDone = False
+    EXPisDone = False
+    while myRobot.getPixelColor(1140, 332) != starColor:
+        handleCommunicationError()
+        
+        # first next step
+        # java.awt.Color[r=164,g=171,b=190] (959, 893)
+        firstNextStepColor = Color(164, 171, 190)
+        if (not firstNextStepIsDone) and myRobot.getPixelColor(959, 893) == firstNextStepColor:
+            firstNextStepIsDone = True
+            myRobot.mouseMove(959, 893)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        # EXP_X color java.awt.Color[r=189,g=204,b=230], (912, 143)
+        EXP_X_color = Color(189, 204, 230)
+        if (not EXPisDone) and myRobot.getPixelColor(912, 143) == EXP_X_color:
+            EXPisDone = True
+            myRobot.mouseMove(912, 143)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        # 2nd next step color java.awt.Color[r=248,g=249,b=250] (960, 893)
+        secondNextStepColor = Color(248, 249, 250)
+        if (not secondNextStepIsDone) and myRobot.getPixelColor(960, 893) == secondNextStepColor:
+            secondNextStepIsDone = True
+            myRobot.mouseMove(960, 893)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        # Friend
+        noApplyColor = Color(255, 255, 255) # (780, 784)
+        if myRobot.getPixelColor(780, 784) == noApplyColor:
+            myRobot.mouseMove(780, 784)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        # Close Mission
+        goingRewardColor = Color(77, 9, 17) #(1053, 666)
+        if myRobot.getPixelColor(1053, 666) == goingRewardColor:
+            myRobot.mouseMove(810, 673)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        # click empty place to speed up
+        myRobot.mouseMove(717, 157)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        # pause for a while
+        myRobot.delay(500)
+
 if __name__ == "__main__":
-    a = 3.13454
-    b = 5
-    stringA = str(a) + ',' + str(b)
-    print stringA
+    print myRobot.getPixelColor(1053, 666)

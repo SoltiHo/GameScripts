@@ -158,6 +158,8 @@ myRobot = JRobot()
             myRobot.delay(<span class="dig">500</span>)
             Utilities.defense(<span class="dig">4</span>)
             myRobot.delay(<span class="dig">500</span>)
+            Utilities.defense(<span class="dig">6</span>)
+            myRobot.delay(<span class="dig">500</span>)
             <span class="kw">return</span> True
         <span class="kw">else</span>:
             <span class="kw">print</span> <span class="str">"defensive LB isn't available"</span>
@@ -297,6 +299,7 @@ LastTransferredUnitIdx = <span class="dig">3</span>
     start = time.time()
     battleCount = <span class="dig">0</span>
     <span class="kw">global</span> numLBUsed
+    numLBUsed = <span class="dig">0</span>
     <span class="kw">while</span> True:
         Utilities.moveAround()
         <span class="cmt">#wait(1)</span>

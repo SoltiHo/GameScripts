@@ -75,10 +75,31 @@ while True:
             Utilities.manuallyKickOff()
         wait(1)
 
-    wait(2)
+    LB_used = 0
+    if Utilities.lookHavingLB(1):
+        LB_used += 1
+    if Utilities.lookHavingLB(2):
+        LB_used += 1
+    if Utilities.lookHavingLB(3):
+        LB_used += 1
+    if Utilities.lookHavingLB(4):
+        LB_used += 1
+    if Utilities.lookHavingLB(5):
+        LB_used += 1
+
+    wait(1)
     click(AutoRegion)
 
+    Utilities.handleMissionEnd()
 
+    total_time = time.time() - start
+    Utilities.log('TrustLog.csv', 'Trust', str(total_time) + ',' + str(LB_used))
+    remaining = 300 - (time.time() - start)
+    #if remaining > 0: wait(remaining)
+
+
+
+def backupCode():
     #1st next step
     NextStepRegion = Region(862,837,206,120)
     while not NextStepRegion.exists("1479079732102.png",1):
@@ -112,6 +133,4 @@ while True:
         click(CloseMissionRegion)
         wait(1)
 
-    remaining = 300 - (time.time() - start)
-    if remaining > 0: wait(remaining)
 

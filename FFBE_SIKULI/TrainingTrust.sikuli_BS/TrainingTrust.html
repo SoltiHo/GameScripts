@@ -147,10 +147,31 @@ count = <span class="dig">0</span>
             Utilities.manuallyKickOff()
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
-    <span class="skw">wait</span>(<span class="dig">2</span>)
+    LB_used = <span class="dig">0</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>):
+        LB_used += <span class="dig">1</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">2</span>):
+        LB_used += <span class="dig">1</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">3</span>):
+        LB_used += <span class="dig">1</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">4</span>):
+        LB_used += <span class="dig">1</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">5</span>):
+        LB_used += <span class="dig">1</span>
+
+    <span class="skw">wait</span>(<span class="dig">1</span>)
     <span class="skw">click</span>(AutoRegion)
 
+    Utilities.handleMissionEnd()
 
+    total_time = time.time() - start
+    Utilities.log(<span class="str">'TrustLog.csv'</span>, <span class="str">'Trust'</span>, str(total_time) + <span class="str">','</span> + str(LB_used))
+    remaining = <span class="dig">300</span> - (time.time() - start)
+    <span class="cmt">#if remaining &gt; 0: wait(remaining)</span>
+
+
+
+<span class="kw">def</span> backupCode():
     <span class="cmt">#1st next step</span>
     NextStepRegion = Region(<span class="dig">862</span>,<span class="dig">837</span>,<span class="dig">206</span>,<span class="dig">120</span>)
     <span class="kw">while</span> <span class="kw">not</span> NextStepRegion.exists(<img src="1479079732102.png" />,<span class="dig">1</span>):
@@ -183,9 +204,6 @@ count = <span class="dig">0</span>
     <span class="kw">while</span> CloseMissionRegion.exists(<img src="1479197182789.png" />):
         <span class="skw">click</span>(CloseMissionRegion)
         <span class="skw">wait</span>(<span class="dig">1</span>)
-
-    remaining = <span class="dig">300</span> - (time.time() - start)
-    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
 </pre>
 </body>
 </html>

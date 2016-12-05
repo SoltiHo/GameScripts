@@ -221,8 +221,16 @@ while True:
     mouseUp(Button.LEFT)
     
     click(Location(1162, 291))
-    wait(5)
+    wait(3)
+
+    Utilities.handleMissionEnd()
     
+    total_time = time.time() - start
+    Utilities.log('LbLog.csv', 'LB', str(total_time) + ',' + str(LB_time) + ',' + str(num_LB_used))
+    remaining = 900 - (time.time() - start)
+    if remaining > 0: wait(remaining)
+    
+def backupCode():
     #1st next step
     NextStepRegion = Region(862,837,206,120)
     while not NextStepRegion.exists("1479079732102.png",1):
@@ -255,7 +263,3 @@ while True:
     while CloseMissionRegion.exists("1479197182789.png"):
         click(CloseMissionRegion)
         wait(1)
-    total_time = time.time() - start
-    Utilities.log('LB', str(total_time) + ',' + str(LB_time) + ',' + str(num_LB_used))
-    remaining = 900 - (time.time() - start)
-    if remaining > 0: wait(remaining)

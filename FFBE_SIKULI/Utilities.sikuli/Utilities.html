@@ -456,15 +456,68 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-<span class="kw">def</span> log(event_type, event_message):
+<span class="kw">def</span> log(log_filename, event_type, event_message):
+    log_file = <span class="str">'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\'</span> + log_filename
     log_msg = time.strftime(<span class="str">'%d/%m/%Y'</span>) + <span class="str">','</span> + time.strftime(<span class="str">'%H:%M:%S'</span>) + <span class="str">','</span> + event_type + <span class="str">','</span> + event_message + <span class="str">'\n'</span>
-    <span class="kw">with</span> open(<span class="str">'C:\Users\Solti\Dropbox\Misc\GameLogs\FFBE.csv'</span>, <span class="str">'a'</span>) <span class="kw">as</span> f:
+    <span class="kw">with</span> open(log_file, <span class="str">'a'</span>) <span class="kw">as</span> f:
         f.write(log_msg)
+
+<span class="kw">def</span> handleMissionEnd():
+    <span class="cmt"># star color = java.awt.Color[r=254,g=237,b=56] (1140, 332)</span>
+    starColor = Color(<span class="dig">254</span>, <span class="dig">237</span>, <span class="dig">56</span>)
+    firstNextStepIsDone = False
+    secondNextStepIsDone = False
+    EXPisDone = False
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1140</span>, <span class="dig">332</span>) != starColor:
+        handleCommunicationError()
+
+        <span class="cmt"># first next step</span>
+        <span class="cmt"># java.awt.Color[r=164,g=171,b=190] (959, 893)</span>
+        firstNextStepColor = Color(<span class="dig">164</span>, <span class="dig">171</span>, <span class="dig">190</span>)
+        <span class="kw">if</span> (<span class="kw">not</span> firstNextStepIsDone) <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">959</span>, <span class="dig">893</span>) == firstNextStepColor:
+            firstNextStepIsDone = True
+            myRobot.mouseMove(<span class="dig">959</span>, <span class="dig">893</span>)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        <span class="cmt"># EXP_X color java.awt.Color[r=189,g=204,b=230], (912, 143)</span>
+        EXP_X_color = Color(<span class="dig">189</span>, <span class="dig">204</span>, <span class="dig">230</span>)
+        <span class="kw">if</span> (<span class="kw">not</span> EXPisDone) <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">912</span>, <span class="dig">143</span>) == EXP_X_color:
+            EXPisDone = True
+            myRobot.mouseMove(<span class="dig">912</span>, <span class="dig">143</span>)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        <span class="cmt"># 2nd next step color java.awt.Color[r=248,g=249,b=250] (960, 893)</span>
+        secondNextStepColor = Color(<span class="dig">248</span>, <span class="dig">249</span>, <span class="dig">250</span>)
+        <span class="kw">if</span> (<span class="kw">not</span> secondNextStepIsDone) <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">960</span>, <span class="dig">893</span>) == secondNextStepColor:
+            secondNextStepIsDone = True
+            myRobot.mouseMove(<span class="dig">960</span>, <span class="dig">893</span>)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        <span class="cmt"># Friend</span>
+        noApplyColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (780, 784)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">780</span>, <span class="dig">784</span>) == noApplyColor:
+            myRobot.mouseMove(<span class="dig">780</span>, <span class="dig">784</span>)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        <span class="cmt"># Close Mission</span>
+        goingRewardColor = Color(<span class="dig">77</span>, <span class="dig">9</span>, <span class="dig">17</span>) <span class="cmt">#(1053, 666)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1053</span>, <span class="dig">666</span>) == goingRewardColor:
+            myRobot.mouseMove(<span class="dig">810</span>, <span class="dig">673</span>)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        <span class="cmt"># click empty place to speed up</span>
+        myRobot.mouseMove(<span class="dig">717</span>, <span class="dig">157</span>)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+        <span class="cmt"># pause for a while</span>
+        myRobot.delay(<span class="dig">500</span>)
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    a = <span class="dig">3.13454</span>
-    b = <span class="dig">5</span>
-    stringA = str(a) + <span class="str">','</span> + str(b)
-    <span class="kw">print</span> stringA
+    <span class="kw">print</span> myRobot.getPixelColor(<span class="dig">1053</span>, <span class="dig">666</span>)
 </pre>
 </body>
 </html>
