@@ -5,7 +5,7 @@ import Utilities
 reload(Utilities)
 
 myRobot = JRobot()
-
+fastMode = True
 missionNextStepPicture = "1479022885841.png"
 count = 0
 while True:
@@ -27,6 +27,16 @@ while True:
     dismissColor = Color(0x00, 0x36, 0x8E)
     while not myRobot.getPixelColor(1010, 946) == dismissColor:
         print "waiting for dismissColor"
+        # buy strength if fast mode
+        buyStrengthColor = Color(70, 0, 0) # (1039, 613)
+        if myRobot.getPixelColor(1039, 613) == buyStrengthColor:
+            if fastMode:
+                myRobot.mouseMove(1039, 613)
+                myRobot.mousePress(InputEvent.BUTTON1_MASK)
+                myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            else:
+                print "no more stength in normal mode"
+                exit(1)
         wait(1)
     while myRobot.getPixelColor(1010, 946) == dismissColor:
         click(Location(1010, 946))

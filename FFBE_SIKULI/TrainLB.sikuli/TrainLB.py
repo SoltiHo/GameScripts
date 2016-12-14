@@ -37,7 +37,7 @@ def selectTransferUnit2():
 
 def selectTransferUnit3():
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(300)
+    myRobot.delay(400)
     myRobot.mouseMove(780, 922)
     myRobot.delay(300)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -104,17 +104,21 @@ def doDefensiveLB(toSelectTargetLB):
         myRobot.delay(500)
         return True
 
-def doLBaccordingToType(toSelectTargetLB):
+# toSummonUnitNum, after selecting LB, which unit to summon. 0 means no summon
+def doLBaccordingToType(toSelectTargetLB, toSummonUnitNum):
     LB_EXECUTED = False
     if TARGET_LB_TYPE != 1:
         LB_EXECUTED = doDefensiveLB(toSelectTargetLB)
     else:
         LB_EXECUTED = doOffensiveLB(toSelectTargetLB)
-    wait(1)
+    #wait(1)
     print "LB_EXECUTED = ", LB_EXECUTED
     global numLBUsed
     if LB_EXECUTED:
         numLBUsed = numLBUsed + 1
+    print "toSummonUnitNum = ", toSummonUnitNum
+    if toSummonUnitNum != 0:
+        Utilities.summonIfAvailable(toSummonUnitNum)
     myRobot.mouseMove(890, 366)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
@@ -125,7 +129,7 @@ def doLBaccordingToType(toSelectTargetLB):
     return LB_EXECUTED
 
 LastTransferredUnitIdx = 3
-def setRoundCommads():
+def setRoundCommads(allowSummon):
     global LastTransferredUnitIdx
     #wait(0.5)
     targetLBavailable = False
@@ -140,8 +144,9 @@ def setRoundCommads():
         else:
             Utilities.closeMagicMenu()
         wait(1)
+    summonNum = 1 if allowSummon else 0
     if targetLBavailable:
-        if not doLBaccordingToType(False):
+        if not doLBaccordingToType(False, summonNum):
             print "Error, LB should be ready but not"
             exit(1)
     else:
@@ -182,14 +187,18 @@ def setRoundCommads():
             checkCount = checkCount + 1
         #wait(1)
 
+        if allowSummon and LastTransferredUnitIdx == 1:
+            summonNum = 2
         if checkCount < 4:
             # transferred
-            if not doLBaccordingToType(True):
+            if not doLBaccordingToType(True, summonNum):
                 print "Error, LB should be ready but not"
                 exit(1)
         else:
             # no one can transfer
             # just do normal kickoff
+            if allowSummon:
+                Utilities.summonIfAvailable(1)
             print "ready to kickoff"
             myRobot.mouseMove(890, 366)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -199,7 +208,7 @@ def setRoundCommads():
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
             Utilities.manuallyKickOff()
 
-def doBattle():
+def doBattle(allowSummon):
     ResultRColor =  Color(0xBF,0xD1,0xDC) #java.awt.Color[r=191,g=209,b=220]
     #click(Location(883, 428))
     wait(1)
@@ -211,7 +220,7 @@ def doBattle():
             click(Location(868, 340))
             break;
 
-        setRoundCommads()
+        setRoundCommads(allowSummon)
         wait(1)
         while Utilities.isAttacking_BS() and myRobot.getPixelColor(868, 340) != ResultRColor:
             print "round in progress"
@@ -234,7 +243,7 @@ def doTrainLB():
         if Utilities.isInBattle():
             battleCount = battleCount + 1
             print "battle ", battleCount, " starts"
-            doBattle()
+            doBattle(False)
             print "battle ", battleCount, " ends"
             if battleCount == BATTLE_COUNT_MAX:
                 break
@@ -243,7 +252,7 @@ def doTrainLB():
     return [TimeSpent, numLBUsed]
 
 if __name__ == "__main__":
-    #doBattle()
+    #doBattle(True)
     #selectTransferUnit4()
-    wait(13)
+    wait(5)
     doTrainLB()

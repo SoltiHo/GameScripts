@@ -516,8 +516,23 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="cmt"># pause for a while</span>
         myRobot.delay(<span class="dig">500</span>)
 
+<span class="kw">def</span> selectNoFollower():
+    <span class="cmt">#Location(1256, 291)Location(1256, 1063)</span>
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">291</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">663</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">1063</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">955</span>, <span class="dig">1037</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">500</span>)
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="kw">print</span> myRobot.getPixelColor(<span class="dig">1053</span>, <span class="dig">666</span>)
+    selectNoFollower()
 </pre>
 </body>
 </html>

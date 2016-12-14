@@ -444,5 +444,20 @@ def handleMissionEnd():
         # pause for a while
         myRobot.delay(500)
 
+def selectNoFollower():
+    #Location(1256, 291)Location(1256, 1063)
+    myRobot.mouseMove(1256, 291)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(300)
+    myRobot.mouseMove(1256, 663)
+    myRobot.delay(300)
+    myRobot.mouseMove(1256, 1063)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(300)
+    myRobot.mouseMove(955, 1037)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(500)
+
 if __name__ == "__main__":
-    print myRobot.getPixelColor(1053, 666)
+    selectNoFollower()

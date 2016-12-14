@@ -113,8 +113,7 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
         myRobot.delay(<span class="dig">500</span>)
 
     <span class="cmt"># choose no follower</span>
-    wheel(WHEEL_DOWN, <span class="dig">100</span>)
-    <span class="skw">click</span>(Location(<span class="dig">953</span>, <span class="dig">993</span>))
+    Utilities.selectNoFollower()
 
     <span class="cmt"># ready to launch</span>
     <span class="kw">while</span> <span class="kw">not</span> LaunchRegion.exists(<img src="1479022755293.png" />):
@@ -256,7 +255,7 @@ LaunchRegion = Region(<span class="dig">910</span>,<span class="dig">883</span>,
     <span class="skw">wait</span>(<span class="dig">3</span>)
     <span class="skw">click</span>(Location(<span class="dig">1121</span>, <span class="dig">291</span>))
     <span class="skw">wait</span>(<span class="dig">2</span>)
-    LB.doBattle()
+    LB.doBattle(True)
     <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">583</span>))
     myRobot.delay(<span class="dig">500</span>)
     <span class="skw">click</span>(Location(<span class="dig">962</span>, <span class="dig">583</span>))

@@ -71,7 +71,7 @@
 </div>
 <pre class="sikuli-code">
 moveCount = <span class="dig">0</span>
-SUMMON_NUM = <span class="dig">4</span>
+SUMMON_NUM = <span class="dig">5</span>
 
 <span class="kw">import</span> Utilities
 reload(Utilities)
@@ -122,10 +122,10 @@ reload(Utilities)
     moveCount = moveCount + <span class="dig">1</span>
     MoveRegion = Region(<span class="dig">859</span>,<span class="dig">451</span>,<span class="dig">231</span>,<span class="dig">183</span>)
     <span class="kw">print</span> <span class="str">"moving around.."</span>, moveCount
-    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(100,0))</span>
-    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(-100,0))</span>
-    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,<span class="dig">100</span>))
-    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">0</span>,-<span class="dig">100</span>))
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">100</span>,<span class="dig">0</span>))
+    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(-<span class="dig">100</span>,<span class="dig">0</span>))
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(0,100))</span>
+    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(0,-100))</span>
     Battle()
 
 <span class="kw">while</span> True:

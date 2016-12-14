@@ -41,8 +41,7 @@ while True:
         myRobot.delay(500)
 
     # choose no follower
-    wheel(WHEEL_DOWN, 100)
-    click(Location(953, 993))
+    Utilities.selectNoFollower()
 
     # ready to launch
     while not LaunchRegion.exists("1479022755293.png"):
@@ -184,7 +183,7 @@ while True:
     wait(3)
     click(Location(1121, 291))
     wait(2)
-    LB.doBattle()
+    LB.doBattle(True)
     click(Location(962, 583))
     myRobot.delay(500)
     click(Location(962, 583))

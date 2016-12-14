@@ -77,7 +77,7 @@
 reload(Utilities)
 
 myRobot = JRobot()
-
+fastMode = True
 missionNextStepPicture = <img src="1479022885841.png" />
 count = <span class="dig">0</span>
 <span class="kw">while</span> True:
@@ -99,6 +99,16 @@ count = <span class="dig">0</span>
     dismissColor = Color(<span class="dig">0x00</span>, <span class="dig">0x36</span>, <span class="dig">0x8E</span>)
     <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
         <span class="kw">print</span> <span class="str">"waiting for dismissColor"</span>
+        <span class="cmt"># buy strength if fast mode</span>
+        buyStrengthColor = Color(<span class="dig">70</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (1039, 613)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1039</span>, <span class="dig">613</span>) == buyStrengthColor:
+            <span class="kw">if</span> fastMode:
+                myRobot.mouseMove(<span class="dig">1039</span>, <span class="dig">613</span>)
+                myRobot.mousePress(InputEvent.BUTTON1_MASK)
+                myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            <span class="kw">else</span>:
+                <span class="kw">print</span> <span class="str">"no more stength in normal mode"</span>
+                exit(<span class="dig">1</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1010</span>, <span class="dig">946</span>) == dismissColor:
         <span class="skw">click</span>(Location(<span class="dig">1010</span>, <span class="dig">946</span>))

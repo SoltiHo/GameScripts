@@ -1,5 +1,5 @@
 moveCount = 0
-SUMMON_NUM = 4
+SUMMON_NUM = 5
 
 import Utilities
 reload(Utilities)
@@ -50,10 +50,10 @@ def MoveAround():
     moveCount = moveCount + 1
     MoveRegion = Region(859,451,231,183)
     print "moving around..", moveCount
-    #dragDrop(MoveRegion, MoveRegion.offset(100,0))
-    #dragDrop(MoveRegion, MoveRegion.offset(-100,0))
-    dragDrop(MoveRegion, MoveRegion.offset(0,100))
-    dragDrop(MoveRegion, MoveRegion.offset(0,-100))
+    dragDrop(MoveRegion, MoveRegion.offset(100,0))
+    dragDrop(MoveRegion, MoveRegion.offset(-100,0))
+    #dragDrop(MoveRegion, MoveRegion.offset(0,100))
+    #dragDrop(MoveRegion, MoveRegion.offset(0,-100))
     Battle()
 
 while True:
