@@ -359,7 +359,8 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     openMagicMenu(unitNum)
     <span class="skw">wait</span>(<span class="dig">0.5</span>)
     summoned = False
-    <span class="kw">if</span> summonRegion.exists(<img src="1477852401573.png" />):
+    summonNotAvailableColor = Color(<span class="dig">206</span>,<span class="dig">111</span>,<span class="dig">111</span>) <span class="cmt"># (998, 720)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">998</span>, <span class="dig">720</span>) == summonNotAvailableColor:
         <span class="skw">click</span>(Location(<span class="dig">1181</span>, <span class="dig">1028</span>)) <span class="cmt"># go back</span>
     <span class="kw">else</span>:
         summoned = True
@@ -391,7 +392,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">print</span> <span class="str">"LB not ready"</span>
         <span class="kw">return</span> False
 
-<span class="kw">def</span> moveAround():
+<span class="kw">def</span> moveAround(direction):
     MoveRegion = Region(<span class="dig">859</span>,<span class="dig">451</span>,<span class="dig">231</span>,<span class="dig">183</span>)
     <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(100,0))</span>
     <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(-100,0))</span>
@@ -399,9 +400,15 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(0,-100))</span>
     myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
     MoveRegion.mouseDown(Button.LEFT)
-    MoveRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    <span class="kw">if</span> direction == <span class="str">'UpDown'</span>:
+        MoveRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    <span class="kw">else</span>:
+        MoveRegion.mouseMove(-<span class="dig">270</span>, <span class="dig">0</span>)
     myRobot.delay(<span class="dig">500</span>)
-    MoveRegion.mouseMove(<span class="dig">0</span>, <span class="dig">540</span>)
+    <span class="kw">if</span> direction == <span class="str">'UpDown'</span>:
+        MoveRegion.mouseMove(<span class="dig">0</span>, <span class="dig">540</span>)
+    <span class="kw">else</span>:
+        MoveRegion.mouseMove(<span class="dig">540</span>, <span class="dig">0</span>)
     myRobot.delay(<span class="dig">500</span>)
     MoveRegion.mouseUp(Button.LEFT)
 
@@ -431,6 +438,10 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">return</span> False
     <span class="kw">else</span>:
         <span class="kw">return</span> True
+
+<span class="kw">def</span> lookAbleToSummon():
+    noSummonColor = Color(<span class="dig">7</span>,<span class="dig">21</span>,<span class="dig">27</span>) <span class="cmt"># (1252, 645)</span>
+    <span class="kw">return</span> myRobot.getPixelColor(<span class="dig">1252</span>,<span class="dig">645</span>) != noSummonColor
 
 <span class="kw">def</span> lookHavingLB(unitNum):
     <span class="kw">if</span> myRobot.getPixelColor( \
@@ -531,8 +542,53 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
 
+
+<span class="kw">def</span> waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[]):
+    <span class="kw">print</span> <span class="str">'x = '</span>, x, <span class="str">', y = '</span>, y, <span class="str">', color = '</span>, color
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
+        <span class="kw">print</span> myRobot.getPixelColor(x, y)
+        <span class="kw">if</span> func_while_wait != None:
+            func_while_wait(*arg_while_wait)
+        myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(x, y) == color:
+        <span class="kw">if</span> func_after_wait != None:
+            func_after_wait(*arg_after_wait)
+        <span class="kw">else</span>:
+            myRobot.mouseMove(x, y)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> waitForColor(x, y, color, wait_msg):
+    <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
+        <span class="kw">print</span> wait_msg
+        myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> buyStrength():
+    buyStrengthColor = Color(<span class="dig">70</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (1039, 613)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1039</span>, <span class="dig">613</span>) == buyStrengthColor:
+        myRobot.mouseMove(<span class="dig">1039</span>, <span class="dig">613</span>)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"no buying message"</span>
+
+
+<span class="kw">def</span> fastClick(x, y):
+    myRobot.mouseMove(x, y)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    selectNoFollower()
+    targetLocation = Location(<span class="dig">1096</span>, <span class="dig">223</span>)
+    hover( targetLocation)
+    <span class="skw">wait</span>(<span class="dig">10</span>)
+    <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+    <span class="kw">if</span> lookAbleToSummon():
+        <span class="kw">print</span> <span class="str">'able to summon'</span>
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">'no summon'</span>
 </pre>
 </body>
 </html>

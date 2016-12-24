@@ -8,9 +8,16 @@ myRobot = JRobot()
 fastMode = True
 missionNextStepPicture = "1479022885841.png"
 count = 0
+LB_used = 0
+start = time.time()
 while True:
-    start = time.time()
-    count = count + 1
+    this_round_start = time.time()
+    if count <= 20:
+        count = count + 1
+    else:
+        start = time.time()
+        LB_used = 0
+        count = 1
 
     # sword color = [r=98,g=4,b=7]   (702, 511)
     swordColor = Color(0x62, 0x04, 0x07)
@@ -85,7 +92,6 @@ while True:
             Utilities.manuallyKickOff()
         wait(1)
 
-    LB_used = 0
     if Utilities.lookHavingLB(1):
         LB_used += 1
     if Utilities.lookHavingLB(2):
@@ -97,14 +103,16 @@ while True:
     if Utilities.lookHavingLB(5):
         LB_used += 1
 
-    wait(1)
+            
     click(AutoRegion)
+    #Utilities.manuallyKickOff()
 
     Utilities.handleMissionEnd()
 
-    total_time = time.time() - start
-    Utilities.log('TrustLog.csv', 'Trust', str(total_time) + ',' + str(LB_used))
-    remaining = 300 - (time.time() - start)
+    if count == 20:
+        total_time = time.time() - start
+        Utilities.log('TrustLog.csv', 'Trust', str(total_time) + ',' + str(LB_used))
+    remaining = 300 - (time.time() - this_round_start)
     #if remaining > 0: wait(remaining)
 
 

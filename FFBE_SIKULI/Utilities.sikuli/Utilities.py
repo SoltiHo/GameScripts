@@ -287,7 +287,8 @@ def summonIfAvailable(unitNum):
     openMagicMenu(unitNum)
     wait(0.5)
     summoned = False
-    if summonRegion.exists("1477852401573.png"):
+    summonNotAvailableColor = Color(206,111,111) # (998, 720)
+    if myRobot.getPixelColor(998, 720) == summonNotAvailableColor:
         click(Location(1181, 1028)) # go back
     else:
         summoned = True
@@ -319,7 +320,7 @@ def isLBAvailable_BS(toClick):
         print "LB not ready"
         return False
 
-def moveAround():
+def moveAround(direction):
     MoveRegion = Region(859,451,231,183)
     #dragDrop(MoveRegion, MoveRegion.offset(100,0))
     #dragDrop(MoveRegion, MoveRegion.offset(-100,0))
@@ -327,9 +328,15 @@ def moveAround():
     #dragDrop(MoveRegion, MoveRegion.offset(0,-100))
     myRobot.mouseMove(961, 494)
     MoveRegion.mouseDown(Button.LEFT)
-    MoveRegion.mouseMove(0, -270)
+    if direction == 'UpDown':
+        MoveRegion.mouseMove(0, -270)
+    else:
+        MoveRegion.mouseMove(-270, 0)        
     myRobot.delay(500)
-    MoveRegion.mouseMove(0, 540)
+    if direction == 'UpDown':
+        MoveRegion.mouseMove(0, 540)
+    else:
+        MoveRegion.mouseMove(540, 0)
     myRobot.delay(500)
     MoveRegion.mouseUp(Button.LEFT)
     
@@ -359,6 +366,10 @@ def isInBattle():
         return False
     else:
         return True
+
+def lookAbleToSummon():
+    noSummonColor = Color(7,21,27) # (1252, 645)
+    return myRobot.getPixelColor(1252,645) != noSummonColor
 
 def lookHavingLB(unitNum):
     if myRobot.getPixelColor( \
@@ -459,5 +470,51 @@ def selectNoFollower():
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
+
+def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[]):
+    print 'x = ', x, ', y = ', y, ', color = ', color
+    while not myRobot.getPixelColor(x, y) == color:
+        print myRobot.getPixelColor(x, y)
+        if func_while_wait != None:
+            func_while_wait(*arg_while_wait)
+        myRobot.delay(500)
+    while myRobot.getPixelColor(x, y) == color:
+        if func_after_wait != None:
+            func_after_wait(*arg_after_wait)
+        else:
+            myRobot.mouseMove(x, y)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        myRobot.delay(500)
+
+def waitForColor(x, y, color, wait_msg):
+    while not myRobot.getPixelColor(x, y) == color:
+        print wait_msg
+        myRobot.delay(500)
+
+def buyStrength():
+    buyStrengthColor = Color(70, 0, 0) # (1039, 613)
+    if myRobot.getPixelColor(1039, 613) == buyStrengthColor:
+        myRobot.mouseMove(1039, 613)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    else:
+        print "no buying message"
+
+
+def fastClick(x, y):
+    myRobot.mouseMove(x, y)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+
 if __name__ == "__main__":
-    selectNoFollower()
+    targetLocation = Location(1096, 223)
+    hover( targetLocation)
+    wait(10)
+    print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+    if lookAbleToSummon():
+        print 'able to summon'
+    else:
+        print 'no summon'
+    

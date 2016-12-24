@@ -80,9 +80,16 @@ myRobot = JRobot()
 fastMode = True
 missionNextStepPicture = <img src="1479022885841.png" />
 count = <span class="dig">0</span>
+LB_used = <span class="dig">0</span>
+start = time.time()
 <span class="kw">while</span> True:
-    start = time.time()
-    count = count + <span class="dig">1</span>
+    this_round_start = time.time()
+    <span class="kw">if</span> count &lt;= <span class="dig">20</span>:
+        count = count + <span class="dig">1</span>
+    <span class="kw">else</span>:
+        start = time.time()
+        LB_used = <span class="dig">0</span>
+        count = <span class="dig">1</span>
 
     <span class="cmt"># sword color = [r=98,g=4,b=7]   (702, 511)</span>
     swordColor = Color(<span class="dig">0x62</span>, <span class="dig">0x04</span>, <span class="dig">0x07</span>)
@@ -157,7 +164,6 @@ count = <span class="dig">0</span>
             Utilities.manuallyKickOff()
         <span class="skw">wait</span>(<span class="dig">1</span>)
 
-    LB_used = <span class="dig">0</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>):
         LB_used += <span class="dig">1</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">2</span>):
@@ -169,14 +175,16 @@ count = <span class="dig">0</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">5</span>):
         LB_used += <span class="dig">1</span>
 
-    <span class="skw">wait</span>(<span class="dig">1</span>)
+
     <span class="skw">click</span>(AutoRegion)
+    <span class="cmt">#Utilities.manuallyKickOff()</span>
 
     Utilities.handleMissionEnd()
 
-    total_time = time.time() - start
-    Utilities.log(<span class="str">'TrustLog.csv'</span>, <span class="str">'Trust'</span>, str(total_time) + <span class="str">','</span> + str(LB_used))
-    remaining = <span class="dig">300</span> - (time.time() - start)
+    <span class="kw">if</span> count == <span class="dig">20</span>:
+        total_time = time.time() - start
+        Utilities.log(<span class="str">'TrustLog.csv'</span>, <span class="str">'Trust'</span>, str(total_time) + <span class="str">','</span> + str(LB_used))
+    remaining = <span class="dig">300</span> - (time.time() - this_round_start)
     <span class="cmt">#if remaining &gt; 0: wait(remaining)</span>
 
 

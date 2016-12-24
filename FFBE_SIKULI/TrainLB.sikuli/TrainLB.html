@@ -71,11 +71,10 @@
 </div>
 <pre class="sikuli-code">
 <span class="cmt"># To run this script, AUTO LB can be ON.</span>
-TARGET_LB_TYPE = <span class="dig">2</span>  <span class="cmt"># 1 is attack, 2 is others\</span>
+TARGET_LB_TYPE = <span class="dig">1</span>  <span class="cmt"># 1 is attack, 2 is others\</span>
 TARGET_LB_SELECT_TEAM = True
 BATTLE_COUNT_MAX = <span class="dig">14</span>
 
-numLBUsed = <span class="dig">0</span>
 
 <span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
 <span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
@@ -110,6 +109,8 @@ myRobot = JRobot()
 <span class="kw">def</span> selectTransferUnit3():
     Utilities.scrollMenuDown_fast()
     myRobot.delay(<span class="dig">400</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">400</span>)
     myRobot.mouseMove(<span class="dig">780</span>, <span class="dig">922</span>)
     myRobot.delay(<span class="dig">300</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -133,10 +134,11 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">500</span>)
         <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
             <span class="kw">print</span> <span class="str">"doOffensiveLB() : return true"</span>
+            myRobot.delay(<span class="dig">1000</span>)
             <span class="kw">return</span> True
         <span class="kw">else</span>:
             <span class="kw">print</span> <span class="str">"offensive LB isn't available"</span>
-            <span class="kw">return</span> True
+            <span class="kw">return</span> False
     <span class="kw">else</span>:
         <span class="kw">print</span> <span class="str">"targetLB is already selected"</span>
         <span class="kw">return</span> True
@@ -174,20 +176,20 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">500</span>)
         Utilities.defense(<span class="dig">4</span>)
         myRobot.delay(<span class="dig">500</span>)
+        Utilities.defense(<span class="dig">6</span>)
+        myRobot.delay(<span class="dig">500</span>)
         <span class="kw">return</span> True
 
 <span class="cmt"># toSummonUnitNum, after selecting LB, which unit to summon. 0 means no summon</span>
 <span class="kw">def</span> doLBaccordingToType(toSelectTargetLB, toSummonUnitNum):
     LB_EXECUTED = False
+    <span class="cmt">#Utilities.log('LbCheck.csv', 'check', '1,')</span>
     <span class="kw">if</span> TARGET_LB_TYPE != <span class="dig">1</span>:
         LB_EXECUTED = doDefensiveLB(toSelectTargetLB)
     <span class="kw">else</span>:
         LB_EXECUTED = doOffensiveLB(toSelectTargetLB)
     <span class="cmt">#wait(1)</span>
     <span class="kw">print</span> <span class="str">"LB_EXECUTED = "</span>, LB_EXECUTED
-    <span class="kw">global</span> numLBUsed
-    <span class="kw">if</span> LB_EXECUTED:
-        numLBUsed = numLBUsed + <span class="dig">1</span>
     <span class="kw">print</span> <span class="str">"toSummonUnitNum = "</span>, toSummonUnitNum
     <span class="kw">if</span> toSummonUnitNum != <span class="dig">0</span>:
         Utilities.summonIfAvailable(toSummonUnitNum)
@@ -205,13 +207,15 @@ LastTransferredUnitIdx = <span class="dig">3</span>
     <span class="kw">global</span> LastTransferredUnitIdx
     <span class="cmt">#wait(0.5)</span>
     targetLBavailable = False
+    targetLBUsed = <span class="dig">0</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">5</span>):
         Utilities.openMagicMenu(<span class="dig">5</span>)
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
             myRobot.delay(<span class="dig">1000</span>)
-            <span class="skw">click</span>(Location(<span class="dig">1068</span>, <span class="dig">830</span>)) <span class="cmt"># select team</span>
-            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">if</span> TARGET_LB_TYPE != <span class="dig">1</span>:
+                <span class="skw">click</span>(Location(<span class="dig">1068</span>, <span class="dig">830</span>)) <span class="cmt"># select team</span>
+                myRobot.delay(<span class="dig">1000</span>)
             targetLBavailable = True
         <span class="kw">else</span>:
             Utilities.closeMagicMenu()
@@ -221,6 +225,7 @@ LastTransferredUnitIdx = <span class="dig">3</span>
         <span class="kw">if</span> <span class="kw">not</span> doLBaccordingToType(False, summonNum):
             <span class="kw">print</span> <span class="str">"Error, LB should be ready but not"</span>
             exit(<span class="dig">1</span>)
+        targetLBUsed += <span class="dig">1</span>
     <span class="kw">else</span>:
         <span class="kw">print</span> <span class="str">"Check teammates' LB..."</span>
         <span class="cmt"># Target LB is not available, see if anyone can transfer</span>
@@ -266,6 +271,7 @@ LastTransferredUnitIdx = <span class="dig">3</span>
             <span class="kw">if</span> <span class="kw">not</span> doLBaccordingToType(True, summonNum):
                 <span class="kw">print</span> <span class="str">"Error, LB should be ready but not"</span>
                 exit(<span class="dig">1</span>)
+            targetLBUsed += <span class="dig">1</span>
         <span class="kw">else</span>:
             <span class="cmt"># no one can transfer</span>
             <span class="cmt"># just do normal kickoff</span>
@@ -279,12 +285,13 @@ LastTransferredUnitIdx = <span class="dig">3</span>
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
             Utilities.manuallyKickOff()
+    <span class="kw">return</span> targetLBUsed
 
 <span class="kw">def</span> doBattle(allowSummon):
     ResultRColor =  Color(<span class="dig">0xBF</span>,<span class="dig">0xD1</span>,<span class="dig">0xDC</span>) <span class="cmt">#java.awt.Color[r=191,g=209,b=220]</span>
     <span class="cmt">#click(Location(883, 428))</span>
     <span class="skw">wait</span>(<span class="dig">1</span>)
-
+    totalTargetLBused = <span class="dig">0</span>
     <span class="kw">while</span> True:
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">868</span>, <span class="dig">340</span>) == ResultRColor:
@@ -292,7 +299,7 @@ LastTransferredUnitIdx = <span class="dig">3</span>
             <span class="skw">click</span>(Location(<span class="dig">868</span>, <span class="dig">340</span>))
             <span class="kw">break</span>;
 
-        setRoundCommads(allowSummon)
+        totalTargetLBused += (setRoundCommads(allowSummon))
         <span class="skw">wait</span>(<span class="dig">1</span>)
         <span class="kw">while</span> Utilities.isAttacking_BS() <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">868</span>, <span class="dig">340</span>) != ResultRColor:
             <span class="kw">print</span> <span class="str">"round in progress"</span>
@@ -303,31 +310,33 @@ LastTransferredUnitIdx = <span class="dig">3</span>
             <span class="kw">print</span> <span class="str">"battle ends"</span>
             <span class="skw">click</span>(Location(<span class="dig">868</span>, <span class="dig">340</span>))
             <span class="kw">break</span>;
+    <span class="kw">return</span> totalTargetLBused
 
-<span class="kw">def</span> doTrainLB():
+
+<span class="kw">def</span> doTrainLB(battle_max_count, direction):
     start = time.time()
     battleCount = <span class="dig">0</span>
-    <span class="kw">global</span> numLBUsed
     numLBUsed = <span class="dig">0</span>
     <span class="kw">while</span> True:
-        Utilities.moveAround()
+        Utilities.moveAround(direction)
         <span class="cmt">#wait(1)</span>
         <span class="kw">if</span> Utilities.isInBattle():
             battleCount = battleCount + <span class="dig">1</span>
             <span class="kw">print</span> <span class="str">"battle "</span>, battleCount, <span class="str">" starts"</span>
-            doBattle(False)
+            numLBUsed += (doBattle(False))
             <span class="kw">print</span> <span class="str">"battle "</span>, battleCount, <span class="str">" ends"</span>
-            <span class="kw">if</span> battleCount == BATTLE_COUNT_MAX:
+            <span class="kw">if</span> battleCount == battle_max_count:
                 <span class="kw">break</span>
-        <span class="skw">wait</span>(<span class="dig">1</span>)
+            <span class="skw">wait</span>(<span class="dig">1</span>)
     TimeSpent = time.time() - start
     <span class="kw">return</span> [TimeSpent, numLBUsed]
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#doBattle(True)</span>
     <span class="cmt">#selectTransferUnit4()</span>
-    <span class="skw">wait</span>(<span class="dig">5</span>)
-    doTrainLB()
+    <span class="cmt">#doOffensiveLB(True)</span>
+    <span class="cmt">#wait(5)</span>
+    doTrainLB(BATTLE_COUNT_MAX, <span class="str">'LeftRight'</span>)
 </pre>
 </body>
 </html>

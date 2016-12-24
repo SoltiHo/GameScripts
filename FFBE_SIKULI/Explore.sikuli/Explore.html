@@ -72,69 +72,44 @@
 <pre class="sikuli-code">
 moveCount = <span class="dig">0</span>
 SUMMON_NUM = <span class="dig">5</span>
+direeciton = <span class="str">'LeftRight'</span>
 
 <span class="kw">import</span> Utilities
 reload(Utilities)
 
+
+
 <span class="kw">def</span> Battle():
-    <span class="skw">wait</span>(<span class="dig">1</span>)
-    MenuRegion = Region(<span class="dig">1146</span>,<span class="dig">979</span>,<span class="dig">112</span>,<span class="dig">99</span>)
-    <span class="kw">if</span> MenuRegion.exists(<img src="1476748187876.png" />):
-        <span class="kw">print</span> <span class="str">"not in battle..."</span>
+    <span class="kw">if</span> <span class="kw">not</span> Utilities.isInBattle():
         <span class="kw">return</span>
     <span class="cmt"># In Battle</span>
-    <span class="kw">print</span> <span class="str">"Fight!!"</span>
-    <span class="cmt"># Cure() now working</span>
-    <span class="kw">global</span> moveCount
-    moveCount = <span class="dig">0</span>
-    AutoRegion = Region(<span class="dig">679</span>,<span class="dig">1014</span>,<span class="dig">129</span>,<span class="dig">57</span>)
-    <span class="kw">while</span> <span class="kw">not</span> AutoRegion.exists(<img src="1476748460074.png" />):
-        <span class="kw">print</span> <span class="str">"waiting auto"</span>
-        <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="skw">click</span>(Location(<span class="dig">783</span>, <span class="dig">518</span>))
-    <span class="skw">click</span>(Location(<span class="dig">908</span>, <span class="dig">462</span>))
-    <span class="cmt">#click(Location(822, 409))</span>
-    <span class="cmt">#click(Location(959, 445))</span>
-
-    <span class="cmt"># summon if available    </span>
-    Utilities.summonIfAvailable(SUMMON_NUM)
-
-    <span class="cmt"># Cure if needed</span>
+    <span class="kw">if</span> Utilities.lookAbleToSummon():
+        Utilities.summonIfAvailable(SUMMON_NUM)
     Utilities.doMiddleCureIfNeeded()
 
-    <span class="cmt"># start Battle</span>
-    <span class="skw">click</span>(AutoRegion)
+    Utilities.fastClick(<span class="dig">783</span>, <span class="dig">518</span>)
+    Utilities.fastClick(<span class="dig">908</span>, <span class="dig">462</span>)
+    Utilities.fastClick(<span class="dig">750</span>, <span class="dig">387</span>)
+    autoColor = Color(<span class="dig">0</span>, <span class="dig">38</span>, <span class="dig">89</span>) <span class="cmt"># 734, 1034</span>
+    Utilities.waitForColorAndDo(<span class="dig">734</span>, <span class="dig">1034</span>, autoColor)
+
     <span class="cmt"># Battle Ends</span>
-    ResultRegion = Region(<span class="dig">837</span>,<span class="dig">299</span>,<span class="dig">235</span>,<span class="dig">73</span>)
-    <span class="kw">while</span> <span class="kw">not</span> ResultRegion.exists(<img src="1479949016541.png" />):
-        <span class="kw">print</span> <span class="str">"waiting for battle to end"</span>
-        <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">print</span> <span class="str">"Battle Ended"</span>
-    <span class="kw">while</span> <span class="kw">not</span> MenuRegion.exists(<img src="1476748187876.png" />):
-        <span class="skw">click</span>(Location(<span class="dig">778</span>, <span class="dig">455</span>))
-        <span class="skw">wait</span>(<span class="dig">1</span>)
-    <span class="kw">return</span>
+    gilColor = Color(<span class="dig">222</span>,<span class="dig">168</span>,<span class="dig">24</span>) <span class="cmt"># (887, 412)</span>
+    Utilities.waitForColorAndDo(<span class="dig">887</span>, <span class="dig">412</span>, gilColor)
 
+<span class="kw">def</span> main():
+    <span class="kw">while</span> True:
+        Utilities.moveAround(direeciton)
+        Battle()
+        <span class="kw">print</span> <span class="str">"one round finished"</span>
+        <span class="kw">if</span> moveCount &gt; <span class="dig">1000</span>:
+            <span class="kw">break</span>
+    <span class="kw">print</span> <span class="str">"end"</span>
 
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    main()
+    <span class="cmt">#Battle()</span>
 
-<span class="kw">def</span> MoveAround():
-    <span class="kw">global</span> moveCount
-    moveCount = moveCount + <span class="dig">1</span>
-    MoveRegion = Region(<span class="dig">859</span>,<span class="dig">451</span>,<span class="dig">231</span>,<span class="dig">183</span>)
-    <span class="kw">print</span> <span class="str">"moving around.."</span>, moveCount
-    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(<span class="dig">100</span>,<span class="dig">0</span>))
-    <span class="skw">dragDrop</span>(MoveRegion, MoveRegion.offset(-<span class="dig">100</span>,<span class="dig">0</span>))
-    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(0,100))</span>
-    <span class="cmt">#dragDrop(MoveRegion, MoveRegion.offset(0,-100))</span>
-    Battle()
-
-<span class="kw">while</span> True:
-    MoveAround()
-    <span class="kw">print</span> <span class="str">"one round finished"</span>
-    <span class="kw">if</span> moveCount &gt; <span class="dig">1000</span>:
-        <span class="kw">break</span>
-    <span class="skw">wait</span>(<span class="dig">1</span>)
-<span class="kw">print</span> <span class="str">"end"</span>
 </pre>
 </body>
 </html>

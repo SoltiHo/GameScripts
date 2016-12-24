@@ -1,0 +1,148 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>FastTrust.sikuli</h2> <a href="FastTrust.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
+<span class="kw">import</span> Utilities
+reload(Utilities)
+
+myRobot = JRobot()
+selectFollower = False
+
+<span class="kw">def</span> enterFastMission():
+    fastMissionColor = Color(<span class="dig">99</span>, <span class="dig">5</span>, <span class="dig">8</span>) <span class="cmt"># (703, 672)</span>
+    Utilities.waitForColorAndDo(<span class="dig">703</span>, <span class="dig">672</span>, fastMissionColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">929</span>, <span class="dig">160</span>))
+
+    <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
+    missionDescNextStepColor = Color(<span class="dig">0</span>, <span class="dig">51</span>, <span class="dig">141</span>) <span class="cmt"># (954, 923)</span>
+    Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor,
+            func_while_wait=Utilities.buyStrength)
+
+    <span class="cmt"># select follower</span>
+    followerColor = Color(<span class="dig">0</span>, <span class="dig">39</span>, <span class="dig">93</span>) <span class="cmt"># (1096, 223)    </span>
+    <span class="kw">if</span> selectFollower:
+        Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+                func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
+    <span class="kw">else</span>:
+        <span class="kw">def</span> waitAndSelectNoFollower():
+            myRobot.delay(<span class="dig">500</span>)
+            func_after_wait=Utilities.selectNoFollower()
+        <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
+        Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(<span class="dig">0</span>, <span class="dig">141</span>, <span class="dig">218</span>)  <span class="cmt"># (917, 892)</span>
+    Utilities.waitForColorAndDo(<span class="dig">917</span>, <span class="dig">892</span>, launchColor)
+
+<span class="kw">def</span> doBattles():
+    nextStepColor = Color(<span class="dig">0</span>, <span class="dig">70</span>, <span class="dig">182</span>) <span class="cmt"># (925, 869)</span>
+    <span class="kw">def</span> attack():
+        inBattleColor = Color(<span class="dig">236</span>, <span class="dig">218</span>, <span class="dig">147</span>) <span class="cmt"># (920, 204)</span>
+        waitingForCommandColor = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">120</span>) <span class="cmt"># (850, 701)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">920</span>, <span class="dig">204</span>) == inBattleColor <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">850</span>, <span class="dig">701</span>) == waitingForCommandColor:
+            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].x, UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].y)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].x, UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].y)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        Utilities.handleCommunicationError()
+
+    Utilities.waitForColorAndDo(<span class="dig">925</span>, <span class="dig">869</span>, nextStepColor,
+            func_while_wait=attack,
+            func_after_wait=Utilities.handleMissionEnd)
+
+<span class="kw">def</span> executeOneRound():
+    enterFastMission()
+    doBattles()
+
+<span class="kw">def</span> main():
+    count = <span class="dig">0</span>
+    start = time.time()
+    total_time = <span class="dig">0</span>
+    <span class="kw">while</span> True:
+        <span class="kw">if</span> count == <span class="dig">0</span>:
+            start = time.time()
+        count += <span class="dig">1</span>
+        executeOneRound()
+        <span class="kw">if</span> count == <span class="dig">50</span>:
+            total_time = time.time() - start
+            Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'FastTrust'</span>, str(total_time) + <span class="str">','</span> + str(count))
+            count = <span class="dig">0</span>
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    main()
+</pre>
+</body>
+</html>
