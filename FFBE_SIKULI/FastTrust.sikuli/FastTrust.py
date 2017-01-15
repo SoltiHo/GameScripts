@@ -14,7 +14,7 @@ def enterFastMission():
 
     # wait for mission dismiss color and buy strength if necessary
     missionDescNextStepColor = Color(0, 51, 141) # (954, 923)
-    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, 
+    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
             func_while_wait=Utilities.buyStrength)
 
     # select follower
@@ -25,7 +25,7 @@ def enterFastMission():
     else:
         def waitAndSelectNoFollower():
             myRobot.delay(500)
-            func_after_wait=Utilities.selectNoFollower()
+            func_after_wait=Utilities.selectStranger()
         #followerColor = Color(22, 41, 54) # (916, 248)
         Utilities.waitForColorAndDo(1096, 223, followerColor, 
             func_after_wait=waitAndSelectNoFollower)
@@ -39,10 +39,10 @@ def doBattles():
         inBattleColor = Color(236, 218, 147) # (920, 204)
         waitingForCommandColor = Color(6, 51, 120) # (850, 701)
         if myRobot.getPixelColor(920, 204) == inBattleColor and myRobot.getPixelColor(850, 701) == waitingForCommandColor:
-            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[0].x, UNIT_CENTER_LOCATIONS[0].y)
+            myRobot.mouseMove(Utilities.UNIT_CENTER_LOCATIONS[0].x, Utilities.UNIT_CENTER_LOCATIONS[0].y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[1].x, UNIT_CENTER_LOCATIONS[1].y)
+            myRobot.mouseMove(Utilities.UNIT_CENTER_LOCATIONS[1].x, Utilities.UNIT_CENTER_LOCATIONS[1].y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         Utilities.handleCommunicationError()

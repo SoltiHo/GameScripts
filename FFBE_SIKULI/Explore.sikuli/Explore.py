@@ -1,16 +1,19 @@
 moveCount = 0
-SUMMON_NUM = 5
+SUMMON_NUM = 2
 direeciton = 'LeftRight'
 
+import java.awt.Robot as JRobot
+import java.awt.Color as Color
+import java.awt.event.InputEvent as InputEvent
 import Utilities
 reload(Utilities)
-
 
 
 def Battle():
     if not Utilities.isInBattle():
         return
     # In Battle
+    myRobot.delay(500)
     if Utilities.lookAbleToSummon():
         Utilities.summonIfAvailable(SUMMON_NUM)
     Utilities.doMiddleCureIfNeeded()
@@ -18,6 +21,7 @@ def Battle():
     Utilities.fastClick(783, 518)
     Utilities.fastClick(908, 462)
     Utilities.fastClick(750, 387)    
+
     autoColor = Color(0, 38, 89) # 734, 1034
     Utilities.waitForColorAndDo(734, 1034, autoColor)
     
@@ -35,5 +39,6 @@ def main():
     print "end"
 
 if __name__ == "__main__":
+    #print(Utilities.lookAbleToSummon())
     main()
     #Battle()

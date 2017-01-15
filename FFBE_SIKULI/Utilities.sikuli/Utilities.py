@@ -367,9 +367,20 @@ def isInBattle():
     else:
         return True
 
+def isInBattle_DuOS():
+    mapColor = Color(3, 81, 176) # (1099,1031)
+    if myRobot.getPixelColor(1099, 1031) == mapColor:
+        return False
+    else:
+        return True
+
 def lookAbleToSummon():
     noSummonColor = Color(7,21,27) # (1252, 645)
     return myRobot.getPixelColor(1252,645) != noSummonColor
+
+def lookAbleToSummon_DuOS():
+    noSummonColor = Color(5,20,25) # (1237, 667)
+    return myRobot.getPixelColor(1237,667) != noSummonColor
 
 def lookHavingLB(unitNum):
     if myRobot.getPixelColor( \
@@ -470,8 +481,24 @@ def selectNoFollower():
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(500)
 
+def selectStranger():
+    #Location(1256, 291)Location(1256, 1063)
+    myRobot.mouseMove(1256, 291)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(300)
+    myRobot.mouseMove(1256, 663)
+    myRobot.delay(300)
+    myRobot.mouseMove(1256, 1063)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(300)
+    myRobot.mouseMove(793, 869)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(500)
+
 
 def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[]):
+    global UNIT_CENTER_LOCATIONS
     print 'x = ', x, ', y = ', y, ', color = ', color
     while not myRobot.getPixelColor(x, y) == color:
         print myRobot.getPixelColor(x, y)
@@ -509,12 +536,9 @@ def fastClick(x, y):
 
 
 if __name__ == "__main__":
-    targetLocation = Location(1096, 223)
-    hover( targetLocation)
-    wait(10)
+    print(lookAbleToSummon())
+    targetLocation = Location(734, 1034)
+    hover(targetLocation)
+    print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
-    if lookAbleToSummon():
-        print 'able to summon'
-    else:
-        print 'no summon'
-    
+  

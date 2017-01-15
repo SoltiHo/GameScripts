@@ -97,7 +97,7 @@ selectFollower = False
     <span class="kw">else</span>:
         <span class="kw">def</span> waitAndSelectNoFollower():
             myRobot.delay(<span class="dig">500</span>)
-            func_after_wait=Utilities.selectNoFollower()
+            func_after_wait=Utilities.selectStranger()
         <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
         Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
             func_after_wait=waitAndSelectNoFollower)
@@ -111,10 +111,10 @@ selectFollower = False
         inBattleColor = Color(<span class="dig">236</span>, <span class="dig">218</span>, <span class="dig">147</span>) <span class="cmt"># (920, 204)</span>
         waitingForCommandColor = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">120</span>) <span class="cmt"># (850, 701)</span>
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">920</span>, <span class="dig">204</span>) == inBattleColor <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">850</span>, <span class="dig">701</span>) == waitingForCommandColor:
-            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].x, UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].y)
+            myRobot.mouseMove(Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].x, Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">0</span>].y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-            myRobot.mouseMove(UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].x, UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].y)
+            myRobot.mouseMove(Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].x, Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">1</span>].y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         Utilities.handleCommunicationError()

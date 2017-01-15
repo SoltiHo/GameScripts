@@ -71,18 +71,21 @@
 </div>
 <pre class="sikuli-code">
 moveCount = <span class="dig">0</span>
-SUMMON_NUM = <span class="dig">5</span>
+SUMMON_NUM = <span class="dig">2</span>
 direeciton = <span class="str">'LeftRight'</span>
 
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+<span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
 <span class="kw">import</span> Utilities
 reload(Utilities)
-
 
 
 <span class="kw">def</span> Battle():
     <span class="kw">if</span> <span class="kw">not</span> Utilities.isInBattle():
         <span class="kw">return</span>
     <span class="cmt"># In Battle</span>
+    myRobot.delay(<span class="dig">500</span>)
     <span class="kw">if</span> Utilities.lookAbleToSummon():
         Utilities.summonIfAvailable(SUMMON_NUM)
     Utilities.doMiddleCureIfNeeded()
@@ -90,6 +93,7 @@ reload(Utilities)
     Utilities.fastClick(<span class="dig">783</span>, <span class="dig">518</span>)
     Utilities.fastClick(<span class="dig">908</span>, <span class="dig">462</span>)
     Utilities.fastClick(<span class="dig">750</span>, <span class="dig">387</span>)
+
     autoColor = Color(<span class="dig">0</span>, <span class="dig">38</span>, <span class="dig">89</span>) <span class="cmt"># 734, 1034</span>
     Utilities.waitForColorAndDo(<span class="dig">734</span>, <span class="dig">1034</span>, autoColor)
 
@@ -107,6 +111,7 @@ reload(Utilities)
     <span class="kw">print</span> <span class="str">"end"</span>
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="cmt">#print(Utilities.lookAbleToSummon())</span>
     main()
     <span class="cmt">#Battle()</span>
 

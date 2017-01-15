@@ -5,7 +5,7 @@ import Utilities
 reload(Utilities)
 
 myRobot = JRobot()
-fastMode = True
+fastMode = False
 missionNextStepPicture = "1479022885841.png"
 count = 0
 LB_used = 0
@@ -113,7 +113,7 @@ while True:
         total_time = time.time() - start
         Utilities.log('TrustLog.csv', 'Trust', str(total_time) + ',' + str(LB_used))
     remaining = 300 - (time.time() - this_round_start)
-    #if remaining > 0: wait(remaining)
+    if remaining > 0: wait(remaining)
 
 
 

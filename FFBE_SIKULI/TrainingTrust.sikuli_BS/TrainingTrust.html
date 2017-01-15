@@ -77,7 +77,7 @@
 reload(Utilities)
 
 myRobot = JRobot()
-fastMode = True
+fastMode = False
 missionNextStepPicture = <img src="1479022885841.png" />
 count = <span class="dig">0</span>
 LB_used = <span class="dig">0</span>
@@ -185,7 +185,7 @@ start = time.time()
         total_time = time.time() - start
         Utilities.log(<span class="str">'TrustLog.csv'</span>, <span class="str">'Trust'</span>, str(total_time) + <span class="str">','</span> + str(LB_used))
     remaining = <span class="dig">300</span> - (time.time() - this_round_start)
-    <span class="cmt">#if remaining &gt; 0: wait(remaining)</span>
+    <span class="kw">if</span> remaining &gt; <span class="dig">0</span>: <span class="skw">wait</span>(remaining)
 
 
 

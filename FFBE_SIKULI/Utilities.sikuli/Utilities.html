@@ -439,9 +439,20 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="kw">else</span>:
         <span class="kw">return</span> True
 
+<span class="kw">def</span> isInBattle_DuOS():
+    mapColor = Color(<span class="dig">3</span>, <span class="dig">81</span>, <span class="dig">176</span>) <span class="cmt"># (1099,1031)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1099</span>, <span class="dig">1031</span>) == mapColor:
+        <span class="kw">return</span> False
+    <span class="kw">else</span>:
+        <span class="kw">return</span> True
+
 <span class="kw">def</span> lookAbleToSummon():
     noSummonColor = Color(<span class="dig">7</span>,<span class="dig">21</span>,<span class="dig">27</span>) <span class="cmt"># (1252, 645)</span>
     <span class="kw">return</span> myRobot.getPixelColor(<span class="dig">1252</span>,<span class="dig">645</span>) != noSummonColor
+
+<span class="kw">def</span> lookAbleToSummon_DuOS():
+    noSummonColor = Color(<span class="dig">5</span>,<span class="dig">20</span>,<span class="dig">25</span>) <span class="cmt"># (1237, 667)</span>
+    <span class="kw">return</span> myRobot.getPixelColor(<span class="dig">1237</span>,<span class="dig">667</span>) != noSummonColor
 
 <span class="kw">def</span> lookHavingLB(unitNum):
     <span class="kw">if</span> myRobot.getPixelColor( \
@@ -542,8 +553,24 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">500</span>)
 
+<span class="kw">def</span> selectStranger():
+    <span class="cmt">#Location(1256, 291)Location(1256, 1063)</span>
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">291</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">663</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">1256</span>, <span class="dig">1063</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">300</span>)
+    myRobot.mouseMove(<span class="dig">793</span>, <span class="dig">869</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">500</span>)
+
 
 <span class="kw">def</span> waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[]):
+    <span class="kw">global</span> UNIT_CENTER_LOCATIONS
     <span class="kw">print</span> <span class="str">'x = '</span>, x, <span class="str">', y = '</span>, y, <span class="str">', color = '</span>, color
     <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
         <span class="kw">print</span> myRobot.getPixelColor(x, y)
@@ -581,14 +608,11 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
 
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    targetLocation = Location(<span class="dig">1096</span>, <span class="dig">223</span>)
-    hover( targetLocation)
-    <span class="skw">wait</span>(<span class="dig">10</span>)
+    <span class="kw">print</span>(lookAbleToSummon())
+    targetLocation = Location(<span class="dig">734</span>, <span class="dig">1034</span>)
+    hover(targetLocation)
+    <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
-    <span class="kw">if</span> lookAbleToSummon():
-        <span class="kw">print</span> <span class="str">'able to summon'</span>
-    <span class="kw">else</span>:
-        <span class="kw">print</span> <span class="str">'no summon'</span>
 </pre>
 </body>
 </html>
