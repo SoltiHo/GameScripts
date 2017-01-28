@@ -221,6 +221,36 @@ def isUnitAlive(unitNum):
     else:
         print "unit ", unitNum, " died"
         return False
+
+def isUnitAliveFast(unitNum):
+    # Marker
+    UNIT_SWORD_COLOR = [
+            Color(201,197,194), # 683, 669
+            Color(141,133,118), # 681, 779
+            Color(141,134,120), # 681, 888
+            Color(103, 90, 72), # 980, 669
+            Color(243,243,243)  # 982, 777 
+            ]
+    UNIT_SWORD_X = [
+            683, 
+            681, 
+            681, 
+            980, 
+            982, 
+            ]
+    UNIT_SWORD_Y = [
+            669,
+            779,
+            888,
+            669,
+            777
+            ]
+    if myRobot.getPixelColor(
+            UNIT_SWORD_X[unitNum - 1],
+            UNIT_SWORD_Y[unitNum - 1]) == UNIT_SWORD_COLOR[unitNum - 1]:
+        return True
+    else:
+        return False
     
 def isAnyoneHPLow():
     if isBloodLowerThanHalf(1) and isUnitAlive(1):
@@ -281,6 +311,8 @@ def manuallyKickOff():
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def summonIfAvailable(unitNum):
+    if not lookAbleToSummon():
+        return False
     if not isUnitAlive(unitNum):
         return False
     summonRegion = Region(968,675,79,87)
@@ -293,7 +325,7 @@ def summonIfAvailable(unitNum):
     else:
         summoned = True
         click(Location(1086, 734))
-    wait(0.5)
+    myRobot.delay(1000)
     return summoned        
 
 def isLBAvailable(toClick):
@@ -360,6 +392,62 @@ def moveRight():
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
+def MoveUpAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    print isBoundary
+    move_func = moveUp
+    if isBoundary:
+        move_func = boundaryGoUp
+    move_func()
+    if isInBattle():
+        myRobot.delay(1000)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(1000)
+        move_func()
+        return 1
+    return 0
+
+def MoveDownAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    print isBoundary
+    move_func = moveDown
+    if isBoundary:
+        move_func = boundaryGoDown
+    move_func()
+    if isInBattle():
+        myRobot.delay(1000)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(1000)
+        move_func()
+        return 1
+    return 0
+
+def MoveLeftAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    print isBoundary
+    move_func = moveLeft
+    if isBoundary:
+        move_func = boundaryGoLeft
+    move_func()    
+    if isInBattle():
+        myRobot.delay(1000)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(1000)
+        move_func()
+        return 1
+    return 0
+
+def MoveRightAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    print isBoundary
+    move_func = moveRight
+    if isBoundary:
+        move_func = boundaryGoRight
+    move_func()
+    if isInBattle():
+        myRobot.delay(1000)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(1000)
+        move_func()
+        return 1
+    return 0
+
 def isInBattle():
     # (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]
     if myRobot.getPixelColor(1231, 998).getRed() > 230:
@@ -406,10 +494,13 @@ def handleCommunicationError():
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-def log(log_filename, event_type, event_message):
+def log(log_filename, event_type, event_message, toDelete=False):
     log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
     log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
-    with open(log_file, 'a') as f:
+    open_mode = 'a'
+    if toDelete:
+        open_mode = 'w'
+    with open(log_file, open_mode) as f:
         f.write(log_msg)
 
 def handleMissionEnd():
@@ -535,10 +626,94 @@ def fastClick(x, y):
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 
+def isWaitingForCommand():
+    menuColor = Color(255, 255, 255) # 1139, 1034
+    waitingForCommandColor1 = Color(6, 51, 120) # (850, 701)
+    waitingForCommandColor2 = Color(6, 53, 124) # (828, 809)
+    waitingForCommandColor3 = Color(6, 45, 120) # (821, 921)
+    waitingForCommandColor4 = Color(6, 50, 117) # (1155, 700)
+    waitingForCommandColor5 = Color(6, 51, 117) # (1153, 808)
+    is_someone_waiting = (
+        (myRobot.getPixelColor(850, 701) == waitingForCommandColor1) or
+        (myRobot.getPixelColor(828, 809) == waitingForCommandColor2) or
+        (myRobot.getPixelColor(821, 921) == waitingForCommandColor3) or
+        (myRobot.getPixelColor(1155, 700) == waitingForCommandColor4) or
+        (myRobot.getPixelColor(1153, 808) == waitingForCommandColor5))
+    
+    if myRobot.getPixelColor(1139, 1034) == menuColor and is_someone_waiting:
+        return True
+    else:
+        return False
+
+def boundaryGoUp():
+    myRobot.mouseMove(956, 464)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(956, 434)
+    myRobot.delay(100)
+    myRobot.mouseMove(956, 414)
+    myRobot.delay(100)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def boundaryGoDown():
+    myRobot.mouseMove(956, 464)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(956, 494)
+    myRobot.delay(100)
+    myRobot.mouseMove(956, 514)
+    myRobot.delay(100)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def boundaryGoLeft():
+    myRobot.mouseMove(956, 464)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(926, 464)
+    myRobot.delay(100)
+    myRobot.mouseMove(906, 464)
+    myRobot.delay(100)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def boundaryGoRight():
+    myRobot.mouseMove(956, 464)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(986, 464)
+    myRobot.delay(100)
+    myRobot.mouseMove(1006, 464)
+    myRobot.delay(100)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def selectMission(mission_location_x, mission_location_y):
+    frontPageColor = Color(243, 108, 151) # (1184,204)
+    waitForColorAndDo(1184, 204, frontPageColor, 
+            func_while_wait=fastClick, arg_while_wait=(929, 160),
+            func_after_wait=fastClick, arg_after_wait=(mission_location_x, mission_location_y))
+    print('waiting for desc next')
+    # wait for mission dismiss color and buy strength if necessary
+    missionDescNextStepColor = Color(0, 51, 141) # (954, 923)
+    waitForColorAndDo(954, 923, missionDescNextStepColor,
+            func_while_wait=buyStrength)
+
+def selectFollowerAndLaunch(toSelct):
+    followerColor = Color(40, 153, 206) # (1255, 348)    
+    if toSelct:
+        waitForColorAndDo(1255, 348, followerColor, 
+                func_after_wait=fastClick, arg_after_wait=(810, 404))
+    else:
+        def waitAndSelectNoFollower():
+            myRobot.delay(500)
+            func_after_wait=selectStranger()
+        waitForColorAndDo(1255, 348, followerColor, 
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(0, 141, 218)  # (917, 892)
+    waitForColorAndDo(917, 892, launchColor)
+
 if __name__ == "__main__":
     print(lookAbleToSummon())
-    targetLocation = Location(734, 1034)
+    targetLocation = Location(1190, 270)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+
+    
+    #wait(3)
   

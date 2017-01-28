@@ -1,0 +1,539 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>WindTemple.sikuli</h2> <a href="WindTemple.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+<span class="kw">import</span> Utilities
+reload(Utilities)
+myRobot = JRobot()
+
+selectFollower = False
+start_phase = <span class="dig">0</span>  <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
+
+num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
+num_summon = <span class="dig">0</span>
+<span class="kw">def</span> revive(unitNum):
+    <span class="cmt"># must use thunder summon</span>
+    <span class="cmt"># open healer menu</span>
+    Utilities.openMagicMenu(<span class="dig">5</span>) <span class="cmt"># assume the healer is at 5</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">721</span>, <span class="dig">831</span>) <span class="cmt"># revive magic</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(
+            Utilities.UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>].getX(),
+            Utilities.UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>].getY())
+    myRobot.delay(<span class="dig">500</span>)
+    returnColor = Color(<span class="dig">19</span>,<span class="dig">209</span>,<span class="dig">208</span>) <span class="cmt"># 1175, 1005</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1175</span>,<span class="dig">1005</span>) == returnColor: <span class="cmt"># not dead</span>
+        Utilities.fastClick(<span class="dig">1175</span>, <span class="dig">1005</span>)
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">1175</span>, <span class="dig">1005</span>)
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="kw">return</span> False
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">return</span> True
+
+<span class="kw">def</span> needCure():
+    <span class="kw">if</span> Utilities.isBloodLowerThanHalf(<span class="dig">1</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> Utilities.isBloodLowerThanHalf(<span class="dig">2</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> Utilities.isBloodLowerThanHalf(<span class="dig">3</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> Utilities.isBloodLowerThanHalf(<span class="dig">4</span>):
+        <span class="kw">return</span> True
+    <span class="kw">if</span> Utilities.isBloodLowerThanHalf(<span class="dig">5</span>):
+        <span class="kw">return</span> True
+    <span class="kw">return</span> False
+
+<span class="kw">def</span> Cure1(): <span class="cmt"># fire monster</span>
+    Utilities.openMagicMenu(<span class="dig">1</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    middleCureColor = Color(<span class="dig">98</span>,<span class="dig">146</span>,<span class="dig">173</span>)
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">732</span>, <span class="dig">817</span>) != middleCureColor:
+        <span class="cmt"># out of MP</span>
+        <span class="kw">print</span> <span class="str">'Unit 4 out of MP'</span>
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">1175</span>, <span class="dig">1005</span>)
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="kw">return</span> False
+    Utilities.fastClick(<span class="dig">732</span>, <span class="dig">817</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">777</span>, <span class="dig">726</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">return</span> True
+
+<span class="kw">def</span> Cure2():
+    <span class="kw">return</span> False
+
+<span class="kw">def</span> Cure3():
+    <span class="kw">return</span> False
+
+<span class="kw">def</span> Cure4():
+    Utilities.openMagicMenu(<span class="dig">4</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    middleCureColor = Color(<span class="dig">127</span>,<span class="dig">146</span>,<span class="dig">125</span>)
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1031</span>, <span class="dig">822</span>) != middleCureColor:
+        <span class="cmt"># out of MP</span>
+        <span class="kw">print</span> <span class="str">'Unit 4 out of MP'</span>
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">1175</span>, <span class="dig">1005</span>)
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="kw">return</span> False
+    Utilities.fastClick(<span class="dig">1031</span>, <span class="dig">822</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">1025</span>, <span class="dig">718</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">return</span> True
+
+<span class="kw">def</span> Cure5():
+    <span class="kw">return</span> False
+
+<span class="kw">def</span> doLB1():
+    <span class="kw">global</span> num_LB_used
+    Utilities.openMagicMenu(<span class="dig">1</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
+        <span class="cmt"># follow action depending on LB type</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
+        num_LB_used[<span class="dig">0</span>] += <span class="dig">1</span>
+    <span class="kw">else</span>:
+        Utilities.closeMagicMenu()
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> doLB2():
+    <span class="kw">global</span> num_LB_used
+    Utilities.openMagicMenu(<span class="dig">2</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
+        <span class="cmt"># follow action depending on LB type</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
+        num_LB_used[<span class="dig">1</span>] += <span class="dig">1</span>
+    <span class="kw">else</span>:
+        Utilities.closeMagicMenu()
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> doLB3():
+    <span class="kw">global</span> num_LB_used
+    Utilities.openMagicMenu(<span class="dig">3</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
+        <span class="cmt"># follow action depending on LB type</span>
+        num_LB_used[<span class="dig">2</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
+    <span class="kw">else</span>:
+        Utilities.closeMagicMenu()
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> doLB4():
+    <span class="kw">global</span> num_LB_used
+    Utilities.openMagicMenu(<span class="dig">4</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
+        <span class="cmt"># follow action depending on LB type</span>
+        num_LB_used[<span class="dig">3</span>] += <span class="dig">1</span>
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">1062</span>, <span class="dig">723</span>)
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
+    <span class="kw">else</span>:
+        Utilities.closeMagicMenu()
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> doLB5():
+    <span class="kw">global</span> num_LB_used
+    Utilities.openMagicMenu(<span class="dig">5</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
+        <span class="cmt"># follow action depending on LB type</span>
+        num_LB_used[<span class="dig">4</span>] += <span class="dig">1</span>
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">1061</span>, <span class="dig">829</span>)
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
+    <span class="kw">else</span>:
+        Utilities.closeMagicMenu()
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> setCommand():
+    <span class="kw">global</span> num_LB_used
+    <span class="kw">global</span> num_summon
+
+    do_revive_unit = <span class="dig">0</span>
+    <span class="kw">if</span> <span class="kw">not</span> Utilities.isUnitAliveFast(<span class="dig">1</span>):
+        revive(<span class="dig">1</span>)
+        do_revive_unit = <span class="dig">5</span>
+    <span class="kw">elif</span> <span class="kw">not</span> Utilities.isUnitAliveFast(<span class="dig">2</span>):
+        revive(<span class="dig">2</span>)
+        do_revive_unit = <span class="dig">5</span>
+    <span class="kw">elif</span> <span class="kw">not</span> Utilities.isUnitAliveFast(<span class="dig">3</span>):
+        revive(<span class="dig">3</span>)
+        do_revive_unit = <span class="dig">5</span>
+    <span class="kw">elif</span> <span class="kw">not</span> Utilities.isUnitAliveFast(<span class="dig">4</span>):
+        revive(<span class="dig">4</span>)
+        do_revive_unit = <span class="dig">5</span>
+    <span class="kw">elif</span> <span class="kw">not</span> Utilities.isUnitAliveFast(<span class="dig">5</span>):
+        <span class="kw">print</span> <span class="str">'master healer dead... game over'</span>
+        exit -<span class="dig">1</span>
+    do_cure_unit = <span class="dig">0</span>
+    <span class="kw">if</span> needCure():
+        cured = Cure1()
+        do_cure_unit = <span class="dig">1</span>
+        <span class="kw">if</span> <span class="kw">not</span> cured:
+            cured = Cure2()
+            do_cure_unit = <span class="dig">2</span>
+        <span class="kw">if</span> <span class="kw">not</span> cured:
+            cured = Cure3()
+            do_cure_unit = <span class="dig">3</span>
+        <span class="kw">if</span> <span class="kw">not</span> cured:
+            cured = Cure4()
+            do_cure_unit = <span class="dig">4</span>
+        <span class="kw">if</span> <span class="kw">not</span> cured:
+            <span class="kw">print</span> <span class="str">'Cannot Cure'</span>
+            exit -<span class="dig">1</span>
+    <span class="cmt"># after revive and cure, check LB</span>
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">1</span> <span class="kw">and</span> do_revive_unit != <span class="dig">1</span>:
+        num_LB_used[<span class="dig">0</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">2</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">2</span> <span class="kw">and</span> do_revive_unit != <span class="dig">2</span>:
+        num_LB_used[<span class="dig">1</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">3</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">3</span> <span class="kw">and</span> do_revive_unit != <span class="dig">3</span>:
+        num_LB_used[<span class="dig">2</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">4</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">4</span> <span class="kw">and</span> do_revive_unit != <span class="dig">4</span>:
+        num_LB_used[<span class="dig">3</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">5</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">5</span> <span class="kw">and</span> do_revive_unit != <span class="dig">5</span>:
+        num_LB_used[<span class="dig">4</span>] += <span class="dig">1</span>
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
+    myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt"># summon if no LB and if available</span>
+    <span class="kw">if</span> do_cure_unit != <span class="dig">2</span> <span class="kw">and</span> do_revive_unit != <span class="dig">2</span> <span class="kw">and</span> (<span class="kw">not</span> Utilities.lookHavingLB(<span class="dig">2</span>)):
+        <span class="kw">if</span> Utilities.summonIfAvailable(<span class="dig">2</span>): <span class="cmt"># earth</span>
+            num_summon += <span class="dig">1</span>
+            Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Summon'</span>)
+        <span class="kw">else</span>:
+            Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'check but no Summon'</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+
+    <span class="cmt">#Utilities.manuallyKickOff()</span>
+    Utilities.fastClick(<span class="dig">745</span>, <span class="dig">1032</span>)  <span class="cmt"># click AUTO</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">745</span>, <span class="dig">1032</span>)  <span class="cmt"># click AUTO</span>
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> issueCommandIfWaitingForOne(commandFunc):
+    <span class="kw">if</span> Utilities.isWaitingForCommand():
+        commandFunc()
+
+<span class="kw">def</span> setBossBattleCommand():
+    issueCommandIfWaitingForOne(setBossCommand)
+
+<span class="kw">def</span> doBossBattle():
+    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Boss Battle'</span>)
+    myRobot.delay(<span class="dig">1500</span>)
+
+    ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
+    totalTargetLBused = <span class="dig">0</span>
+    Utilities.waitForColorAndDo(<span class="dig">865</span>, <span class="dig">339</span>, ResultRColor,
+            func_while_wait=setBossBattleCommand)
+    myRobot.delay(<span class="dig">1000</span>)
+
+<span class="kw">def</span> setBossCommand():
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>):
+        num_LB_used[<span class="dig">0</span>] += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">'unit 1 LB = '</span>, num_LB_used[<span class="dig">0</span>]
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">2</span>):
+        num_LB_used[<span class="dig">1</span>] += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">'unit 2 LB = '</span>, num_LB_used[<span class="dig">1</span>]
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">3</span>):
+        num_LB_used[<span class="dig">2</span>] += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">'unit 3 LB = '</span>, num_LB_used[<span class="dig">2</span>]
+    <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">4</span>):
+        num_LB_used[<span class="dig">3</span>] += <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">'unit 4 LB = '</span>, num_LB_used[<span class="dig">3</span>]
+    <span class="cmt"># revive the Boss</span>
+    Utilities.openMagicMenu(<span class="dig">5</span>) <span class="cmt"># assume the healer is at 5</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">721</span>, <span class="dig">831</span>) <span class="cmt"># revive magic</span>
+    myRobot.delay(<span class="dig">800</span>)
+    Utilities.fastClick(<span class="dig">757</span>,<span class="dig">1034</span>)
+    myRobot.delay(<span class="dig">800</span>)
+    Utilities.fastClick(<span class="dig">799</span>, <span class="dig">374</span>)
+    myRobot.delay(<span class="dig">800</span>)
+    Utilities.fastClick(<span class="dig">745</span>, <span class="dig">1032</span>)  <span class="cmt"># click AUTO</span>
+    myRobot.delay(<span class="dig">500</span>)
+
+    ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
+
+<span class="kw">def</span> setBattleCommand():
+    issueCommandIfWaitingForOne(setCommand)
+
+<span class="kw">def</span> doBattle():
+    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'do Battle'</span>)
+    myRobot.delay(<span class="dig">1500</span>)
+    Utilities.fastClick(<span class="dig">796</span>, <span class="dig">471</span>)
+    Utilities.fastClick(<span class="dig">695</span>, <span class="dig">377</span>)
+    Utilities.fastClick(<span class="dig">864</span>, <span class="dig">421</span>)
+
+    ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
+    totalTargetLBused = <span class="dig">0</span>
+    Utilities.waitForColorAndDo(<span class="dig">865</span>, <span class="dig">339</span>, ResultRColor,
+            func_while_wait=setBattleCommand)
+    myRobot.delay(<span class="dig">1000</span>)
+
+<span class="kw">def</span> walkUp(count, isBoundary=False):
+    battle_count = <span class="dig">0</span>
+    <span class="kw">while</span> count &gt; <span class="dig">0</span>:
+        battle_count += Utilities.MoveUpAndCheckBattle(doBattle, isBoundary=isBoundary)
+        myRobot.delay(<span class="dig">300</span>)
+        count -= <span class="dig">1</span>
+    <span class="kw">return</span> battle_count
+
+<span class="kw">def</span> walkDown(count, isBoundary=False):
+    battle_count = <span class="dig">0</span>
+    <span class="kw">while</span> count &gt; <span class="dig">0</span>:
+        battle_count += Utilities.MoveDownAndCheckBattle(doBattle, isBoundary=isBoundary)
+        myRobot.delay(<span class="dig">300</span>)
+        count -= <span class="dig">1</span>
+    <span class="kw">return</span> battle_count
+
+<span class="kw">def</span> walkRight(count, isBoundary=False):
+    battle_count = <span class="dig">0</span>
+    <span class="kw">while</span> count &gt; <span class="dig">0</span>:
+        battle_count += Utilities.MoveRightAndCheckBattle(doBattle, isBoundary=isBoundary)
+        myRobot.delay(<span class="dig">300</span>)
+        count -= <span class="dig">1</span>
+    <span class="kw">return</span> battle_count
+
+<span class="kw">def</span> walkLeft(count, isBoundary=False):
+    battle_count = <span class="dig">0</span>
+    <span class="kw">while</span> count &gt; <span class="dig">0</span>:
+        battle_count += Utilities.MoveLeftAndCheckBattle(doBattle, isBoundary=isBoundary)
+        myRobot.delay(<span class="dig">300</span>)
+        count -= <span class="dig">1</span>
+    <span class="kw">return</span> battle_count
+
+<span class="kw">def</span> walkThroughPhaseOne():
+    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'phase 1'</span>)
+    MAX_BATTLE_COUNT = <span class="dig">14</span>
+    num_battle = <span class="dig">0</span>
+
+    num_battle += walkRight(<span class="dig">13</span>)
+    num_battle += walkLeft(<span class="dig">13</span>)
+    num_battle += walkUp(<span class="dig">7</span>)
+    num_battle += walkRight(<span class="dig">1</span>)
+    num_battle += walkUp(<span class="dig">3</span>)
+    num_battle += walkRight(<span class="dig">1</span>)
+    num_battle += walkUp(<span class="dig">2</span>)
+    num_battle += walkLeft(<span class="dig">2</span>)
+    num_battle += walkUp(<span class="dig">5</span>)  <span class="cmt"># entering page 2</span>
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># --- page 2 ---</span>
+    num_battle += walkUp(<span class="dig">2</span>)
+    num_battle += walkLeft(<span class="dig">7</span>)
+    num_battle += walkUp(<span class="dig">4</span>)
+    num_battle += walkLeft(<span class="dig">3</span>)
+    num_battle += walkDown(<span class="dig">7</span>)
+    num_battle += walkRight(<span class="dig">7</span>) <span class="cmt"># 2nd mine</span>
+    num_battle += walkLeft(<span class="dig">7</span>)
+    num_battle += walkUp(<span class="dig">10</span>)
+    num_battle += walkLeft(<span class="dig">4</span>)
+    num_battle += walkUp(<span class="dig">7</span>)
+    num_battle += walkRight(<span class="dig">7</span>)
+    num_battle += walkDown(<span class="dig">4</span>)
+    num_battle += walkRight(<span class="dig">6</span>)  <span class="cmt"># Leaving Zone 1, do the remaining battles</span>
+    doRemainingBattles(MAX_BATTLE_COUNT - num_battle)
+
+    <span class="cmt"># go to reference position</span>
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    mouseUp(Button.LEFT)
+    walkRight(<span class="dig">1</span>)
+    walkUp(<span class="dig">2</span>)
+    walkUp(<span class="dig">5</span>, isBoundary=True) <span class="cmt"># entering page 3, Zone 2</span>
+    myRobot.delay(<span class="dig">2000</span>)
+
+<span class="kw">def</span> doRemainingBattles(numBattle, direction=<span class="str">'UpDown'</span>):
+    <span class="kw">while</span> numBattle &gt; <span class="dig">0</span>:
+        <span class="kw">while</span> True:
+            Utilities.moveAround(direction)
+            <span class="kw">if</span> Utilities.isInBattle():
+                doBattle()
+                <span class="kw">break</span>
+        numBattle -= <span class="dig">1</span>
+        <span class="kw">print</span> <span class="str">'remaining battle count: '</span>, numBattle
+
+<span class="kw">def</span> walkThroughPhaseTwo():
+    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Phase 2'</span>)
+    MAX_BATTLE_COUNT = <span class="dig">15</span>
+    num_battle = <span class="dig">0</span>
+
+    num_battle += walkRight(<span class="dig">8</span>)
+    num_battle += walkUp(<span class="dig">2</span>)
+    num_battle += walkRight(<span class="dig">6</span>) <span class="cmt"># 3rd Mine</span>
+    num_battle += walkLeft(<span class="dig">6</span>)
+    num_battle += walkDown(<span class="dig">2</span>)
+    num_battle += walkLeft(<span class="dig">8</span>)
+    num_battle += walkUp(<span class="dig">23</span>)
+    num_battle += walkLeft(<span class="dig">10</span>)
+    num_battle += walkUp(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">10</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True)
+    <span class="cmt"># do the remaining battle</span>
+    doRemainingBattles(MAX_BATTLE_COUNT - num_battle, <span class="str">'LeftRight'</span>)
+    <span class="cmt"># go to reference position</span>
+    myRobot.delay(<span class="dig">1000</span>)
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(-<span class="dig">270</span>, <span class="dig">0</span>)
+    myRobot.delay(<span class="dig">1000</span>)
+    mouseUp(Button.LEFT)
+
+    walkRight(<span class="dig">4</span>, isBoundary=True)
+    walkUp(<span class="dig">3</span>, isBoundary=True)  <span class="cmt"># entering page 4</span>
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># go meet Boss and catch 5th mine on the way</span>
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    myRobot.delay(<span class="dig">4000</span>)
+    mouseUp(Button.LEFT)
+
+    <span class="cmt"># "Yes" to Boss</span>
+    Utilities.fastClick(<span class="dig">1125</span>, <span class="dig">289</span>)
+    myRobot.delay(<span class="dig">1500</span>)
+    <span class="cmt"># confirm</span>
+    Utilities.fastClick(<span class="dig">1125</span>, <span class="dig">289</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    doBossBattle()
+    myRobot.delay(<span class="dig">1000</span>)
+
+    <span class="cmt"># exit</span>
+    Utilities.fastClick(<span class="dig">1021</span>, <span class="dig">422</span>)
+    myRobot.delay(<span class="dig">1500</span>)
+    Utilities.fastClick(<span class="dig">1141</span>, <span class="dig">414</span>)
+    myRobot.delay(<span class="dig">1500</span>)
+
+    Utilities.handleMissionEnd()
+    myRobot.delay(<span class="dig">1500</span>)
+
+<span class="kw">def</span> enterMission():
+    <span class="cmt"># select mission (779, 364)</span>
+    Utilities.selectMission(<span class="dig">779</span>, <span class="dig">364</span>)
+    <span class="cmt"># select follower</span>
+    <span class="kw">print</span> <span class="str">'select follower = '</span>, selectFollower
+    Utilities.selectFollowerAndLaunch(selectFollower)
+    myRobot.delay(<span class="dig">2000</span>)
+
+<span class="kw">def</span> process():
+    <span class="kw">global</span> num_LB_used
+    <span class="kw">global</span> num_summon
+    <span class="kw">global</span> start_phase
+    <span class="kw">while</span> True:
+        start = time.time()
+        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'start time = '</span> + str(start), toDelete=True)
+        num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
+        num_summon = <span class="dig">0</span>
+
+        <span class="kw">if</span> start_phase &lt;= <span class="dig">0</span>:
+            enterMission()
+            myRobot.delay(<span class="dig">3000</span>)
+        <span class="kw">if</span> start_phase &lt;= <span class="dig">1</span>:
+            walkThroughPhaseOne()
+            myRobot.delay(<span class="dig">1000</span>)
+        <span class="kw">if</span> start_phase &lt;= <span class="dig">2</span>:
+            walkThroughPhaseTwo()
+        total_time = time.time() - start
+        Utilities.log(<span class="str">'WindTempleReport.csv'</span>, <span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(num_LB_used[<span class="dig">0</span>]) +
+                    <span class="str">','</span> + str(num_LB_used[<span class="dig">1</span>]) + <span class="str">','</span> + str(num_LB_used[<span class="dig">2</span>]) + <span class="str">','</span> + str(num_LB_used[<span class="dig">3</span>]) +
+                    <span class="str">','</span> + str(num_LB_used[<span class="dig">4</span>]) + <span class="str">','</span> + str(num_summon))
+        start_phase = <span class="dig">0</span>
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    process()
+    <span class="cmt">#setCommand()</span>
+    <span class="cmt">#Utilities.boundaryGoRight()</span>
+    <span class="cmt">#doBattle()</span>
+    <span class="cmt">#doRemainingBattles(15, 'LeftRight')</span>
+    <span class="cmt">#Utilities.fastClick(796, 471)</span>
+
+</pre>
+</body>
+</html>

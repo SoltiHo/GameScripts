@@ -77,7 +77,7 @@
 reload(Utilities)
 
 myRobot = JRobot()
-selectFollower = False
+selectFollower = True
 
 <span class="kw">def</span> enterFastMission():
     fastMissionColor = Color(<span class="dig">99</span>, <span class="dig">5</span>, <span class="dig">8</span>) <span class="cmt"># (703, 672)</span>
@@ -90,9 +90,9 @@ selectFollower = False
             func_while_wait=Utilities.buyStrength)
 
     <span class="cmt"># select follower</span>
-    followerColor = Color(<span class="dig">0</span>, <span class="dig">39</span>, <span class="dig">93</span>) <span class="cmt"># (1096, 223)    </span>
+    followerColor = Color(<span class="dig">145</span>,<span class="dig">60</span>,<span class="dig">32</span>) <span class="cmt"># (1015,223)    </span>
     <span class="kw">if</span> selectFollower:
-        Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+        Utilities.waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
                 func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
     <span class="kw">else</span>:
         <span class="kw">def</span> waitAndSelectNoFollower():

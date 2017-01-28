@@ -294,6 +294,36 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" died"</span>
         <span class="kw">return</span> False
 
+<span class="kw">def</span> isUnitAliveFast(unitNum):
+    <span class="cmt"># Marker</span>
+    UNIT_SWORD_COLOR = [
+            Color(<span class="dig">201</span>,<span class="dig">197</span>,<span class="dig">194</span>), <span class="cmt"># 683, 669</span>
+            Color(<span class="dig">141</span>,<span class="dig">133</span>,<span class="dig">118</span>), <span class="cmt"># 681, 779</span>
+            Color(<span class="dig">141</span>,<span class="dig">134</span>,<span class="dig">120</span>), <span class="cmt"># 681, 888</span>
+            Color(<span class="dig">103</span>, <span class="dig">90</span>, <span class="dig">72</span>), <span class="cmt"># 980, 669</span>
+            Color(<span class="dig">243</span>,<span class="dig">243</span>,<span class="dig">243</span>)  <span class="cmt"># 982, 777 </span>
+            ]
+    UNIT_SWORD_X = [
+            <span class="dig">683</span>,
+            <span class="dig">681</span>,
+            <span class="dig">681</span>,
+            <span class="dig">980</span>,
+            <span class="dig">982</span>,
+            ]
+    UNIT_SWORD_Y = [
+            <span class="dig">669</span>,
+            <span class="dig">779</span>,
+            <span class="dig">888</span>,
+            <span class="dig">669</span>,
+            <span class="dig">777</span>
+            ]
+    <span class="kw">if</span> myRobot.getPixelColor(
+            UNIT_SWORD_X[unitNum - <span class="dig">1</span>],
+            UNIT_SWORD_Y[unitNum - <span class="dig">1</span>]) == UNIT_SWORD_COLOR[unitNum - <span class="dig">1</span>]:
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">return</span> False
+
 <span class="kw">def</span> isAnyoneHPLow():
     <span class="kw">if</span> isBloodLowerThanHalf(<span class="dig">1</span>) <span class="kw">and</span> isUnitAlive(<span class="dig">1</span>):
         <span class="kw">print</span> <span class="str">"unit 1 need cure"</span>
@@ -353,6 +383,8 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 <span class="kw">def</span> summonIfAvailable(unitNum):
+    <span class="kw">if</span> <span class="kw">not</span> lookAbleToSummon():
+        <span class="kw">return</span> False
     <span class="kw">if</span> <span class="kw">not</span> isUnitAlive(unitNum):
         <span class="kw">return</span> False
     summonRegion = Region(<span class="dig">968</span>,<span class="dig">675</span>,<span class="dig">79</span>,<span class="dig">87</span>)
@@ -365,7 +397,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="kw">else</span>:
         summoned = True
         <span class="skw">click</span>(Location(<span class="dig">1086</span>, <span class="dig">734</span>))
-    <span class="skw">wait</span>(<span class="dig">0.5</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     <span class="kw">return</span> summoned
 
 <span class="kw">def</span> isLBAvailable(toClick):
@@ -432,6 +464,62 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
+<span class="kw">def</span> MoveUpAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    <span class="kw">print</span> isBoundary
+    move_func = moveUp
+    <span class="kw">if</span> isBoundary:
+        move_func = boundaryGoUp
+    move_func()
+    <span class="kw">if</span> isInBattle():
+        myRobot.delay(<span class="dig">1000</span>)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(<span class="dig">1000</span>)
+        move_func()
+        <span class="kw">return</span> <span class="dig">1</span>
+    <span class="kw">return</span> <span class="dig">0</span>
+
+<span class="kw">def</span> MoveDownAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    <span class="kw">print</span> isBoundary
+    move_func = moveDown
+    <span class="kw">if</span> isBoundary:
+        move_func = boundaryGoDown
+    move_func()
+    <span class="kw">if</span> isInBattle():
+        myRobot.delay(<span class="dig">1000</span>)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(<span class="dig">1000</span>)
+        move_func()
+        <span class="kw">return</span> <span class="dig">1</span>
+    <span class="kw">return</span> <span class="dig">0</span>
+
+<span class="kw">def</span> MoveLeftAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    <span class="kw">print</span> isBoundary
+    move_func = moveLeft
+    <span class="kw">if</span> isBoundary:
+        move_func = boundaryGoLeft
+    move_func()
+    <span class="kw">if</span> isInBattle():
+        myRobot.delay(<span class="dig">1000</span>)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(<span class="dig">1000</span>)
+        move_func()
+        <span class="kw">return</span> <span class="dig">1</span>
+    <span class="kw">return</span> <span class="dig">0</span>
+
+<span class="kw">def</span> MoveRightAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+    <span class="kw">print</span> isBoundary
+    move_func = moveRight
+    <span class="kw">if</span> isBoundary:
+        move_func = boundaryGoRight
+    move_func()
+    <span class="kw">if</span> isInBattle():
+        myRobot.delay(<span class="dig">1000</span>)
+        battleFunc(*battleFuncArg)
+        myRobot.delay(<span class="dig">1000</span>)
+        move_func()
+        <span class="kw">return</span> <span class="dig">1</span>
+    <span class="kw">return</span> <span class="dig">0</span>
+
 <span class="kw">def</span> isInBattle():
     <span class="cmt"># (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]</span>
     <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1231</span>, <span class="dig">998</span>).getRed() &gt; <span class="dig">230</span>:
@@ -478,10 +566,13 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-<span class="kw">def</span> log(log_filename, event_type, event_message):
+<span class="kw">def</span> log(log_filename, event_type, event_message, toDelete=False):
     log_file = <span class="str">'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\'</span> + log_filename
     log_msg = time.strftime(<span class="str">'%d/%m/%Y'</span>) + <span class="str">','</span> + time.strftime(<span class="str">'%H:%M:%S'</span>) + <span class="str">','</span> + event_type + <span class="str">','</span> + event_message + <span class="str">'\n'</span>
-    <span class="kw">with</span> open(log_file, <span class="str">'a'</span>) <span class="kw">as</span> f:
+    open_mode = <span class="str">'a'</span>
+    <span class="kw">if</span> toDelete:
+        open_mode = <span class="str">'w'</span>
+    <span class="kw">with</span> open(log_file, open_mode) <span class="kw">as</span> f:
         f.write(log_msg)
 
 <span class="kw">def</span> handleMissionEnd():
@@ -607,12 +698,97 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 
+<span class="kw">def</span> isWaitingForCommand():
+    menuColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># 1139, 1034</span>
+    waitingForCommandColor1 = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">120</span>) <span class="cmt"># (850, 701)</span>
+    waitingForCommandColor2 = Color(<span class="dig">6</span>, <span class="dig">53</span>, <span class="dig">124</span>) <span class="cmt"># (828, 809)</span>
+    waitingForCommandColor3 = Color(<span class="dig">6</span>, <span class="dig">45</span>, <span class="dig">120</span>) <span class="cmt"># (821, 921)</span>
+    waitingForCommandColor4 = Color(<span class="dig">6</span>, <span class="dig">50</span>, <span class="dig">117</span>) <span class="cmt"># (1155, 700)</span>
+    waitingForCommandColor5 = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">117</span>) <span class="cmt"># (1153, 808)</span>
+    is_someone_waiting = (
+        (myRobot.getPixelColor(<span class="dig">850</span>, <span class="dig">701</span>) == waitingForCommandColor1) <span class="kw">or</span>
+        (myRobot.getPixelColor(<span class="dig">828</span>, <span class="dig">809</span>) == waitingForCommandColor2) <span class="kw">or</span>
+        (myRobot.getPixelColor(<span class="dig">821</span>, <span class="dig">921</span>) == waitingForCommandColor3) <span class="kw">or</span>
+        (myRobot.getPixelColor(<span class="dig">1155</span>, <span class="dig">700</span>) == waitingForCommandColor4) <span class="kw">or</span>
+        (myRobot.getPixelColor(<span class="dig">1153</span>, <span class="dig">808</span>) == waitingForCommandColor5))
+
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1139</span>, <span class="dig">1034</span>) == menuColor <span class="kw">and</span> is_someone_waiting:
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> boundaryGoUp():
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">464</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">434</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">414</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> boundaryGoDown():
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">464</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">494</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">514</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> boundaryGoLeft():
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">464</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(<span class="dig">926</span>, <span class="dig">464</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">906</span>, <span class="dig">464</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> boundaryGoRight():
+    myRobot.mouseMove(<span class="dig">956</span>, <span class="dig">464</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(<span class="dig">986</span>, <span class="dig">464</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">1006</span>, <span class="dig">464</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+<span class="kw">def</span> selectMission(mission_location_x, mission_location_y):
+    frontPageColor = Color(<span class="dig">243</span>, <span class="dig">108</span>, <span class="dig">151</span>) <span class="cmt"># (1184,204)</span>
+    waitForColorAndDo(<span class="dig">1184</span>, <span class="dig">204</span>, frontPageColor,
+            func_while_wait=fastClick, arg_while_wait=(<span class="dig">929</span>, <span class="dig">160</span>),
+            func_after_wait=fastClick, arg_after_wait=(mission_location_x, mission_location_y))
+    <span class="kw">print</span>(<span class="str">'waiting for desc next'</span>)
+    <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
+    missionDescNextStepColor = Color(<span class="dig">0</span>, <span class="dig">51</span>, <span class="dig">141</span>) <span class="cmt"># (954, 923)</span>
+    waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor,
+            func_while_wait=buyStrength)
+
+<span class="kw">def</span> selectFollowerAndLaunch(toSelct):
+    followerColor = Color(<span class="dig">40</span>, <span class="dig">153</span>, <span class="dig">206</span>) <span class="cmt"># (1255, 348)    </span>
+    <span class="kw">if</span> toSelct:
+        waitForColorAndDo(<span class="dig">1255</span>, <span class="dig">348</span>, followerColor,
+                func_after_wait=fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
+    <span class="kw">else</span>:
+        <span class="kw">def</span> waitAndSelectNoFollower():
+            myRobot.delay(<span class="dig">500</span>)
+            func_after_wait=selectStranger()
+        waitForColorAndDo(<span class="dig">1255</span>, <span class="dig">348</span>, followerColor,
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(<span class="dig">0</span>, <span class="dig">141</span>, <span class="dig">218</span>)  <span class="cmt"># (917, 892)</span>
+    waitForColorAndDo(<span class="dig">917</span>, <span class="dig">892</span>, launchColor)
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="kw">print</span>(lookAbleToSummon())
-    targetLocation = Location(<span class="dig">734</span>, <span class="dig">1034</span>)
+    targetLocation = Location(<span class="dig">1190</span>, <span class="dig">270</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+
+
+    <span class="cmt">#wait(3)</span>
+
 </pre>
 </body>
 </html>

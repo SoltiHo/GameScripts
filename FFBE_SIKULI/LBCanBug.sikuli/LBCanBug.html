@@ -79,6 +79,10 @@
 reload(Utilities)
 myRobot = JRobot()
 
+SkipExpMerge = True
+expTarget = Location(<span class="dig">516</span>, <span class="dig">421</span>)
+lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
+
 <span class="kw">def</span> main():
     <span class="kw">while</span> True:
         <span class="cmt"># open FFBE in BS</span>
@@ -86,8 +90,8 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">3000</span>)
 
         <span class="cmt"># wait for desktopLocation(687, 265)</span>
-        floorColor = Color(<span class="dig">11</span>, <span class="dig">6</span>, <span class="dig">17</span>) <span class="cmt"># (521, 599)</span>
-        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">521</span>, <span class="dig">599</span>) != floorColor:
+        floorColor = Color(<span class="dig">255</span>, <span class="dig">195</span>, <span class="dig">250</span>) <span class="cmt"># Location(830, 830)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">830</span>, <span class="dig">830</span>) != floorColor:
             myRobot.mouseMove(<span class="dig">521</span>, <span class="dig">599</span>)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
@@ -103,7 +107,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">1000</span>)
 
         <span class="cmt"># wait for mission start</span>
-        menuColor = Color(<span class="dig">171</span>,<span class="dig">137</span>,<span class="dig">17</span>) <span class="cmt"># 845, 845</span>
+        menuColor = Color(<span class="dig">149</span>,<span class="dig">116</span>,<span class="dig">13</span>) <span class="cmt"># 845, 845</span>
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">845</span>,<span class="dig">845</span>) != menuColor:
             myRobot.delay(<span class="dig">1000</span>)
         myRobot.delay(<span class="dig">1000</span>)
@@ -144,7 +148,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">1000</span>)
 
         <span class="cmt"># wait for DuOS to close completely</span>
-        BSFFBEColor = Color(<span class="dig">232</span>, <span class="dig">177</span>, <span class="dig">157</span>) <span class="cmt"># (273, 316)</span>
+        BSFFBEColor = Color(<span class="dig">152</span>, <span class="dig">106</span>, <span class="dig">67</span>) <span class="cmt"># (273, 316)</span>
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">273</span>, <span class="dig">316</span>) != BSFFBEColor:
             myRobot.delay(<span class="dig">1000</span>)
         myRobot.delay(<span class="dig">1000</span>)
@@ -157,10 +161,12 @@ myRobot = JRobot()
 
 <span class="kw">def</span> mergeAndSell():
     mergeUnits()
-    <span class="cmt">#mergeExpUnits()</span>
+    <span class="kw">if</span> <span class="kw">not</span> SkipExpMerge:
+        mergeExpUnits()
     sellRemainingUnits()
 
 <span class="kw">def</span> sellRemainingUnits():
+    <span class="kw">global</span> SkipExpMerge
     <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>))
     myRobot.delay(<span class="dig">2000</span>)
     <span class="cmt"># sell</span>
@@ -168,16 +174,17 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="skw">click</span>(Location(<span class="dig">526</span>, <span class="dig">411</span>)) <span class="cmt"># 1st</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">602</span>, <span class="dig">430</span>)) <span class="cmt"># 2nd</span>
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">679</span>, <span class="dig">420</span>)) <span class="cmt"># 3rd</span>
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">761</span>, <span class="dig">423</span>)) <span class="cmt"># 4th</span>
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">831</span>, <span class="dig">420</span>)) <span class="cmt"># 5th</span>
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">538</span>)) <span class="cmt"># 6th</span>
-    myRobot.delay(<span class="dig">500</span>)
+    <span class="kw">if</span> SkipExpMerge:
+        <span class="skw">click</span>(Location(<span class="dig">602</span>, <span class="dig">430</span>)) <span class="cmt"># 2nd</span>
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="skw">click</span>(Location(<span class="dig">679</span>, <span class="dig">420</span>)) <span class="cmt"># 3rd</span>
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="skw">click</span>(Location(<span class="dig">761</span>, <span class="dig">423</span>)) <span class="cmt"># 4th</span>
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="skw">click</span>(Location(<span class="dig">831</span>, <span class="dig">420</span>)) <span class="cmt"># 5th</span>
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">538</span>)) <span class="cmt"># 6th</span>
+        myRobot.delay(<span class="dig">500</span>)
 
     <span class="cmt"># sell</span>
     <span class="skw">click</span>(Location(<span class="dig">675</span>, <span class="dig">753</span>))
@@ -194,12 +201,21 @@ myRobot = JRobot()
 
 
 <span class="kw">def</span> mergeUnits():
-    <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>))
-    myRobot.delay(<span class="dig">2000</span>)
+    <span class="kw">global</span> lbTarget
+    unitOneColor = Color(<span class="dig">254</span>, <span class="dig">254</span>, <span class="dig">254</span>) <span class="cmt"># (585, 638)</span>
+    <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>)) <span class="cmt"># click Units</span>
+    wait_count = <span class="dig">0</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">585</span>, <span class="dig">638</span>) != unitOneColor:
+        myRobot.delay(<span class="dig">500</span>)
+        wait_count += <span class="dig">1</span>
+        <span class="kw">if</span> wait_count == <span class="dig">4</span>:
+            <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>)) <span class="cmt"># click Units</span>
+            wait_count = <span class="dig">0</span>
+    myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># Merge</span>
     <span class="skw">click</span>(Location(<span class="dig">573</span>, <span class="dig">731</span>))
     myRobot.delay(<span class="dig">2000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">603</span>, <span class="dig">642</span>))  <span class="cmt"># select Target</span>
+    <span class="skw">click</span>(lbTarget)  <span class="cmt"># select Target</span>
     myRobot.delay(<span class="dig">1500</span>)
     <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">648</span>))
     myRobot.delay(<span class="dig">1000</span>)
@@ -215,12 +231,13 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> mergeExpUnits():
+    <span class="kw">global</span> expTarget
     <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>))
     myRobot.delay(<span class="dig">2000</span>)
     <span class="cmt"># Merge</span>
     <span class="skw">click</span>(Location(<span class="dig">556</span>, <span class="dig">733</span>))
     myRobot.delay(<span class="dig">2000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">831</span>, <span class="dig">536</span>))   <span class="cmt"># select Target</span>
+    <span class="skw">click</span>(expTarget)   <span class="cmt"># select Target</span>
     myRobot.delay(<span class="dig">1500</span>)
     <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">648</span>))  <span class="cmt"># select spot</span>
     myRobot.delay(<span class="dig">1000</span>)
@@ -246,22 +263,26 @@ myRobot = JRobot()
 
 <span class="kw">def</span> enterBSMission():
     <span class="skw">click</span>(Location(<span class="dig">520</span>, <span class="dig">844</span>))
-    vertexColor = Color(<span class="dig">96</span>, <span class="dig">114</span>, <span class="dig">185</span>) <span class="cmt"># (820, 688)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">820</span>, <span class="dig">688</span>) != vertexColor:
-        myRobot.delay(<span class="dig">1000</span>)
-        <span class="kw">print</span>(<span class="str">'wait for vertex'</span>)
-    <span class="skw">click</span>(Location(<span class="dig">832</span>, <span class="dig">695</span>)) <span class="cmt"># vertex</span>
     myRobot.delay(<span class="dig">1000</span>)
-    missionColor = Color(<span class="dig">191</span>, <span class="dig">18</span>, <span class="dig">130</span>) <span class="cmt"># (629, 375)</span>
+    vertexColor = Color(<span class="dig">152</span>, <span class="dig">145</span>, <span class="dig">186</span>) <span class="cmt"># (820, 688)</span>
+    Utilities.waitForColorAndDo(<span class="dig">820</span>, <span class="dig">688</span>, vertexColor)
+    <span class="cmt">#while myRobot.getPixelColor(820, 688) != vertexColor:</span>
+    <span class="cmt">#    myRobot.delay(1000)</span>
+    <span class="cmt">#    print('wait for vertex')</span>
+    <span class="cmt">#myRobot.delay(500)</span>
+    <span class="cmt">#click(Location(832, 695)) # vertex</span>
+    myRobot.delay(<span class="dig">1000</span>)
+    missionColor = Color(<span class="dig">202</span>,<span class="dig">23</span>,<span class="dig">139</span>) <span class="cmt"># (629, 375)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">629</span>, <span class="dig">375</span>) != missionColor:
         myRobot.delay(<span class="dig">1000</span>)
         <span class="kw">print</span>(<span class="str">'waiting for mission color'</span>)
-    <span class="skw">click</span>(Location(<span class="dig">637</span>, <span class="dig">356</span>))
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="skw">click</span>(Location(<span class="dig">629</span>,<span class="dig">375</span>))
     myRobot.delay(<span class="dig">1000</span>)
     <span class="skw">click</span>(Location(<span class="dig">603</span>, <span class="dig">427</span>)) <span class="cmt"># easy </span>
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># waiting for next step</span>
-    stoneColor = Color(<span class="dig">5</span>,<span class="dig">94</span>,<span class="dig">223</span>) <span class="cmt"># (839, 703)</span>
+    stoneColor = Color(<span class="dig">4</span>,<span class="dig">36</span>,<span class="dig">189</span>) <span class="cmt"># (839, 703)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">839</span>, <span class="dig">703</span>) != stoneColor:
         <span class="kw">print</span> <span class="str">'waiting for stone'</span>
         <span class="cmt"># buying strength</span>
@@ -275,7 +296,7 @@ myRobot = JRobot()
 
 <span class="kw">def</span> waitForDuOSFFBEandOpen():
     <span class="kw">print</span> <span class="str">'waitForDuOSFFBEandOpen'</span>
-    DuOSFFBEColor = Color(<span class="dig">241</span>,<span class="dig">186</span>,<span class="dig">166</span>) <span class="cmt">#(503, 988)</span>
+    DuOSFFBEColor = Color(<span class="dig">192</span>,<span class="dig">129</span>,<span class="dig">81</span>) <span class="cmt">#(503, 988)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">503</span>, <span class="dig">988</span>) != DuOSFFBEColor:
         <span class="kw">print</span> <span class="str">'wait for DuOS FFBE color'</span>
         myRobot.delay(<span class="dig">1000</span>)
@@ -311,7 +332,7 @@ myRobot = JRobot()
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
     <span class="cmt"># wait for DuOS FFBE Desktop</span>
-    DuOSFFBEColor = Color(<span class="dig">241</span>,<span class="dig">186</span>,<span class="dig">166</span>) <span class="cmt">#(503, 988)</span>
+    DuOSFFBEColor = Color(<span class="dig">192</span>,<span class="dig">129</span>,<span class="dig">81</span>) <span class="cmt">#(503, 988)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">503</span>, <span class="dig">988</span>) != DuOSFFBEColor:
         <span class="kw">print</span> <span class="str">'wait for DuOS FFBE color'</span>
         myRobot.delay(<span class="dig">1000</span>)
@@ -321,6 +342,7 @@ myRobot = JRobot()
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#enterBSMission()</span>
     <span class="cmt">#mergeUnits()</span>
+    <span class="cmt">#mergeExpUnits()</span>
     <span class="cmt">#wait(10)</span>
     main()
     <span class="cmt">#waitForDuOSFFBEandOpen()</span>

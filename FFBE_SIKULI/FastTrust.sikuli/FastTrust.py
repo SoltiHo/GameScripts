@@ -5,7 +5,7 @@ import Utilities
 reload(Utilities)
 
 myRobot = JRobot()
-selectFollower = False
+selectFollower = True
 
 def enterFastMission():
     fastMissionColor = Color(99, 5, 8) # (703, 672)
@@ -18,9 +18,9 @@ def enterFastMission():
             func_while_wait=Utilities.buyStrength)
 
     # select follower
-    followerColor = Color(0, 39, 93) # (1096, 223)    
+    followerColor = Color(145,60,32) # (1015,223)    
     if selectFollower:
-        Utilities.waitForColorAndDo(1096, 223, followerColor, 
+        Utilities.waitForColorAndDo(1015, 223, followerColor, 
                 func_after_wait=Utilities.fastClick, arg_after_wait=(810, 404))
     else:
         def waitAndSelectNoFollower():
