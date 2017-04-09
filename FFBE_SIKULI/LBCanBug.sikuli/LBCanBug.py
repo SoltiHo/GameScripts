@@ -8,45 +8,32 @@ reload(Utilities)
 myRobot = JRobot()
 
 SkipExpMerge = True
-expTarget = Location(516, 421)
-lbTarget = Location(832, 641)
+expTarget = Location(962, 548)
+lbTarget = Location(962, 548)
 
 def main():
     while True:
         # open FFBE in BS
-        click(Location(282, 323))
+        Utilities.enterBSFFBE()
         myRobot.delay(3000)
     
         # wait for desktopLocation(687, 265)
-        floorColor = Color(255, 195, 250) # Location(830, 830)
-        while myRobot.getPixelColor(830, 830) != floorColor:
-            myRobot.mouseMove(521, 599)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-            myRobot.delay(500)
+        Utilities.waitForBSFFBEDesktop()
         myRobot.delay(2000)
         
         # sell and merge units
         mergeAndSell()
-        myRobot.delay(1000)
+        myRobot.delay(2000)
         
         # enter the mission again
         enterBSMission()
         myRobot.delay(1000)
     
-        # wait for mission start
-        menuColor = Color(149,116,13) # 845, 845
-        while myRobot.getPixelColor(845,845) != menuColor:
-            myRobot.delay(1000)
-        myRobot.delay(1000)
-    
         # close FFBE BS app
-        click(Location(377, 166))
-        myRobot.delay(2000)
+        Utilities.closeBSFFBE()
     
         # switch to DuOS
-        type("\t", KEY_ALT)
-        myRobot.delay(1000)
+        Utilities.switchEmulator()
     
         # wait for DuOS to boot
         waitForDuOSFFBEandOpen()
@@ -65,6 +52,7 @@ def main():
         while myRobot.getPixelColor(1187, 265) != frontPageColor:
             click(Location(961, 895))
             click(Location(825, 801))
+            click(Location(954, 939))
             myRobot.delay(1000)
         myRobot.delay(1000)
     
@@ -76,8 +64,8 @@ def main():
         myRobot.delay(1000)
     
         # wait for DuOS to close completely
-        BSFFBEColor = Color(152, 106, 67) # (273, 316)
-        while myRobot.getPixelColor(273, 316) != BSFFBEColor:
+        BSFFBEColor = Color(224, 132, 169) # (335, 198)
+        while myRobot.getPixelColor(335, 198) != BSFFBEColor:
             myRobot.delay(1000)
         myRobot.delay(1000)
         print 'saw BS FFBE, continue'
@@ -95,136 +83,167 @@ def mergeAndSell():
 
 def sellRemainingUnits():
     global SkipExpMerge
-    click(Location(581, 846))
+    strengthenColor = Color(243, 187, 161) # (864, 848)
+    click(Location(807, 1026)) # click Units
     myRobot.delay(2000)
-    # sell
-    click(Location(764, 640))
-    myRobot.delay(1000)
-    click(Location(526, 411)) # 1st
+    while myRobot.getPixelColor(864, 848) != strengthenColor:
+        myRobot.delay(1000)
+    myRobot.delay(2000)
+
+    # click sell unit
+    sellColor = Color(93, 11, 20)  # (1180, 246)
+    Utilities.waitForColorAndDo(1180, 246, sellColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[816, 708])
+    myRobot.delay(2000)
+
+
+    Utilities.fastClick(712, 378)
     myRobot.delay(500)
     if SkipExpMerge:
-        click(Location(602, 430)) # 2nd
+        Utilities.fastClick(839, 383) # 2nd
         myRobot.delay(500)
-        click(Location(679, 420)) # 3rd
+        Utilities.fastClick(959, 373) # 3rd
         myRobot.delay(500)
-        click(Location(761, 423)) # 4th
+        Utilities.fastClick(1082, 382) # 4
         myRobot.delay(500)
-        click(Location(831, 420)) # 5th
+        Utilities.fastClick(1197, 390) # 5
         myRobot.delay(500)
-        click(Location(522, 538)) # 6th
+        Utilities.fastClick(715, 551) # 6
         myRobot.delay(500)
+    myRobot.delay(1000)
 
     # sell
-    click(Location(675, 753))
+    confirmSellColor = Color(147, 0, 7)  # (1047, 823)
+    Utilities.waitForColorAndDo(1047, 823, confirmSellColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[998, 893])
     myRobot.delay(1000)
-    # confirm 1
-    click(Location(756, 576))
+
+    # 2nd confirm
+    secondConfirmColor = Color(102, 0, 0)  # (1034, 588)
+    Utilities.waitForColorAndDo(1034, 588, secondConfirmColor)
     myRobot.delay(1000)
-    # confirm 2
-    click(Location(756, 576))
-    myRobot.delay(1000)
+
     # OK
-    click(Location(675, 567))
-    myRobot.delay(1000) 
-
-
+    okColor = Color(0, 79, 178) # (900, 577)
+    Utilities.waitForColorAndDo(900, 577, okColor)
+    myRobot.delay(3000)
+    
+    # go back to frontpage and click vertex
+    vertexColor = Color(223, 225, 240) # (802, 614)
+    while myRobot.getPixelColor(802, 614) != vertexColor:
+        myRobot.delay(4000)
+        Utilities.fastClick(705, 1026)  # click front page
+    print("back at front page")
+    
 def mergeUnits():
     global lbTarget
-    unitOneColor = Color(254, 254, 254) # (585, 638)
-    click(Location(581, 846)) # click Units
-    wait_count = 0
-    while myRobot.getPixelColor(585, 638) != unitOneColor:
-        myRobot.delay(500)
-        wait_count += 1
-        if wait_count == 4:
-            click(Location(581, 846)) # click Units
-            wait_count = 0
-    myRobot.delay(1000)
-    # Merge
-    click(Location(573, 731))
+    strengthenColor = Color(243, 187, 161) # (864, 848)
+    click(Location(807, 1026)) # click Units
     myRobot.delay(2000)
+    Utilities.waitForColorAndDo(864, 848, strengthenColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[807, 1026])
+    myRobot.delay(2000)
+    # Merge
     click(lbTarget)  # select Target
-    myRobot.delay(1500)
-    click(Location(522, 648))
+    myRobot.delay(2000)
+
+    firstSpotColor = Color(174, 174, 174) # (719, 753)
+    Utilities.waitForColorAndDo(719, 753, firstSpotColor)
+
+    lbCanColor = Color(111, 113, 41)  # (1068, 394)
+    while myRobot.getPixelColor(1068, 394) != lbCanColor:
+        myRobot.delay(1000)
+
+    Utilities.fastClick(1068, 394)
     myRobot.delay(1000)
-    click(Location(756, 430))
-    myRobot.delay(500)
-    click(Location(674, 763))
+
+    okColor = Color(255, 255, 255) # (942, 898)
+    print('waiting for okColor')
+    Utilities.waitForColorAndDo(942, 898, okColor)
     myRobot.delay(1000)
-    click(Location(674, 763))  # merge confirm
-    myRobot.delay(1000)
-    cleanSelectionColor = Color(87,10,18) # (779, 753)
-    while myRobot.getPixelColor(779, 753) != cleanSelectionColor:
-        click(Location(797, 715))
-        myRobot.delay(500)
+
+    mergeColor = Color(255, 255, 255) # (981, 890)
+    print('waiting for mergeColor')
+    while myRobot.getPixelColor(981, 890) == mergeColor:
+        myRobot.delay(1000)
+        Utilities.fastClick(981, 890)
+    myRobot.delay(2000)
+
+    # wait for merge animation
+    while myRobot.getPixelColor(981, 890) != mergeColor:
+        myRobot.delay(1000)
+        Utilities.fastClick(1070, 893)
+        print('waiting for 2nd merge color')
+    myRobot.delay(2000)
+        
 
 def mergeExpUnits():
     global expTarget
-    click(Location(581, 846))
+    strengthenColor = Color(243, 187, 161) # (864, 848)
+    click(Location(807, 1026)) # click Units
+    myRobot.delay(2000)
+    Utilities.waitForColorAndDo(864, 848, strengthenColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[807, 1026])
     myRobot.delay(2000)
     # Merge
-    click(Location(556, 733))
+    click(expTarget)  # select Target
     myRobot.delay(2000)
-    click(expTarget)   # select Target
-    myRobot.delay(1500)
-    click(Location(522, 648))  # select spot
+
+    firstSpotColor = Color(174, 174, 174) # (719, 753)
+    Utilities.waitForColorAndDo(719, 753, firstSpotColor)
     myRobot.delay(1000)
-    click(Location(526, 411)) # 1st
+    click(Location(717, 384)) # 1st
     myRobot.delay(500)
-    click(Location(602, 430)) # 2nd
+    click(Location(834, 391)) # 2nd
     myRobot.delay(500)
-    click(Location(679, 420)) # 3rd
+    click(Location(958, 391)) # 3rd
     myRobot.delay(500)
-    click(Location(761, 423)) # 4th
+    click(Location(1076, 386)) # 4th
     myRobot.delay(500)
-    click(Location(522, 538)) # 6th
+    click(Location(714, 560)) # 6th
     myRobot.delay(500)
 
-    click(Location(674, 763))
+    click(Location(958, 901)) # ok
     myRobot.delay(1000)
-    click(Location(674, 763))  # merge confirm
+    click(Location(966, 901))  # merge confirm
     myRobot.delay(1000)
-    cleanSelectionColor = Color(87,10,18) # (779, 753)
-    while myRobot.getPixelColor(779, 753) != cleanSelectionColor:
-        click(Location(818, 750))
+    cleanSelectionColor = Color(143,93,98) # (1132,889)
+    while myRobot.getPixelColor(1132, 889) != cleanSelectionColor:
+        click(Location(1185, 898))
         myRobot.delay(500)
 
 def enterBSMission():
-    click(Location(520, 844))
+    mazeColor = Color(254, 179, 239) # (877, 518)
+    Utilities.waitForColorAndDo(877, 518, mazeColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[839, 566])
+    myRobot.delay(2000)
+
+    def checkAndBuyStrength():
+        Utilities.fastClick(911, 384)
+        myRobot.delay(1500)
+        Utilities.fastClick(1051, 538)
+        myRobot.delay(1500)
+        Utilities.fastClick(1011, 590)
+        myRobot.delay(1500)
+    nextStepColor = Color(247, 247, 249) # (960, 948)
+    Utilities.waitForColorAndDo(960, 948, nextStepColor,
+            func_while_wait=checkAndBuyStrength)
+    myRobot.delay(2000)
+
+    # select first follower
+    Utilities.fastClick(843, 377)
     myRobot.delay(1000)
-    vertexColor = Color(152, 145, 186) # (820, 688)
-    Utilities.waitForColorAndDo(820, 688, vertexColor)
-    #while myRobot.getPixelColor(820, 688) != vertexColor:
-    #    myRobot.delay(1000)
-    #    print('wait for vertex')
-    #myRobot.delay(500)
-    #click(Location(832, 695)) # vertex
-    myRobot.delay(1000)
-    missionColor = Color(202,23,139) # (629, 375)
-    while myRobot.getPixelColor(629, 375) != missionColor:
+
+    # launch
+    menuColor = Color(134, 113, 70)  # (1229, 1022)
+    while myRobot.getPixelColor(1229, 1022) != menuColor:
         myRobot.delay(1000)
-        print('waiting for mission color')
-    myRobot.delay(500)
-    click(Location(629,375)) 
-    myRobot.delay(1000)
-    click(Location(603, 427)) # easy 
-    myRobot.delay(1000)
-    # waiting for next step
-    stoneColor = Color(4,36,189) # (839, 703)
-    while myRobot.getPixelColor(839, 703) != stoneColor:
-        print 'waiting for stone'
-        # buying strength
-        click(Location(788, 576))
-        myRobot.delay(500)
-    click(Location(674, 782))
-    myRobot.delay(1000)
-    click(Location(562, 422)) # select the 1st follower
-    myRobot.delay(1000)
-    click(Location(681, 771)) # depart
+        Utilities.fastClick(902, 949) # click launch
+        print('waiting for menu')
 
 def waitForDuOSFFBEandOpen():
     print 'waitForDuOSFFBEandOpen'
-    DuOSFFBEColor = Color(192,129,81) #(503, 988)
+    DuOSFFBEColor = Color(237,170,198) #(503, 988)
     while myRobot.getPixelColor(503, 988) != DuOSFFBEColor:
         print 'wait for DuOS FFBE color'
         myRobot.delay(1000)
@@ -260,7 +279,7 @@ def closeMuOSFFBE():
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
     # wait for DuOS FFBE Desktop
-    DuOSFFBEColor = Color(192,129,81) #(503, 988)
+    DuOSFFBEColor = Color(237,170,198) #(503, 988)
     while myRobot.getPixelColor(503, 988) != DuOSFFBEColor:
         print 'wait for DuOS FFBE color'
         myRobot.delay(1000)
@@ -273,4 +292,5 @@ if __name__ == "__main__":
     #mergeExpUnits()
     #wait(10)
     main()
+    #sellRemainingUnits()
     #waitForDuOSFFBEandOpen()

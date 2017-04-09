@@ -77,6 +77,7 @@
 
 reload(Utilities)
 myRobot = JRobot()
+min_cycle_time = <span class="dig">50</span>
 
 <span class="kw">def</span> enterBSFFBE():
     BSFFBEColor = Color(<span class="dig">222</span>,<span class="dig">171</span>,<span class="dig">131</span>) <span class="cmt"># (330, 196)</span>
@@ -90,18 +91,82 @@ myRobot = JRobot()
         Utilities.fastClick(<span class="dig">962</span>, <span class="dig">940</span>)
     <span class="kw">print</span> <span class="str">'saw BS FFBE Desktop'</span>
 
+<span class="kw">def</span> sellUnits():
+    Utilities.fastClick(<span class="dig">807</span>, <span class="dig">1028</span>)
+    strengthenColor = Color(<span class="dig">222</span>, <span class="dig">225</span>, <span class="dig">232</span>) <span class="cmt"># (760, 858)</span>
+    waitCount = <span class="dig">0</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">760</span>,<span class="dig">858</span>) != strengthenColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        waitCount += <span class="dig">1</span>
+        <span class="kw">if</span> waitCount == <span class="dig">3</span>:
+            Utilities.fastClick(<span class="dig">807</span>, <span class="dig">1028</span>)
+            waitCount = <span class="dig">0</span>
+
+    <span class="cmt"># Then click on sell units</span>
+    Utilities.fastClick(<span class="dig">1036</span>, <span class="dig">710</span>)
+    clearChoiceColor = Color(<span class="dig">79</span>, <span class="dig">9</span>, <span class="dig">17</span>) <span class="cmt"># (1108, 892)</span>
+    waitCount = <span class="dig">0</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1108</span>, <span class="dig">892</span>) != clearChoiceColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        waitCount += <span class="dig">1</span>
+        <span class="kw">if</span> waitCount == <span class="dig">3</span>:
+            Utilities.fastClick(<span class="dig">1036</span>, <span class="dig">710</span>)
+            waitCount = <span class="dig">0</span>
+
+    <span class="cmt"># chose the unit</span>
+    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.fastClick(<span class="dig">717</span>, <span class="dig">387</span>)
+
+    <span class="cmt"># click sell</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">946</span>, <span class="dig">892</span>)
+    myRobot.delay(<span class="dig">500</span>)
+
+    <span class="cmt"># confirm</span>
+    confirmColor = Color(<span class="dig">0</span>, <span class="dig">31</span>, <span class="dig">85</span>)  <span class="cmt"># (1064, 597)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1064</span>, <span class="dig">597</span>, confirmColor)
+
+    <span class="cmt"># click ok</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">938</span>, <span class="dig">599</span>)
+
+    <span class="cmt"># click front page</span>
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">704</span>, <span class="dig">1031</span>)
+    myRobot.delay(<span class="dig">1000</span>)
+
+
 <span class="kw">def</span> enterNewYearExplore():
     vertexColor = Color(<span class="dig">66</span>,<span class="dig">27</span>,<span class="dig">183</span>) <span class="cmt"># (1151, 788)</span>
-    Utilities.waitForColorAndDo(<span class="dig">1151</span>, <span class="dig">788</span>, vertexColor)
+    <span class="cmt"># Utilities.waitForColorAndDo(1151, 788, vertexColor)</span>
+    waitCount = <span class="dig">0</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1151</span>, <span class="dig">788</span>) != vertexColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        waitCount += <span class="dig">1</span>
+        <span class="kw">if</span> waitCount == <span class="dig">20</span>:
+            <span class="kw">print</span> <span class="str">'Vertex Error, restart BS FFBE'</span>
+            closeBSFFBE()
+            myRobot.delay(<span class="dig">5000</span>)
+            myRobot.mouseMove(<span class="dig">879</span>, <span class="dig">532</span>)
+            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">return</span> False
+
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1151</span>, <span class="dig">788</span>) == vertexColor:
+        Utilities.fastClick(<span class="dig">1151</span>, <span class="dig">788</span>)
+        myRobot.delay(<span class="dig">1000</span>)
 
     lunarNewYearColor = Color(<span class="dig">253</span>, <span class="dig">255</span>, <span class="dig">96</span>) <span class="cmt"># (748, 246)</span>
     Utilities.waitForColorAndDo(<span class="dig">748</span>, <span class="dig">246</span>, lunarNewYearColor)
 
     middleLevelColor = Color(<span class="dig">65</span>, <span class="dig">122</span>, <span class="dig">89</span>)  <span class="cmt"># (706, 535)</span>
-    Utilities.waitForColorAndDo(<span class="dig">706</span>, <span class="dig">535</span>, middleLevelColor)
+    Utilities.waitForColorAndDo(<span class="dig">706</span>, <span class="dig">535</span>, middleLevelColor,
+            func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">898</span>, <span class="dig">694</span>))
+    <span class="cmt"># 3rd position: (898, 694)</span>
+    <span class="cmt"># 2nd position: (868, 527)</span>
 
     nextStepColor = Color(<span class="dig">250</span>, <span class="dig">251</span>, <span class="dig">252</span>)  <span class="cmt"># (935,933)</span>
-    Utilities.waitForColorAndDo(<span class="dig">935</span>, <span class="dig">933</span>, nextStepColor)
+    Utilities.waitForColorAndDo(<span class="dig">935</span>, <span class="dig">933</span>, nextStepColor,
+            func_while_wait=Utilities.buyStrength)
 
     <span class="cmt"># Choose follower</span>
     sortingColor = Color(<span class="dig">163</span>, <span class="dig">173</span>, <span class="dig">195</span>) <span class="cmt"># (1124, 245)</span>
@@ -110,11 +175,13 @@ myRobot = JRobot()
     <span class="cmt"># Launch</span>
     launchColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (945, 912)</span>
     Utilities.waitForColorAndDo(<span class="dig">945</span>, <span class="dig">912</span>, launchColor)
-    <span class="kw">print</span> <span class="str">'Entered explore mission'</span>
+
+    <span class="kw">return</span> True
 
 <span class="kw">def</span> waitForMissionMenu():
     menuColor = Color(<span class="dig">166</span>,<span class="dig">127</span>,<span class="dig">116</span>) <span class="cmt"># (1209, 1026)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1209</span>, <span class="dig">1026</span>) != menuColor:
+        Utilities.handleCommunicationError()
         myRobot.delay(<span class="dig">1000</span>)
     <span class="kw">print</span> <span class="str">'saw explore mission menu'</span>
 
@@ -133,28 +200,36 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> openDuOSFFBE():
-    duOSFFBEColor = Color(<span class="dig">171</span>, <span class="dig">116</span>, <span class="dig">84</span>) <span class="cmt"># (495, 986)</span>
+    duOSFFBEColor = Color(<span class="dig">212</span>,<span class="dig">191</span>,<span class="dig">219</span>) <span class="cmt"># (495, 986)</span>
     Utilities.waitForColorAndDo(<span class="dig">495</span>, <span class="dig">986</span>, duOSFFBEColor)
 
 <span class="kw">def</span> waitForDuOSFFBEMissionEnd():
-    nextStepColor = Color(<span class="dig">214</span>, <span class="dig">223</span>, <span class="dig">233</span>)
-    Utilities.waitForColorAndDo(<span class="dig">495</span>, <span class="dig">986</span>, duOSFFBEColor,
+    nextStepColor = Color(<span class="dig">229</span>, <span class="dig">233</span>, <span class="dig">239</span>) <span class="cmt"># (937, 902)</span>
+    <span class="kw">def</span> clickAndHandleCommError():
+        Utilities.fastClick(<span class="dig">960</span>, <span class="dig">646</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">925</span>, <span class="dig">590</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">495</span>, <span class="dig">986</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+    Utilities.waitForColorAndDo(<span class="dig">937</span>, <span class="dig">902</span>, nextStepColor,
+            func_while_wait=clickAndHandleCommError)
+
+    secondNextStepColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (933, 905)</span>
+    Utilities.waitForColorAndDo(<span class="dig">933</span>, <span class="dig">905</span>, secondNextStepColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">925</span>, <span class="dig">590</span>))
 
-    secondNextStepColor = Color(<span class="dig">210</span>, <span class="dig">218</span>, <span class="dig">227</span>) <span class="cmt"># (938, 955)</span>
-    Utilities.waitForColorAndDo(<span class="dig">938</span>, <span class="dig">955</span>, secondNextStepColor,
-            func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">925</span>, <span class="dig">590</span>))
-
-    thirdNextStepColor = Color(<span class="dig">129</span>, <span class="dig">150</span>, <span class="dig">176</span>) <span class="cmt"># (936, 904)</span>
-    Utilities.waitForColorAndDo(<span class="dig">936</span>, <span class="dig">904</span>, thirdNextStepColor,
-            func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">925</span>, <span class="dig">590</span>))
+    <span class="cmt">#thirdNextStepColor = Color(129, 150, 176) # (936, 904)</span>
+    <span class="cmt">#Utilities.waitForColorAndDo(936, 904, thirdNextStepColor,</span>
+    <span class="cmt">#        func_while_wait=Utilities.fastClick, arg_while_wait=(925, 590))</span>
 
     frontPageColor = Color(<span class="dig">154</span>, <span class="dig">2</span>, <span class="dig">10</span>) <span class="cmt"># (1190, 270)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1190</span>, <span class="dig">270</span>) != frontPageColor:
-        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">847</span>, <span class="dig">803</span>)
+        myRobot.delay(<span class="dig">2000</span>)
     <span class="kw">print</span> <span class="str">'DuOS mission Completed'</span>
 
-<span class="kw">def</span> closeMuOSFFBE():
+<span class="kw">def</span> openDuOSAddCloseLine():
     myRobot.mouseMove(<span class="dig">912</span>, <span class="dig">1080</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseMove(<span class="dig">912</span>, <span class="dig">780</span>)
@@ -164,41 +239,72 @@ myRobot = JRobot()
     myRobot.mouseMove(<span class="dig">1027</span>, <span class="dig">1070</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-    myRobot.delay(<span class="dig">2500</span>)
 
-    <span class="cmt"># wait for DuOS background color</span>
-    backgroundColor = Color(<span class="dig">200</span>,<span class="dig">237</span>,<span class="dig">230</span>) <span class="cmt"># (1569, 449)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1569</span>,<span class="dig">449</span>) != backgroundColor:
-        myRobot.delay(<span class="dig">500</span>)
-        <span class="kw">print</span>(<span class="str">'waiting for DuOS background Color'</span>)
-    myRobot.delay(<span class="dig">500</span>)
+<span class="kw">def</span> waitForFloatingWindow():
+    myRobot.delay(<span class="dig">3000</span>)
+    openDuOSAddCloseLine()
+
+<span class="kw">def</span> closeMuOSFFBE():
+    openDuOSAddCloseLine()
+
+    <span class="cmt"># wait for floating window</span>
+    floatingFrontPageColor = Color(<span class="dig">118</span>, <span class="dig">55</span>, <span class="dig">80</span>) <span class="cmt"># (1261, 462)</span>
+    count = <span class="dig">0</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1261</span>, <span class="dig">462</span>) != floatingFrontPageColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        count += <span class="dig">1</span>
+        <span class="kw">if</span> count == <span class="dig">6</span>:
+            openDuOSAddCloseLine()
+            count = <span class="dig">0</span>
+    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.fastClick(<span class="dig">1328</span>, <span class="dig">191</span>)
+    myRobot.delay(<span class="dig">3000</span>)
+
+    <span class="cmt"># wait for DuOS FFBE</span>
+    duOSFFBEColor = Color(<span class="dig">212</span>,<span class="dig">191</span>,<span class="dig">219</span>) <span class="cmt"># (495, 986)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">495</span>, <span class="dig">986</span>) != duOSFFBEColor:
+        myRobot.delay(<span class="dig">1000</span>)
+    <span class="kw">print</span> <span class="str">'back to DuOS Desktop'</span>
 
 
 <span class="kw">def</span> mainLoop():
     <span class="kw">while</span> True:
+        skip_the_round = False
+        start = time.time()
         enterBSFFBE()
         myRobot.delay(<span class="dig">2000</span>)
         waitForBSFFBEDesktop()
         myRobot.delay(<span class="dig">2000</span>)
-        enterNewYearExplore()
-        myRobot.delay(<span class="dig">2000</span>)
-        waitForMissionMenu()
-        myRobot.delay(<span class="dig">2000</span>)
-        closeBSFFBE()
-        myRobot.delay(<span class="dig">2000</span>)
-        switchEmulator()
-        myRobot.delay(<span class="dig">2000</span>)
-        openDuOSFFBE()
-        myRobot.delay(<span class="dig">2000</span>)
-        waitForDuOSFFBEMissionEnd()
-        myRobot.delay(<span class="dig">2000</span>)
-        closeMuOSFFBE()
-        myRobot.delay(<span class="dig">2000</span>)
-        switchEmulator()
-        myRobot.delay(<span class="dig">2000</span>)
+        <span class="cmt">#sellUnits()</span>
+        <span class="kw">if</span> enterNewYearExplore():
+            myRobot.delay(<span class="dig">2000</span>)
+            waitForMissionMenu()
+            myRobot.delay(<span class="dig">2000</span>)
+            closeBSFFBE()
+            myRobot.delay(<span class="dig">2000</span>)
+            switchEmulator()
+            myRobot.delay(<span class="dig">2000</span>)
+            openDuOSFFBE()
+            myRobot.delay(<span class="dig">2000</span>)
+            waitForDuOSFFBEMissionEnd()
+            myRobot.delay(<span class="dig">2000</span>)
+            closeMuOSFFBE()
+            myRobot.delay(<span class="dig">2000</span>)
+            switchEmulator()
+            myRobot.delay(<span class="dig">2000</span>)
+
+        end = time.time()
+        remaining = min_cycle_time - (end - start)
+        <span class="kw">if</span> remaining &gt; <span class="dig">0</span>:
+            <span class="skw">wait</span>(remaining)
+        total_time = time.time() - start
+        Utilities.log(<span class="str">'LunarNewYearLog.csv'</span>, <span class="str">'Explore'</span>, str(total_time))
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     mainLoop()
+    <span class="cmt">#waitForDuOSFFBEMissionEnd()</span>
+    <span class="cmt">#closeMuOSFFBE()</span>
+
 </pre>
 </body>
 </html>

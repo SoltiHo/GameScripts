@@ -1,6 +1,7 @@
 moveCount = 0
-SUMMON_NUM = 2
-direeciton = 'LeftRight'
+SUMMON_NUM = 0
+to_summon = False
+direeciton = 'UpDown'
 
 import java.awt.Robot as JRobot
 import java.awt.Color as Color
@@ -8,16 +9,23 @@ import java.awt.event.InputEvent as InputEvent
 import Utilities
 reload(Utilities)
 
+myRobot = JRobot()
 
+    
 def Battle():
     if not Utilities.isInBattle():
         return
     # In Battle
     myRobot.delay(500)
-    if Utilities.lookAbleToSummon():
+    if to_summon and Utilities.lookAbleToSummon():
         Utilities.summonIfAvailable(SUMMON_NUM)
+    myRobot.delay(1500)
     Utilities.doMiddleCureIfNeeded()
 
+    myRobot.delay(500)
+    doSteal()
+    myRobot.delay(1000)
+    
     Utilities.fastClick(783, 518)
     Utilities.fastClick(908, 462)
     Utilities.fastClick(750, 387)    

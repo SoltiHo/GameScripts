@@ -71,8 +71,9 @@
 </div>
 <pre class="sikuli-code">
 moveCount = <span class="dig">0</span>
-SUMMON_NUM = <span class="dig">2</span>
-direeciton = <span class="str">'LeftRight'</span>
+SUMMON_NUM = <span class="dig">0</span>
+to_summon = False
+direeciton = <span class="str">'UpDown'</span>
 
 <span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
 <span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
@@ -80,15 +81,22 @@ direeciton = <span class="str">'LeftRight'</span>
 <span class="kw">import</span> Utilities
 reload(Utilities)
 
+myRobot = JRobot()
+
 
 <span class="kw">def</span> Battle():
     <span class="kw">if</span> <span class="kw">not</span> Utilities.isInBattle():
         <span class="kw">return</span>
     <span class="cmt"># In Battle</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="kw">if</span> Utilities.lookAbleToSummon():
+    <span class="kw">if</span> to_summon <span class="kw">and</span> Utilities.lookAbleToSummon():
         Utilities.summonIfAvailable(SUMMON_NUM)
+    myRobot.delay(<span class="dig">1500</span>)
     Utilities.doMiddleCureIfNeeded()
+
+    myRobot.delay(<span class="dig">500</span>)
+    doSteal()
+    myRobot.delay(<span class="dig">1000</span>)
 
     Utilities.fastClick(<span class="dig">783</span>, <span class="dig">518</span>)
     Utilities.fastClick(<span class="dig">908</span>, <span class="dig">462</span>)

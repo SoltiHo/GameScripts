@@ -271,6 +271,7 @@ def isAnyoneHPLow():
     if isBloodLowerThanHalf(6) and isUnitAlive(6):
         print "unit 6 need cure"
         return True
+    return False
 
 def manuallyKickOff():
     myRobot.mouseMove(823,739)
@@ -392,13 +393,14 @@ def moveRight():
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-def MoveUpAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+def MoveUpAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False, detectBattle=True):
     print isBoundary
     move_func = moveUp
     if isBoundary:
         move_func = boundaryGoUp
     move_func()
-    if isInBattle():
+    myRobot.delay(200)
+    if detectBattle and isInBattle():
         myRobot.delay(1000)
         battleFunc(*battleFuncArg)
         myRobot.delay(1000)
@@ -406,13 +408,14 @@ def MoveUpAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
         return 1
     return 0
 
-def MoveDownAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+def MoveDownAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False, detectBattle=True):
     print isBoundary
     move_func = moveDown
     if isBoundary:
         move_func = boundaryGoDown
     move_func()
-    if isInBattle():
+    myRobot.delay(200)
+    if detectBattle and isInBattle():
         myRobot.delay(1000)
         battleFunc(*battleFuncArg)
         myRobot.delay(1000)
@@ -420,13 +423,14 @@ def MoveDownAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
         return 1
     return 0
 
-def MoveLeftAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+def MoveLeftAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False, detectBattle=True):
     print isBoundary
     move_func = moveLeft
     if isBoundary:
         move_func = boundaryGoLeft
-    move_func()    
-    if isInBattle():
+    move_func()
+    myRobot.delay(200)
+    if detectBattle and isInBattle():
         myRobot.delay(1000)
         battleFunc(*battleFuncArg)
         myRobot.delay(1000)
@@ -434,13 +438,14 @@ def MoveLeftAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
         return 1
     return 0
 
-def MoveRightAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
+def MoveRightAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False, detectBattle=True):
     print isBoundary
     move_func = moveRight
     if isBoundary:
         move_func = boundaryGoRight
     move_func()
-    if isInBattle():
+    myRobot.delay(200)
+    if detectBattle and isInBattle():
         myRobot.delay(1000)
         battleFunc(*battleFuncArg)
         myRobot.delay(1000)
@@ -450,9 +455,13 @@ def MoveRightAndCheckBattle(battleFunc, battleFuncArg=[], isBoundary=False):
 
 def isInBattle():
     # (BS) Not in battle color = java.awt.Color[r=255,g=255,b=255]
-    if myRobot.getPixelColor(1231, 998).getRed() > 230:
+    inBattleColor = Color(255, 255, 255)
+    if myRobot.getPixelColor(1231, 998) == inBattleColor:
         return False
     else:
+        myRobot.delay(500)
+        if myRobot.getPixelColor(1231, 998) == inBattleColor:
+            return False
         return True
 
 def isInBattle_DuOS():
@@ -493,6 +502,8 @@ def handleCommunicationError():
         myRobot.mouseMove(943, 620)
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+    else:
+        print "no comm error"
 
 def log(log_filename, event_type, event_message, toDelete=False):
     log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
@@ -513,11 +524,10 @@ def handleMissionEnd():
         handleCommunicationError()
         
         # first next step
-        # java.awt.Color[r=164,g=171,b=190] (959, 893)
-        firstNextStepColor = Color(164, 171, 190)
-        if (not firstNextStepIsDone) and myRobot.getPixelColor(959, 893) == firstNextStepColor:
+        firstNextStepColor = Color(0, 39, 113) # (958, 943)
+        if (not firstNextStepIsDone) and myRobot.getPixelColor(958, 943) == firstNextStepColor:
             firstNextStepIsDone = True
-            myRobot.mouseMove(959, 893)
+            myRobot.mouseMove(958, 943)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         # EXP_X color java.awt.Color[r=189,g=204,b=230], (912, 143)
@@ -527,13 +537,15 @@ def handleMissionEnd():
             myRobot.mouseMove(912, 143)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-        # 2nd next step color java.awt.Color[r=248,g=249,b=250] (960, 893)
-        secondNextStepColor = Color(248, 249, 250)
-        if (not secondNextStepIsDone) and myRobot.getPixelColor(960, 893) == secondNextStepColor:
+        # 2nd next step color java.awt.Color[r=254,g=254,b=254] (938,939)
+        secondNextStepColor = Color(254, 254, 254)
+        if (not secondNextStepIsDone) and myRobot.getPixelColor(938,939) == secondNextStepColor:
+            print '2nd next step click'
             secondNextStepIsDone = True
-            myRobot.mouseMove(960, 893)
+            myRobot.mouseMove(959, 940)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        print '2nd next  = ', secondNextStepIsDone
 
         # Friend
         noApplyColor = Color(255, 255, 255) # (780, 784)
@@ -554,7 +566,7 @@ def handleMissionEnd():
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-        # pause for a while
+        # pause for a while        
         myRobot.delay(500)
 
 def selectNoFollower():
@@ -588,13 +600,19 @@ def selectStranger():
     myRobot.delay(500)
 
 
-def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[]):
+def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[], func_wait_too_long=None, arg_wait_too_long=[], wait_max_count=20):
     global UNIT_CENTER_LOCATIONS
     print 'x = ', x, ', y = ', y, ', color = ', color
+    wait_count = 0
     while not myRobot.getPixelColor(x, y) == color:
         print myRobot.getPixelColor(x, y)
         if func_while_wait != None:
             func_while_wait(*arg_while_wait)
+        wait_count += 1
+        if wait_count == wait_max_count:
+            wait_count = 0
+            if func_wait_too_long != None:
+                func_wait_too_long(*arg_wait_too_long)
         myRobot.delay(500)
     while myRobot.getPixelColor(x, y) == color:
         if func_after_wait != None:
@@ -611,11 +629,13 @@ def waitForColor(x, y, color, wait_msg):
         myRobot.delay(500)
 
 def buyStrength():
-    buyStrengthColor = Color(70, 0, 0) # (1039, 613)
-    if myRobot.getPixelColor(1039, 613) == buyStrengthColor:
-        myRobot.mouseMove(1039, 613)
+    buyStrengthColor = Color(248, 249, 251) # (1135, 541)
+    if myRobot.getPixelColor(1135, 541) == buyStrengthColor:
+        myRobot.mouseMove(1135, 541)
         myRobot.mousePress(InputEvent.BUTTON1_MASK)
         myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        use100StoneRedColor = Color(89,0,0) # (1027, 599)
+        waitForColorAndDo(1027, 599, use100StoneRedColor)
     else:
         print "no buying message"
 
@@ -646,38 +666,42 @@ def isWaitingForCommand():
         return False
 
 def boundaryGoUp():
-    myRobot.mouseMove(956, 464)
+    myRobot.mouseMove(756, 464)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    myRobot.mouseMove(956, 434)
     myRobot.delay(100)
-    myRobot.mouseMove(956, 414)
+    myRobot.mouseMove(756, 424)
+    myRobot.delay(100)
+    myRobot.mouseMove(756, 394)
     myRobot.delay(100)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def boundaryGoDown():
-    myRobot.mouseMove(956, 464)
+    myRobot.mouseMove(756, 464)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    myRobot.mouseMove(956, 494)
     myRobot.delay(100)
-    myRobot.mouseMove(956, 514)
+    myRobot.mouseMove(756, 504)
+    myRobot.delay(100)
+    myRobot.mouseMove(756, 534)
     myRobot.delay(100)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def boundaryGoLeft():
-    myRobot.mouseMove(956, 464)
+    myRobot.mouseMove(756, 464)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    myRobot.mouseMove(926, 464)
     myRobot.delay(100)
-    myRobot.mouseMove(906, 464)
+    myRobot.mouseMove(716, 464)
+    myRobot.delay(100)
+    myRobot.mouseMove(686, 464)
     myRobot.delay(100)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def boundaryGoRight():
-    myRobot.mouseMove(956, 464)
+    myRobot.mouseMove(756, 464)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    myRobot.mouseMove(986, 464)
     myRobot.delay(100)
-    myRobot.mouseMove(1006, 464)
+    myRobot.mouseMove(796, 464)
+    myRobot.delay(100)
+    myRobot.mouseMove(826, 464)
     myRobot.delay(100)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
@@ -707,12 +731,117 @@ def selectFollowerAndLaunch(toSelct):
     launchColor = Color(0, 141, 218)  # (917, 892)
     waitForColorAndDo(917, 892, launchColor)
 
+def moveAroundTillBattle(direction='UpDown'):
+    while True:
+        moveAround(direction)
+        if isInBattle():                
+            break
+    print 'now in battle'
+
+def closeBSFFBE():
+    myRobot.mouseMove(327, 5)
+    myRobot.delay(500)
+
+    FFBETopColor = Color(226, 176, 156) # (202, 10)
+    waitForColorAndDo(202, 10, FFBETopColor,
+            func_after_wait=fastClick, arg_after_wait=(310, 10))
+    print 'BS FFBE closed'
+
+
+def switchEmulator():
+    # switch emulator
+    type("\t", KEY_ALT)
+    myRobot.delay(1000)
+
+def enterBSFFBE():
+    BSFFBEColor = Color(230,191,216) # (330, 196)
+    waitForColorAndDo(330, 196, BSFFBEColor,
+            func_after_wait=fastClick, arg_after_wait=(330, 196))
+    print 'entered BS FFBE'
+
+def waitForBSFFBEDesktop():
+    print 'waiting for FFBE Desktop'
+    friendColor = Color(255,184,254) # (1189, 1025)
+    while myRobot.getPixelColor(1189,1025) != friendColor:
+        fastClick(995, 639)
+        myRobot.delay(1000)
+    print 'saw BS FFBE Desktop'
+
+def waitForDuOSFFBEMissionEnd():
+    nextStepColor = Color(229, 233, 239) # (937, 902)
+    def clickAndHandleCommError():
+        fastClick(960, 646)
+        myRobot.delay(1000)
+        fastClick(925, 590)
+        myRobot.delay(1000)
+        fastClick(495, 986)
+        myRobot.delay(1000)
+    waitForColorAndDo(937, 902, nextStepColor,
+            func_while_wait=clickAndHandleCommError)
+
+    secondNextStepColor = Color(255, 255, 255) # (933, 905)
+    waitForColorAndDo(933, 905, secondNextStepColor,
+            func_while_wait=fastClick, arg_while_wait=(925, 590))
+
+    #thirdNextStepColor = Color(129, 150, 176) # (936, 904)
+    #waitForColorAndDo(936, 904, thirdNextStepColor,
+    #        func_while_wait=fastClick, arg_while_wait=(925, 590))
+
+    frontPageColor = Color(154, 2, 10) # (1190, 270)
+    while myRobot.getPixelColor(1190, 270) != frontPageColor:
+        fastClick(847, 803)
+        myRobot.delay(2000)
+    print 'DuOS mission Completed'
+
+def openDuOSAddCloseLine():
+    myRobot.mouseMove(912, 1080)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseMove(912, 780)    
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+    myRobot.delay(500)
+    myRobot.mouseMove(1027, 1070)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+def waitForFloatingWindow():
+    myRobot.delay(3000)
+    openDuOSAddCloseLine()
+
+def openDuOSFFBE():
+    duOSFFBEColor = Color(212,191,219) # (495, 986)
+    waitForColorAndDo(495, 986, duOSFFBEColor)
+
+def closeMuOSFFBE():
+    openDuOSAddCloseLine()
+    
+    # wait for floating window
+    floatingFrontPageColor = Color(118, 55, 80) # (1261, 462)
+    count = 0
+    while myRobot.getPixelColor(1261, 462) != floatingFrontPageColor:
+        myRobot.delay(1000)
+        count += 1
+        if count == 6:
+            openDuOSAddCloseLine()
+            count = 0
+    myRobot.delay(1000)
+    fastClick(1328, 191)
+    myRobot.delay(3000)
+
+    # wait for DuOS FFBE
+    duOSFFBEColor = Color(212,191,219) # (495, 986)
+    while myRobot.getPixelColor(495, 986) != duOSFFBEColor:
+        myRobot.delay(1000)
+    print 'back to DuOS Desktop'
+
 if __name__ == "__main__":
-    print(lookAbleToSummon())
-    targetLocation = Location(1190, 270)
+    #handleMissionEnd()
+    #exit(1)
+    targetLocation = Location(738, 384)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+    myRobot.delay(3000)
 
     
     #wait(3)

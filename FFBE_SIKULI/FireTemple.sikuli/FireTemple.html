@@ -67,7 +67,7 @@
    </head>
 <body>
 <div class="info">
-<h2>WindTemple.sikuli</h2> <a href="WindTemple.zip">(Download this script)</a>
+<h2>FireTemple.sikuli</h2> <a href="FireTemple.zip">(Download this script)</a>
 </div>
 <pre class="sikuli-code">
 <span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
@@ -76,8 +76,10 @@
 reload(Utilities)
 myRobot = JRobot()
 
-selectFollower = False
+selectFollower = True
 start_phase = <span class="dig">0</span>  <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
+STEP_WAIT = <span class="dig">300</span>
+buyStrength = True
 
 num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
 num_summon = <span class="dig">0</span>
@@ -166,7 +168,7 @@ num_summon = <span class="dig">0</span>
     myRobot.delay(<span class="dig">500</span>)
     <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
         <span class="cmt"># follow action depending on LB type</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
         num_LB_used[<span class="dig">0</span>] += <span class="dig">1</span>
     <span class="kw">else</span>:
         Utilities.closeMagicMenu()
@@ -178,7 +180,7 @@ num_summon = <span class="dig">0</span>
     myRobot.delay(<span class="dig">500</span>)
     <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
         <span class="cmt"># follow action depending on LB type</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
         num_LB_used[<span class="dig">1</span>] += <span class="dig">1</span>
     <span class="kw">else</span>:
         Utilities.closeMagicMenu()
@@ -191,7 +193,7 @@ num_summon = <span class="dig">0</span>
     <span class="kw">if</span> Utilities.isLBAvailable_BS(True):
         <span class="cmt"># follow action depending on LB type</span>
         num_LB_used[<span class="dig">2</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
     <span class="kw">else</span>:
         Utilities.closeMagicMenu()
     myRobot.delay(<span class="dig">500</span>)
@@ -205,7 +207,7 @@ num_summon = <span class="dig">0</span>
         num_LB_used[<span class="dig">3</span>] += <span class="dig">1</span>
         myRobot.delay(<span class="dig">500</span>)
         Utilities.fastClick(<span class="dig">1062</span>, <span class="dig">723</span>)
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
     <span class="kw">else</span>:
         Utilities.closeMagicMenu()
     myRobot.delay(<span class="dig">500</span>)
@@ -219,7 +221,7 @@ num_summon = <span class="dig">0</span>
         num_LB_used[<span class="dig">4</span>] += <span class="dig">1</span>
         myRobot.delay(<span class="dig">500</span>)
         Utilities.fastClick(<span class="dig">1061</span>, <span class="dig">829</span>)
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
     <span class="kw">else</span>:
         Utilities.closeMagicMenu()
     myRobot.delay(<span class="dig">500</span>)
@@ -258,6 +260,24 @@ num_summon = <span class="dig">0</span>
             <span class="kw">print</span> <span class="str">'Cannot Cure'</span>
             exit -<span class="dig">1</span>
 
+<span class="kw">def</span> doSteal():
+    <span class="kw">if</span> <span class="kw">not</span> Utilities.lookHavingLB(<span class="dig">5</span>):
+        Utilities.openMagicMenu(<span class="dig">5</span>)
+        myRobot.delay(<span class="dig">500</span>)
+        Utilities.fastClick(<span class="dig">745</span>, <span class="dig">819</span>)
+    myRobot.delay(<span class="dig">500</span>)
+
+<span class="kw">def</span> followerAttackOnly():
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">5</span>])
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, <span class="dig">100</span>)
+    mouseUp(Button.LEFT)
+    myRobot.delay(<span class="dig">500</span>)
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">5</span>])
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">100</span>)
+    mouseUp(Button.LEFT)
+
 <span class="kw">def</span> setCommand():
     <span class="kw">global</span> num_LB_used
     <span class="kw">global</span> num_summon
@@ -267,29 +287,33 @@ num_summon = <span class="dig">0</span>
     <span class="cmt"># after revive and cure, check LB</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">1</span> <span class="kw">and</span> do_revive_unit != <span class="dig">1</span>:
         num_LB_used[<span class="dig">0</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_1'</span>)
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">2</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">2</span> <span class="kw">and</span> do_revive_unit != <span class="dig">2</span>:
         num_LB_used[<span class="dig">1</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_2'</span>)
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">3</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">3</span> <span class="kw">and</span> do_revive_unit != <span class="dig">3</span>:
         num_LB_used[<span class="dig">2</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_3'</span>)
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">4</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">4</span> <span class="kw">and</span> do_revive_unit != <span class="dig">4</span>:
         num_LB_used[<span class="dig">3</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_4'</span>)
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">5</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">5</span> <span class="kw">and</span> do_revive_unit != <span class="dig">5</span>:
         num_LB_used[<span class="dig">4</span>] += <span class="dig">1</span>
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'LB_5'</span>)
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># summon if no LB and if available</span>
-    <span class="kw">if</span> do_cure_unit != <span class="dig">2</span> <span class="kw">and</span> do_revive_unit != <span class="dig">2</span> <span class="kw">and</span> (<span class="kw">not</span> Utilities.lookHavingLB(<span class="dig">2</span>)):
-        <span class="kw">if</span> Utilities.summonIfAvailable(<span class="dig">2</span>): <span class="cmt"># earth</span>
-            num_summon += <span class="dig">1</span>
-            Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Summon'</span>)
-        <span class="kw">else</span>:
-            Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'check but no Summon'</span>)
-        myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt">#if do_cure_unit != 2 and do_revive_unit != 2 and (not Utilities.lookHavingLB(2)):</span>
+    <span class="cmt">#    if Utilities.summonIfAvailable(2): # earth</span>
+    <span class="cmt">#        num_summon += 1</span>
+    <span class="cmt">#        Utilities.log('FireTempleLog.txt', 'LB_log', 'Summon')</span>
+    <span class="cmt">#    else:</span>
+    <span class="cmt">#        Utilities.log('FireTempleLog.txt', 'LB_log', 'check but no Summon')</span>
+    <span class="cmt">#    myRobot.delay(1000)</span>
 
+    doSteal()
+    myRobot.delay(<span class="dig">1000</span>)
+    followerAttackOnly()
+    myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt">#Utilities.manuallyKickOff()</span>
     Utilities.fastClick(<span class="dig">745</span>, <span class="dig">1032</span>)  <span class="cmt"># click AUTO</span>
     myRobot.delay(<span class="dig">500</span>)
@@ -304,9 +328,10 @@ num_summon = <span class="dig">0</span>
     issueCommandIfWaitingForOne(setBossCommand)
 
 <span class="kw">def</span> doBossBattle():
-    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Boss Battle'</span>)
+    Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Boss Battle'</span>)
     myRobot.delay(<span class="dig">1500</span>)
-
+    <span class="kw">while</span> <span class="kw">not</span> Utilities.isWaitingForCommand():
+        myRobot.delay(<span class="dig">500</span>)
     ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
     totalTargetLBused = <span class="dig">0</span>
     Utilities.waitForColorAndDo(<span class="dig">865</span>, <span class="dig">339</span>, ResultRColor,
@@ -346,11 +371,18 @@ num_summon = <span class="dig">0</span>
     issueCommandIfWaitingForOne(setCommand)
 
 <span class="kw">def</span> doBattle():
-    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'do Battle'</span>)
+    Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'do Battle'</span>)
     myRobot.delay(<span class="dig">1500</span>)
-    Utilities.fastClick(<span class="dig">796</span>, <span class="dig">471</span>)
-    Utilities.fastClick(<span class="dig">695</span>, <span class="dig">377</span>)
-    Utilities.fastClick(<span class="dig">864</span>, <span class="dig">421</span>)
+    <span class="kw">while</span> <span class="kw">not</span> Utilities.isWaitingForCommand():
+        myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">727</span>, <span class="dig">551</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">856</span>, <span class="dig">316</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">912</span>, <span class="dig">535</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">699</span>, <span class="dig">385</span>)
+    myRobot.delay(<span class="dig">500</span>)
 
     ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
     totalTargetLBused = <span class="dig">0</span>
@@ -358,80 +390,123 @@ num_summon = <span class="dig">0</span>
             func_while_wait=setBattleCommand)
     myRobot.delay(<span class="dig">1000</span>)
 
-<span class="kw">def</span> walkUp(count, isBoundary=False):
+<span class="kw">def</span> walkUp(count, isBoundary=False, detectBattle=True):
     battle_count = <span class="dig">0</span>
     <span class="kw">while</span> count &gt; <span class="dig">0</span>:
-        battle_count += Utilities.MoveUpAndCheckBattle(doBattle, isBoundary=isBoundary)
-        myRobot.delay(<span class="dig">300</span>)
+        battle_count += Utilities.MoveUpAndCheckBattle(doBattle, isBoundary=isBoundary, detectBattle=detectBattle)
+        myRobot.delay(STEP_WAIT)
         count -= <span class="dig">1</span>
     <span class="kw">return</span> battle_count
 
-<span class="kw">def</span> walkDown(count, isBoundary=False):
+<span class="kw">def</span> walkDown(count, isBoundary=False, detectBattle=True):
     battle_count = <span class="dig">0</span>
     <span class="kw">while</span> count &gt; <span class="dig">0</span>:
-        battle_count += Utilities.MoveDownAndCheckBattle(doBattle, isBoundary=isBoundary)
-        myRobot.delay(<span class="dig">300</span>)
+        battle_count += Utilities.MoveDownAndCheckBattle(doBattle, isBoundary=isBoundary, detectBattle=detectBattle)
+        myRobot.delay(STEP_WAIT)
         count -= <span class="dig">1</span>
     <span class="kw">return</span> battle_count
 
-<span class="kw">def</span> walkRight(count, isBoundary=False):
+<span class="kw">def</span> walkRight(count, isBoundary=False, detectBattle=True):
     battle_count = <span class="dig">0</span>
     <span class="kw">while</span> count &gt; <span class="dig">0</span>:
-        battle_count += Utilities.MoveRightAndCheckBattle(doBattle, isBoundary=isBoundary)
-        myRobot.delay(<span class="dig">300</span>)
+        battle_count += Utilities.MoveRightAndCheckBattle(doBattle, isBoundary=isBoundary, detectBattle=detectBattle)
+        myRobot.delay(STEP_WAIT)
         count -= <span class="dig">1</span>
     <span class="kw">return</span> battle_count
 
-<span class="kw">def</span> walkLeft(count, isBoundary=False):
+<span class="kw">def</span> walkLeft(count, isBoundary=False, detectBattle=True):
     battle_count = <span class="dig">0</span>
     <span class="kw">while</span> count &gt; <span class="dig">0</span>:
-        battle_count += Utilities.MoveLeftAndCheckBattle(doBattle, isBoundary=isBoundary)
-        myRobot.delay(<span class="dig">300</span>)
+        battle_count += Utilities.MoveLeftAndCheckBattle(doBattle, isBoundary=isBoundary, detectBattle=detectBattle)
+        myRobot.delay(STEP_WAIT)
         count -= <span class="dig">1</span>
     <span class="kw">return</span> battle_count
 
 <span class="kw">def</span> walkThroughPhaseOne():
-    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'phase 1'</span>)
+    Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'phase 1'</span>)
     MAX_BATTLE_COUNT = <span class="dig">14</span>
     num_battle = <span class="dig">0</span>
 
-    num_battle += walkRight(<span class="dig">13</span>)
-    num_battle += walkLeft(<span class="dig">13</span>)
-    num_battle += walkUp(<span class="dig">7</span>)
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True)
+    <span class="cmt"># now, complete the rest battles</span>
+    doRemainingBattles(MAX_BATTLE_COUNT - num_battle)
+    <span class="cmt"># ref point</span>
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, -<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    mouseUp(Button.LEFT)
+    myRobot.delay(<span class="dig">500</span>)
+
     num_battle += walkRight(<span class="dig">1</span>)
     num_battle += walkUp(<span class="dig">3</span>)
-    num_battle += walkRight(<span class="dig">1</span>)
+    <span class="cmt"># num_battle += walkUp(15, isBoundary=True)</span>
+
+    <span class="cmt"># go get 1st mine</span>
+    num_battle += walkLeft(<span class="dig">4</span>)
+    num_battle += walkDown(<span class="dig">2</span>) <span class="cmt"># 1st mine</span>
     num_battle += walkUp(<span class="dig">2</span>)
-    num_battle += walkLeft(<span class="dig">2</span>)
-    num_battle += walkUp(<span class="dig">5</span>)  <span class="cmt"># entering page 2</span>
+
+    <span class="cmt"># go get 2nd mine</span>
+    num_battle += walkRight(<span class="dig">16</span>)
+    num_battle += walkRight(<span class="dig">3</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">1</span>, isBoundary=True, detectBattle=False)  <span class="cmt"># switch page</span>
     myRobot.delay(<span class="dig">2000</span>)
 
-    <span class="cmt"># --- page 2 ---</span>
-    num_battle += walkUp(<span class="dig">2</span>)
-    num_battle += walkLeft(<span class="dig">7</span>)
-    num_battle += walkUp(<span class="dig">4</span>)
+    <span class="cmt"># now at page 2</span>
+    num_battle += walkRight(<span class="dig">5</span>, isBoundary=True)
+    <span class="cmt">#myRobot.delay(500)</span>
+    num_battle += walkUp(<span class="dig">6</span>)
+    num_battle += walkRight(<span class="dig">11</span>)
+    num_battle += walkDown(<span class="dig">8</span>)
     num_battle += walkLeft(<span class="dig">3</span>)
     num_battle += walkDown(<span class="dig">7</span>)
-    num_battle += walkRight(<span class="dig">7</span>) <span class="cmt"># 2nd mine</span>
-    num_battle += walkLeft(<span class="dig">7</span>)
-    num_battle += walkUp(<span class="dig">10</span>)
-    num_battle += walkLeft(<span class="dig">4</span>)
+
+    num_battle += walkLeft(<span class="dig">1</span>) <span class="cmt"># almost bottom</span>
+    num_battle += walkDown(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">7</span>, isBoundary=True) <span class="cmt"># right turn to hidden path</span>
+    num_battle += walkDown(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">1</span>, isBoundary=True) <span class="cmt"># 2nd mine</span>
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True)
+
+    <span class="cmt"># now leave page2</span>
+    num_battle += walkUp(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">7</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">1</span>) <span class="cmt"># almost bottom</span>
+
     num_battle += walkUp(<span class="dig">7</span>)
-    num_battle += walkRight(<span class="dig">7</span>)
-    num_battle += walkDown(<span class="dig">4</span>)
-    num_battle += walkRight(<span class="dig">6</span>)  <span class="cmt"># Leaving Zone 1, do the remaining battles</span>
-    doRemainingBattles(MAX_BATTLE_COUNT - num_battle)
+    num_battle += walkRight(<span class="dig">3</span>)
+    num_battle += walkUp(<span class="dig">8</span>)
+    num_battle += walkLeft(<span class="dig">11</span>)
+    num_battle += walkDown(<span class="dig">6</span>)
+
+    num_battle += walkLeft(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>) <span class="cmt"># now back to page 1</span>
+
+    num_battle += walkLeft(<span class="dig">4</span>, isBoundary=True)  <span class="cmt"># switch page</span>
+    num_battle += walkLeft(<span class="dig">11</span>)
+    <span class="cmt"># go up to page 3</span>
+    num_battle += walkUp(<span class="dig">5</span>)
+    num_battle += walkUp(<span class="dig">1</span>, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now at page 3</span>
+    num_battle += walkUp(<span class="dig">3</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True)
 
     <span class="cmt"># go to reference position</span>
     myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
     mouseDown(Button.LEFT)
-    mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
+    mouseMove(<span class="dig">0</span>, <span class="dig">270</span>)
     myRobot.delay(<span class="dig">2000</span>)
     mouseUp(Button.LEFT)
-    walkRight(<span class="dig">1</span>)
-    walkUp(<span class="dig">2</span>)
-    walkUp(<span class="dig">5</span>, isBoundary=True) <span class="cmt"># entering page 3, Zone 2</span>
-    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now go to zone 2</span>
+    num_battle += walkUp(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">10</span>)
+
 
 <span class="kw">def</span> doRemainingBattles(numBattle, direction=<span class="str">'UpDown'</span>):
     <span class="kw">while</span> numBattle &gt; <span class="dig">0</span>:
@@ -444,35 +519,108 @@ num_summon = <span class="dig">0</span>
         <span class="kw">print</span> <span class="str">'remaining battle count: '</span>, numBattle
 
 <span class="kw">def</span> walkThroughPhaseTwo():
-    Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Phase 2'</span>)
+    Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'Phase 2'</span>)
     MAX_BATTLE_COUNT = <span class="dig">15</span>
     num_battle = <span class="dig">0</span>
-
-    num_battle += walkRight(<span class="dig">8</span>)
-    num_battle += walkUp(<span class="dig">2</span>)
-    num_battle += walkRight(<span class="dig">6</span>) <span class="cmt"># 3rd Mine</span>
-    num_battle += walkLeft(<span class="dig">6</span>)
-    num_battle += walkDown(<span class="dig">2</span>)
-    num_battle += walkLeft(<span class="dig">8</span>)
-    num_battle += walkUp(<span class="dig">23</span>)
-    num_battle += walkLeft(<span class="dig">10</span>)
-    num_battle += walkUp(<span class="dig">4</span>, isBoundary=True)
-    num_battle += walkRight(<span class="dig">10</span>, isBoundary=True)
-    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True)
-    <span class="cmt"># do the remaining battle</span>
-    doRemainingBattles(MAX_BATTLE_COUNT - num_battle, <span class="str">'LeftRight'</span>)
-    <span class="cmt"># go to reference position</span>
-    myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt"># complete the remaining battle here</span>
+    doRemainingBattles(MAX_BATTLE_COUNT - num_battle)
+    <span class="cmt"># ref point</span>
     myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
     mouseDown(Button.LEFT)
-    mouseMove(-<span class="dig">270</span>, <span class="dig">0</span>)
-    myRobot.delay(<span class="dig">1000</span>)
+    mouseMove(<span class="dig">0</span>, <span class="dig">200</span>)
+    myRobot.delay(<span class="dig">2000</span>)
     mouseUp(Button.LEFT)
+    myRobot.delay(<span class="dig">500</span>)
 
-    walkRight(<span class="dig">4</span>, isBoundary=True)
-    walkUp(<span class="dig">3</span>, isBoundary=True)  <span class="cmt"># entering page 4</span>
+    <span class="cmt">#num_battle += walkDown(10, isBoundary=True)</span>
+    num_battle += walkLeft(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+    <span class="cmt"># now at page 4</span>
+    num_battle += walkLeft(<span class="dig">8</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">9</span>)
+    num_battle += walkDown(<span class="dig">4</span>)
+    num_battle += walkDown(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkDown(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
     myRobot.delay(<span class="dig">2000</span>)
 
+    <span class="cmt"># now at page 5</span>
+    num_battle += walkDown(<span class="dig">12</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">10</span>)
+    num_battle += walkUp(<span class="dig">11</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># back to page 4 small island for mine 3</span>
+    num_battle += walkUp(<span class="dig">3</span>, isBoundary=True) <span class="cmt"># 3rd mine</span>
+    num_battle += walkDown(<span class="dig">3</span>, isBoundary=True)
+    num_battle += walkDown(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now back to page 5, reverse it</span>
+    num_battle += walkDown(<span class="dig">11</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">10</span>)
+    num_battle += walkUp(<span class="dig">12</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now back to page 4, reverse it</span>
+    num_battle += walkUp(<span class="dig">5</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">3</span>)
+    num_battle += walkRight(<span class="dig">9</span>)
+    num_battle += walkRight(<span class="dig">8</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now back to page 3</span>
+    num_battle += walkRight(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">10</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">22</span>)
+    num_battle += walkDown(<span class="dig">4</span>)
+    num_battle += walkDown(<span class="dig">7</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now at page 6</span>
+    num_battle += walkRight(<span class="dig">8</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>)
+    num_battle += walkRight(<span class="dig">12</span>)
+    num_battle += walkUp(<span class="dig">8</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">9</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkDown(<span class="dig">2</span>, isBoundary=True)  <span class="cmt"># 4th mine</span>
+    <span class="cmt"># now reverse, go back</span>
+    num_battle += walkUp(<span class="dig">2</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkDown(<span class="dig">1</span>, isBoundary=True)
+    num_battle += walkRight(<span class="dig">9</span>, isBoundary=True)
+    num_battle += walkDown(<span class="dig">8</span>, isBoundary=True)
+
+
+
+    <span class="cmt"># go to reference position</span>
+    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
+    mouseDown(Button.LEFT)
+    mouseMove(-<span class="dig">200</span>, <span class="dig">0</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    mouseUp(Button.LEFT)
+
+    num_battle += walkDown(<span class="dig">1</span>)
+    num_battle += walkLeft(<span class="dig">7</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now back to page 3</span>
+    num_battle += walkLeft(<span class="dig">4</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">11</span>, isBoundary=True)
+    num_battle += walkLeft(<span class="dig">11</span>)
+    num_battle += walkUp(<span class="dig">10</span>, isBoundary=True)
+    num_battle += walkUp(<span class="dig">1</span>, isBoundary=True, detectBattle=False)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># now at page 7</span>
     <span class="cmt"># go meet Boss and catch 5th mine on the way</span>
     myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
     mouseDown(Button.LEFT)
@@ -486,8 +634,11 @@ num_summon = <span class="dig">0</span>
     <span class="cmt"># confirm</span>
     Utilities.fastClick(<span class="dig">1125</span>, <span class="dig">289</span>)
     myRobot.delay(<span class="dig">2000</span>)
-    doBossBattle()
-    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.fastClick(<span class="dig">1125</span>, <span class="dig">289</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    doBattle()
+    myRobot.delay(<span class="dig">2000</span>)
 
     <span class="cmt"># exit</span>
     Utilities.fastClick(<span class="dig">1021</span>, <span class="dig">422</span>)
@@ -499,12 +650,34 @@ num_summon = <span class="dig">0</span>
     myRobot.delay(<span class="dig">1500</span>)
 
 <span class="kw">def</span> enterMission():
-    <span class="cmt"># select mission (779, 364)</span>
-    Utilities.selectMission(<span class="dig">779</span>, <span class="dig">364</span>)
+    FireMissionColor = Color(<span class="dig">18</span>, <span class="dig">69</span>, <span class="dig">39</span>) <span class="cmt"># (738, 384)</span>
+    Utilities.waitForColorAndDo(<span class="dig">738</span>, <span class="dig">384</span>, FireMissionColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">929</span>, <span class="dig">160</span>))
+
+    <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
+    missionDescNextStepColor = Color(<span class="dig">0</span>, <span class="dig">83</span>, <span class="dig">196</span>) <span class="cmt"># (954, 923)</span>
+    <span class="kw">if</span> buyStrength:
+        Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor,
+                func_while_wait=Utilities.buyStrength)
+    <span class="kw">else</span>:
+        Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor)
+
+
     <span class="cmt"># select follower</span>
-    <span class="kw">print</span> <span class="str">'select follower = '</span>, selectFollower
-    Utilities.selectFollowerAndLaunch(selectFollower)
-    myRobot.delay(<span class="dig">2000</span>)
+    followerColor = Color(<span class="dig">145</span>,<span class="dig">60</span>,<span class="dig">32</span>) <span class="cmt"># (1015,223)    </span>
+    <span class="kw">if</span> selectFollower:
+        Utilities.waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
+                func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
+    <span class="kw">else</span>:
+        <span class="kw">def</span> waitAndSelectNoFollower():
+            myRobot.delay(<span class="dig">500</span>)
+            func_after_wait=Utilities.selectStranger()
+        <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
+        Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(<span class="dig">0</span>, <span class="dig">43</span>, <span class="dig">68</span>)  <span class="cmt"># (913,951)</span>
+    Utilities.waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
 
 <span class="kw">def</span> process():
     <span class="kw">global</span> num_LB_used
@@ -512,7 +685,7 @@ num_summon = <span class="dig">0</span>
     <span class="kw">global</span> start_phase
     <span class="kw">while</span> True:
         start = time.time()
-        Utilities.log(<span class="str">'WindTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'start time = '</span> + str(start), toDelete=True)
+        Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'start time = '</span> + str(start), toDelete=True)
         num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
         num_summon = <span class="dig">0</span>
 
@@ -521,24 +694,23 @@ num_summon = <span class="dig">0</span>
             myRobot.delay(<span class="dig">3000</span>)
         <span class="kw">if</span> start_phase &lt;= <span class="dig">1</span>:
             walkThroughPhaseOne()
-            myRobot.delay(<span class="dig">1000</span>)
+            myRobot.delay(<span class="dig">2000</span>)
         <span class="kw">if</span> start_phase &lt;= <span class="dig">2</span>:
             walkThroughPhaseTwo()
+            myRobot.delay(<span class="dig">2000</span>)
         total_time = time.time() - start
-        Utilities.log(<span class="str">'WindTempleReport.csv'</span>, <span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(num_LB_used[<span class="dig">0</span>]) +
+        Utilities.log(<span class="str">'FireTempleReport.csv'</span>, <span class="str">'LB'</span>, str(total_time) + <span class="str">','</span> + str(num_LB_used[<span class="dig">0</span>]) +
                     <span class="str">','</span> + str(num_LB_used[<span class="dig">1</span>]) + <span class="str">','</span> + str(num_LB_used[<span class="dig">2</span>]) + <span class="str">','</span> + str(num_LB_used[<span class="dig">3</span>]) +
                     <span class="str">','</span> + str(num_LB_used[<span class="dig">4</span>]) + <span class="str">','</span> + str(num_summon))
         start_phase = <span class="dig">0</span>
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="cmt">#process()</span>
-    <span class="cmt">#doRemainingBattles(15)</span>
-    doRemainingBattles(<span class="dig">15</span>, <span class="str">'LeftRight'</span>)
-    <span class="cmt">#setCommand()</span>
-    <span class="cmt">#Utilities.boundaryGoRight()</span>
-    <span class="cmt">#doBattle()</span>
     <span class="cmt">#doRemainingBattles(15, 'LeftRight')</span>
-    <span class="cmt">#Utilities.fastClick(796, 471)</span>
+    <span class="cmt">#walkThroughPhaseTwo()</span>
+    process()
+    <span class="cmt">#enterMission()</span>
+    <span class="cmt">#setCommand()</span>
+    <span class="cmt">#doBattle()</span>
 
 </pre>
 </body>

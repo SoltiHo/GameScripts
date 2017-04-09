@@ -80,45 +80,32 @@ reload(Utilities)
 myRobot = JRobot()
 
 SkipExpMerge = True
-expTarget = Location(<span class="dig">516</span>, <span class="dig">421</span>)
-lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
+expTarget = Location(<span class="dig">962</span>, <span class="dig">548</span>)
+lbTarget = Location(<span class="dig">962</span>, <span class="dig">548</span>)
 
 <span class="kw">def</span> main():
     <span class="kw">while</span> True:
         <span class="cmt"># open FFBE in BS</span>
-        <span class="skw">click</span>(Location(<span class="dig">282</span>, <span class="dig">323</span>))
+        Utilities.enterBSFFBE()
         myRobot.delay(<span class="dig">3000</span>)
 
         <span class="cmt"># wait for desktopLocation(687, 265)</span>
-        floorColor = Color(<span class="dig">255</span>, <span class="dig">195</span>, <span class="dig">250</span>) <span class="cmt"># Location(830, 830)</span>
-        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">830</span>, <span class="dig">830</span>) != floorColor:
-            myRobot.mouseMove(<span class="dig">521</span>, <span class="dig">599</span>)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-            myRobot.delay(<span class="dig">500</span>)
+        Utilities.waitForBSFFBEDesktop()
         myRobot.delay(<span class="dig">2000</span>)
 
         <span class="cmt"># sell and merge units</span>
         mergeAndSell()
-        myRobot.delay(<span class="dig">1000</span>)
+        myRobot.delay(<span class="dig">2000</span>)
 
         <span class="cmt"># enter the mission again</span>
         enterBSMission()
         myRobot.delay(<span class="dig">1000</span>)
 
-        <span class="cmt"># wait for mission start</span>
-        menuColor = Color(<span class="dig">149</span>,<span class="dig">116</span>,<span class="dig">13</span>) <span class="cmt"># 845, 845</span>
-        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">845</span>,<span class="dig">845</span>) != menuColor:
-            myRobot.delay(<span class="dig">1000</span>)
-        myRobot.delay(<span class="dig">1000</span>)
-
         <span class="cmt"># close FFBE BS app</span>
-        <span class="skw">click</span>(Location(<span class="dig">377</span>, <span class="dig">166</span>))
-        myRobot.delay(<span class="dig">2000</span>)
+        Utilities.closeBSFFBE()
 
         <span class="cmt"># switch to DuOS</span>
-        <span class="skw">type</span>(<span class="str">"\t"</span>, KEY_ALT)
-        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.switchEmulator()
 
         <span class="cmt"># wait for DuOS to boot</span>
         waitForDuOSFFBEandOpen()
@@ -137,6 +124,7 @@ lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1187</span>, <span class="dig">265</span>) != frontPageColor:
             <span class="skw">click</span>(Location(<span class="dig">961</span>, <span class="dig">895</span>))
             <span class="skw">click</span>(Location(<span class="dig">825</span>, <span class="dig">801</span>))
+            <span class="skw">click</span>(Location(<span class="dig">954</span>, <span class="dig">939</span>))
             myRobot.delay(<span class="dig">1000</span>)
         myRobot.delay(<span class="dig">1000</span>)
 
@@ -148,8 +136,8 @@ lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
         myRobot.delay(<span class="dig">1000</span>)
 
         <span class="cmt"># wait for DuOS to close completely</span>
-        BSFFBEColor = Color(<span class="dig">152</span>, <span class="dig">106</span>, <span class="dig">67</span>) <span class="cmt"># (273, 316)</span>
-        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">273</span>, <span class="dig">316</span>) != BSFFBEColor:
+        BSFFBEColor = Color(<span class="dig">224</span>, <span class="dig">132</span>, <span class="dig">169</span>) <span class="cmt"># (335, 198)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">335</span>, <span class="dig">198</span>) != BSFFBEColor:
             myRobot.delay(<span class="dig">1000</span>)
         myRobot.delay(<span class="dig">1000</span>)
         <span class="kw">print</span> <span class="str">'saw BS FFBE, continue'</span>
@@ -167,136 +155,167 @@ lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
 
 <span class="kw">def</span> sellRemainingUnits():
     <span class="kw">global</span> SkipExpMerge
-    <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>))
+    strengthenColor = Color(<span class="dig">243</span>, <span class="dig">187</span>, <span class="dig">161</span>) <span class="cmt"># (864, 848)</span>
+    <span class="skw">click</span>(Location(<span class="dig">807</span>, <span class="dig">1026</span>)) <span class="cmt"># click Units</span>
     myRobot.delay(<span class="dig">2000</span>)
-    <span class="cmt"># sell</span>
-    <span class="skw">click</span>(Location(<span class="dig">764</span>, <span class="dig">640</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">526</span>, <span class="dig">411</span>)) <span class="cmt"># 1st</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">864</span>, <span class="dig">848</span>) != strengthenColor:
+        myRobot.delay(<span class="dig">1000</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># click sell unit</span>
+    sellColor = Color(<span class="dig">93</span>, <span class="dig">11</span>, <span class="dig">20</span>)  <span class="cmt"># (1180, 246)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1180</span>, <span class="dig">246</span>, sellColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">816</span>, <span class="dig">708</span>])
+    myRobot.delay(<span class="dig">2000</span>)
+
+
+    Utilities.fastClick(<span class="dig">712</span>, <span class="dig">378</span>)
     myRobot.delay(<span class="dig">500</span>)
     <span class="kw">if</span> SkipExpMerge:
-        <span class="skw">click</span>(Location(<span class="dig">602</span>, <span class="dig">430</span>)) <span class="cmt"># 2nd</span>
+        Utilities.fastClick(<span class="dig">839</span>, <span class="dig">383</span>) <span class="cmt"># 2nd</span>
         myRobot.delay(<span class="dig">500</span>)
-        <span class="skw">click</span>(Location(<span class="dig">679</span>, <span class="dig">420</span>)) <span class="cmt"># 3rd</span>
+        Utilities.fastClick(<span class="dig">959</span>, <span class="dig">373</span>) <span class="cmt"># 3rd</span>
         myRobot.delay(<span class="dig">500</span>)
-        <span class="skw">click</span>(Location(<span class="dig">761</span>, <span class="dig">423</span>)) <span class="cmt"># 4th</span>
+        Utilities.fastClick(<span class="dig">1082</span>, <span class="dig">382</span>) <span class="cmt"># 4</span>
         myRobot.delay(<span class="dig">500</span>)
-        <span class="skw">click</span>(Location(<span class="dig">831</span>, <span class="dig">420</span>)) <span class="cmt"># 5th</span>
+        Utilities.fastClick(<span class="dig">1197</span>, <span class="dig">390</span>) <span class="cmt"># 5</span>
         myRobot.delay(<span class="dig">500</span>)
-        <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">538</span>)) <span class="cmt"># 6th</span>
+        Utilities.fastClick(<span class="dig">715</span>, <span class="dig">551</span>) <span class="cmt"># 6</span>
         myRobot.delay(<span class="dig">500</span>)
+    myRobot.delay(<span class="dig">1000</span>)
 
     <span class="cmt"># sell</span>
-    <span class="skw">click</span>(Location(<span class="dig">675</span>, <span class="dig">753</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="cmt"># confirm 1</span>
-    <span class="skw">click</span>(Location(<span class="dig">756</span>, <span class="dig">576</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="cmt"># confirm 2</span>
-    <span class="skw">click</span>(Location(<span class="dig">756</span>, <span class="dig">576</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="cmt"># OK</span>
-    <span class="skw">click</span>(Location(<span class="dig">675</span>, <span class="dig">567</span>))
+    confirmSellColor = Color(<span class="dig">147</span>, <span class="dig">0</span>, <span class="dig">7</span>)  <span class="cmt"># (1047, 823)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1047</span>, <span class="dig">823</span>, confirmSellColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">998</span>, <span class="dig">893</span>])
     myRobot.delay(<span class="dig">1000</span>)
 
+    <span class="cmt"># 2nd confirm</span>
+    secondConfirmColor = Color(<span class="dig">102</span>, <span class="dig">0</span>, <span class="dig">0</span>)  <span class="cmt"># (1034, 588)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1034</span>, <span class="dig">588</span>, secondConfirmColor)
+    myRobot.delay(<span class="dig">1000</span>)
+
+    <span class="cmt"># OK</span>
+    okColor = Color(<span class="dig">0</span>, <span class="dig">79</span>, <span class="dig">178</span>) <span class="cmt"># (900, 577)</span>
+    Utilities.waitForColorAndDo(<span class="dig">900</span>, <span class="dig">577</span>, okColor)
+    myRobot.delay(<span class="dig">3000</span>)
+
+    <span class="cmt"># go back to frontpage and click vertex</span>
+    vertexColor = Color(<span class="dig">223</span>, <span class="dig">225</span>, <span class="dig">240</span>) <span class="cmt"># (802, 614)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">802</span>, <span class="dig">614</span>) != vertexColor:
+        myRobot.delay(<span class="dig">4000</span>)
+        Utilities.fastClick(<span class="dig">705</span>, <span class="dig">1026</span>)  <span class="cmt"># click front page</span>
+    <span class="kw">print</span>(<span class="str">"back at front page"</span>)
 
 <span class="kw">def</span> mergeUnits():
     <span class="kw">global</span> lbTarget
-    unitOneColor = Color(<span class="dig">254</span>, <span class="dig">254</span>, <span class="dig">254</span>) <span class="cmt"># (585, 638)</span>
-    <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>)) <span class="cmt"># click Units</span>
-    wait_count = <span class="dig">0</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">585</span>, <span class="dig">638</span>) != unitOneColor:
-        myRobot.delay(<span class="dig">500</span>)
-        wait_count += <span class="dig">1</span>
-        <span class="kw">if</span> wait_count == <span class="dig">4</span>:
-            <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>)) <span class="cmt"># click Units</span>
-            wait_count = <span class="dig">0</span>
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="cmt"># Merge</span>
-    <span class="skw">click</span>(Location(<span class="dig">573</span>, <span class="dig">731</span>))
+    strengthenColor = Color(<span class="dig">243</span>, <span class="dig">187</span>, <span class="dig">161</span>) <span class="cmt"># (864, 848)</span>
+    <span class="skw">click</span>(Location(<span class="dig">807</span>, <span class="dig">1026</span>)) <span class="cmt"># click Units</span>
     myRobot.delay(<span class="dig">2000</span>)
+    Utilities.waitForColorAndDo(<span class="dig">864</span>, <span class="dig">848</span>, strengthenColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">807</span>, <span class="dig">1026</span>])
+    myRobot.delay(<span class="dig">2000</span>)
+    <span class="cmt"># Merge</span>
     <span class="skw">click</span>(lbTarget)  <span class="cmt"># select Target</span>
-    myRobot.delay(<span class="dig">1500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">648</span>))
+    myRobot.delay(<span class="dig">2000</span>)
+
+    firstSpotColor = Color(<span class="dig">174</span>, <span class="dig">174</span>, <span class="dig">174</span>) <span class="cmt"># (719, 753)</span>
+    Utilities.waitForColorAndDo(<span class="dig">719</span>, <span class="dig">753</span>, firstSpotColor)
+
+    lbCanColor = Color(<span class="dig">111</span>, <span class="dig">113</span>, <span class="dig">41</span>)  <span class="cmt"># (1068, 394)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1068</span>, <span class="dig">394</span>) != lbCanColor:
+        myRobot.delay(<span class="dig">1000</span>)
+
+    Utilities.fastClick(<span class="dig">1068</span>, <span class="dig">394</span>)
     myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">756</span>, <span class="dig">430</span>))
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">674</span>, <span class="dig">763</span>))
+
+    okColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (942, 898)</span>
+    <span class="kw">print</span>(<span class="str">'waiting for okColor'</span>)
+    Utilities.waitForColorAndDo(<span class="dig">942</span>, <span class="dig">898</span>, okColor)
     myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">674</span>, <span class="dig">763</span>))  <span class="cmt"># merge confirm</span>
-    myRobot.delay(<span class="dig">1000</span>)
-    cleanSelectionColor = Color(<span class="dig">87</span>,<span class="dig">10</span>,<span class="dig">18</span>) <span class="cmt"># (779, 753)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">779</span>, <span class="dig">753</span>) != cleanSelectionColor:
-        <span class="skw">click</span>(Location(<span class="dig">797</span>, <span class="dig">715</span>))
-        myRobot.delay(<span class="dig">500</span>)
+
+    mergeColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (981, 890)</span>
+    <span class="kw">print</span>(<span class="str">'waiting for mergeColor'</span>)
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">981</span>, <span class="dig">890</span>) == mergeColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">981</span>, <span class="dig">890</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># wait for merge animation</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">981</span>, <span class="dig">890</span>) != mergeColor:
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">1070</span>, <span class="dig">893</span>)
+        <span class="kw">print</span>(<span class="str">'waiting for 2nd merge color'</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+
 
 <span class="kw">def</span> mergeExpUnits():
     <span class="kw">global</span> expTarget
-    <span class="skw">click</span>(Location(<span class="dig">581</span>, <span class="dig">846</span>))
+    strengthenColor = Color(<span class="dig">243</span>, <span class="dig">187</span>, <span class="dig">161</span>) <span class="cmt"># (864, 848)</span>
+    <span class="skw">click</span>(Location(<span class="dig">807</span>, <span class="dig">1026</span>)) <span class="cmt"># click Units</span>
+    myRobot.delay(<span class="dig">2000</span>)
+    Utilities.waitForColorAndDo(<span class="dig">864</span>, <span class="dig">848</span>, strengthenColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">807</span>, <span class="dig">1026</span>])
     myRobot.delay(<span class="dig">2000</span>)
     <span class="cmt"># Merge</span>
-    <span class="skw">click</span>(Location(<span class="dig">556</span>, <span class="dig">733</span>))
+    <span class="skw">click</span>(expTarget)  <span class="cmt"># select Target</span>
     myRobot.delay(<span class="dig">2000</span>)
-    <span class="skw">click</span>(expTarget)   <span class="cmt"># select Target</span>
-    myRobot.delay(<span class="dig">1500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">648</span>))  <span class="cmt"># select spot</span>
+
+    firstSpotColor = Color(<span class="dig">174</span>, <span class="dig">174</span>, <span class="dig">174</span>) <span class="cmt"># (719, 753)</span>
+    Utilities.waitForColorAndDo(<span class="dig">719</span>, <span class="dig">753</span>, firstSpotColor)
     myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">526</span>, <span class="dig">411</span>)) <span class="cmt"># 1st</span>
+    <span class="skw">click</span>(Location(<span class="dig">717</span>, <span class="dig">384</span>)) <span class="cmt"># 1st</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">602</span>, <span class="dig">430</span>)) <span class="cmt"># 2nd</span>
+    <span class="skw">click</span>(Location(<span class="dig">834</span>, <span class="dig">391</span>)) <span class="cmt"># 2nd</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">679</span>, <span class="dig">420</span>)) <span class="cmt"># 3rd</span>
+    <span class="skw">click</span>(Location(<span class="dig">958</span>, <span class="dig">391</span>)) <span class="cmt"># 3rd</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">761</span>, <span class="dig">423</span>)) <span class="cmt"># 4th</span>
+    <span class="skw">click</span>(Location(<span class="dig">1076</span>, <span class="dig">386</span>)) <span class="cmt"># 4th</span>
     myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">522</span>, <span class="dig">538</span>)) <span class="cmt"># 6th</span>
+    <span class="skw">click</span>(Location(<span class="dig">714</span>, <span class="dig">560</span>)) <span class="cmt"># 6th</span>
     myRobot.delay(<span class="dig">500</span>)
 
-    <span class="skw">click</span>(Location(<span class="dig">674</span>, <span class="dig">763</span>))
+    <span class="skw">click</span>(Location(<span class="dig">958</span>, <span class="dig">901</span>)) <span class="cmt"># ok</span>
     myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">674</span>, <span class="dig">763</span>))  <span class="cmt"># merge confirm</span>
+    <span class="skw">click</span>(Location(<span class="dig">966</span>, <span class="dig">901</span>))  <span class="cmt"># merge confirm</span>
     myRobot.delay(<span class="dig">1000</span>)
-    cleanSelectionColor = Color(<span class="dig">87</span>,<span class="dig">10</span>,<span class="dig">18</span>) <span class="cmt"># (779, 753)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">779</span>, <span class="dig">753</span>) != cleanSelectionColor:
-        <span class="skw">click</span>(Location(<span class="dig">818</span>, <span class="dig">750</span>))
+    cleanSelectionColor = Color(<span class="dig">143</span>,<span class="dig">93</span>,<span class="dig">98</span>) <span class="cmt"># (1132,889)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1132</span>, <span class="dig">889</span>) != cleanSelectionColor:
+        <span class="skw">click</span>(Location(<span class="dig">1185</span>, <span class="dig">898</span>))
         myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> enterBSMission():
-    <span class="skw">click</span>(Location(<span class="dig">520</span>, <span class="dig">844</span>))
+    mazeColor = Color(<span class="dig">254</span>, <span class="dig">179</span>, <span class="dig">239</span>) <span class="cmt"># (877, 518)</span>
+    Utilities.waitForColorAndDo(<span class="dig">877</span>, <span class="dig">518</span>, mazeColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">839</span>, <span class="dig">566</span>])
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="kw">def</span> checkAndBuyStrength():
+        Utilities.fastClick(<span class="dig">911</span>, <span class="dig">384</span>)
+        myRobot.delay(<span class="dig">1500</span>)
+        Utilities.fastClick(<span class="dig">1051</span>, <span class="dig">538</span>)
+        myRobot.delay(<span class="dig">1500</span>)
+        Utilities.fastClick(<span class="dig">1011</span>, <span class="dig">590</span>)
+        myRobot.delay(<span class="dig">1500</span>)
+    nextStepColor = Color(<span class="dig">247</span>, <span class="dig">247</span>, <span class="dig">249</span>) <span class="cmt"># (960, 948)</span>
+    Utilities.waitForColorAndDo(<span class="dig">960</span>, <span class="dig">948</span>, nextStepColor,
+            func_while_wait=checkAndBuyStrength)
+    myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="cmt"># select first follower</span>
+    Utilities.fastClick(<span class="dig">843</span>, <span class="dig">377</span>)
     myRobot.delay(<span class="dig">1000</span>)
-    vertexColor = Color(<span class="dig">152</span>, <span class="dig">145</span>, <span class="dig">186</span>) <span class="cmt"># (820, 688)</span>
-    Utilities.waitForColorAndDo(<span class="dig">820</span>, <span class="dig">688</span>, vertexColor)
-    <span class="cmt">#while myRobot.getPixelColor(820, 688) != vertexColor:</span>
-    <span class="cmt">#    myRobot.delay(1000)</span>
-    <span class="cmt">#    print('wait for vertex')</span>
-    <span class="cmt">#myRobot.delay(500)</span>
-    <span class="cmt">#click(Location(832, 695)) # vertex</span>
-    myRobot.delay(<span class="dig">1000</span>)
-    missionColor = Color(<span class="dig">202</span>,<span class="dig">23</span>,<span class="dig">139</span>) <span class="cmt"># (629, 375)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">629</span>, <span class="dig">375</span>) != missionColor:
+
+    <span class="cmt"># launch</span>
+    menuColor = Color(<span class="dig">134</span>, <span class="dig">113</span>, <span class="dig">70</span>)  <span class="cmt"># (1229, 1022)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1229</span>, <span class="dig">1022</span>) != menuColor:
         myRobot.delay(<span class="dig">1000</span>)
-        <span class="kw">print</span>(<span class="str">'waiting for mission color'</span>)
-    myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">629</span>,<span class="dig">375</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">603</span>, <span class="dig">427</span>)) <span class="cmt"># easy </span>
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="cmt"># waiting for next step</span>
-    stoneColor = Color(<span class="dig">4</span>,<span class="dig">36</span>,<span class="dig">189</span>) <span class="cmt"># (839, 703)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">839</span>, <span class="dig">703</span>) != stoneColor:
-        <span class="kw">print</span> <span class="str">'waiting for stone'</span>
-        <span class="cmt"># buying strength</span>
-        <span class="skw">click</span>(Location(<span class="dig">788</span>, <span class="dig">576</span>))
-        myRobot.delay(<span class="dig">500</span>)
-    <span class="skw">click</span>(Location(<span class="dig">674</span>, <span class="dig">782</span>))
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">562</span>, <span class="dig">422</span>)) <span class="cmt"># select the 1st follower</span>
-    myRobot.delay(<span class="dig">1000</span>)
-    <span class="skw">click</span>(Location(<span class="dig">681</span>, <span class="dig">771</span>)) <span class="cmt"># depart</span>
+        Utilities.fastClick(<span class="dig">902</span>, <span class="dig">949</span>) <span class="cmt"># click launch</span>
+        <span class="kw">print</span>(<span class="str">'waiting for menu'</span>)
 
 <span class="kw">def</span> waitForDuOSFFBEandOpen():
     <span class="kw">print</span> <span class="str">'waitForDuOSFFBEandOpen'</span>
-    DuOSFFBEColor = Color(<span class="dig">192</span>,<span class="dig">129</span>,<span class="dig">81</span>) <span class="cmt">#(503, 988)</span>
+    DuOSFFBEColor = Color(<span class="dig">237</span>,<span class="dig">170</span>,<span class="dig">198</span>) <span class="cmt">#(503, 988)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">503</span>, <span class="dig">988</span>) != DuOSFFBEColor:
         <span class="kw">print</span> <span class="str">'wait for DuOS FFBE color'</span>
         myRobot.delay(<span class="dig">1000</span>)
@@ -332,7 +351,7 @@ lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
     <span class="cmt"># wait for DuOS FFBE Desktop</span>
-    DuOSFFBEColor = Color(<span class="dig">192</span>,<span class="dig">129</span>,<span class="dig">81</span>) <span class="cmt">#(503, 988)</span>
+    DuOSFFBEColor = Color(<span class="dig">237</span>,<span class="dig">170</span>,<span class="dig">198</span>) <span class="cmt">#(503, 988)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">503</span>, <span class="dig">988</span>) != DuOSFFBEColor:
         <span class="kw">print</span> <span class="str">'wait for DuOS FFBE color'</span>
         myRobot.delay(<span class="dig">1000</span>)
@@ -345,6 +364,7 @@ lbTarget = Location(<span class="dig">832</span>, <span class="dig">641</span>)
     <span class="cmt">#mergeExpUnits()</span>
     <span class="cmt">#wait(10)</span>
     main()
+    <span class="cmt">#sellRemainingUnits()</span>
     <span class="cmt">#waitForDuOSFFBEandOpen()</span>
 
 </pre>
