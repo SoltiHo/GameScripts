@@ -90,23 +90,43 @@ def scrollMenuDown():
     moveRegion.mouseMove(0, -270)
     moveRegion.mouseUp(Button.LEFT)
 
+def scrollMenuUp_fast():
+    myRobot.mouseMove(935, 685)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 735)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 785)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 835)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 885)
+    #myRobot.delay(150)
+    myRobot.mouseMove(935, 935)
+    myRobot.delay(100)
+    myRobot.mouseMove(935, 1003)
+    myRobot.delay(200)
+    myRobot.mouseMove(935, 1002)
+    myRobot.delay(350)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
 def scrollMenuDown_fast():
     myRobot.mouseMove(935, 955)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    #myRobot.delay(100)
+    myRobot.delay(100)
     myRobot.mouseMove(935, 905)
-    #myRobot.delay(150)
+    myRobot.delay(100)
     myRobot.mouseMove(935, 855)
-    #myRobot.delay(150)
+    myRobot.delay(100)
     myRobot.mouseMove(935, 805)
-    #myRobot.delay(150)
+    myRobot.delay(100)
     myRobot.mouseMove(935, 755)
     #myRobot.delay(150)
     myRobot.mouseMove(935, 705)
     myRobot.delay(100)
     myRobot.mouseMove(935, 655)
     myRobot.delay(200)
-    myRobot.mouseMove(935, 660)
+    myRobot.mouseMove(935, 656)
     myRobot.delay(350)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
@@ -489,6 +509,39 @@ def lookHavingLB(unitNum):
         print "unit ", unitNum, " no LB"   
         return False
 
+def selectFollowerAndLaunch(selectFollower):
+    followerColor = Color(145,60,32) # (1015,223)
+    if selectFollower:
+        waitForColorAndDo(1015, 223, followerColor, 
+                func_after_wait=fastClick, arg_after_wait=(810, 404))
+    else:
+        def waitAndSelectNoFollower():
+            myRobot.delay(500)
+            func_after_wait=selectStranger()
+        #followerColor = Color(22, 41, 54) # (916, 248)
+        waitForColorAndDo(1096, 223, followerColor, 
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(0, 43, 68)  # (913,951)
+    waitForColorAndDo(913, 951, launchColor)
+
+def handleFollowerError():
+    OColor = Color(239, 241, 244) # (943, 602)
+    KColor = Color(251, 251, 252) # (972, 596)
+    EdgeColor = Color(186, 187, 188) # (1164, 432)
+    isFollowerError = myRobot.getPixelColor(943, 602) == OColor and \
+            myRobot.getPixelColor(972, 596) == KColor and \
+            myRobot.getPixelColor(1164, 432) == EdgeColor
+    if isFollowerError:
+        print "Follower Error detected, clicking OK"
+        myRobot.mouseMove(943, 602)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        myRobot.delay(3000)
+        selectFollowerAndLaunch(True)
+    else:
+        print "no follower error"  
+
 def handleCommunicationError():
     # detect communication error
     OColor = Color(242, 245, 248)
@@ -514,13 +567,14 @@ def log(log_filename, event_type, event_message, toDelete=False):
     with open(log_file, open_mode) as f:
         f.write(log_msg)
 
-def handleMissionEnd():
+def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(254, 237, 56)):
     # star color = java.awt.Color[r=254,g=237,b=56] (1140, 332)
-    starColor = Color(254, 237, 56)
     firstNextStepIsDone = False
     secondNextStepIsDone = False
     EXPisDone = False
-    while myRobot.getPixelColor(1140, 332) != starColor:
+    while myRobot.getPixelColor(targetX, targetY) != waitTargetColor:
+        print "targetX =", targetX, ", targetY =", targetY, ", targetColor = ", waitTargetColor
+        print "current = ", myRobot.getPixelColor(targetX, targetY)
         handleCommunicationError()
         
         # first next step
@@ -600,7 +654,7 @@ def selectStranger():
     myRobot.delay(500)
 
 
-def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[], func_wait_too_long=None, arg_wait_too_long=[], wait_max_count=20):
+def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[], wait_time_period=500, func_wait_too_long=None, arg_wait_too_long=[], wait_max_count=20):
     global UNIT_CENTER_LOCATIONS
     print 'x = ', x, ', y = ', y, ', color = ', color
     wait_count = 0
@@ -613,7 +667,7 @@ def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func
             wait_count = 0
             if func_wait_too_long != None:
                 func_wait_too_long(*arg_wait_too_long)
-        myRobot.delay(500)
+        myRobot.delay(wait_time_period)
     while myRobot.getPixelColor(x, y) == color:
         if func_after_wait != None:
             func_after_wait(*arg_after_wait)
@@ -621,7 +675,7 @@ def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func
             myRobot.mouseMove(x, y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-        myRobot.delay(500)
+        myRobot.delay(wait_time_period)
 
 def waitForColor(x, y, color, wait_msg):
     while not myRobot.getPixelColor(x, y) == color:
@@ -834,10 +888,44 @@ def closeMuOSFFBE():
         myRobot.delay(1000)
     print 'back to DuOS Desktop'
 
+def waitForBSFFBEDesktop2():
+    friendColor = Color(255,184,254) # (1189, 1025)
+    while myRobot.getPixelColor(1189,1025) != friendColor:
+        fastClick(962, 940)
+    print 'saw BS FFBE Desktop'
+
+def closeBS():
+    myRobot.mouseMove(897, 0)
+    myRobot.delay(500)
+    BSCloseColor = Color(69, 67, 82) # (1897, 11)
+    waitForColorAndDo(1897, 11, BSCloseColor)
+    print 'BS emulator closed'
+
+def launchBS():
+    FFBEonDesktopColor = Color(131,181,22) # (113, 932)
+    #FFBEColor = Color(222,53,24)  # (121, 972)
+    if myRobot.getPixelColor(113, 932) != FFBEonDesktopColor:
+        print 'cannot see FFBE icon'
+        exit(1)
+    fastClick(113,932)
+    myRobot.delay(200)
+    fastClick(113,932)
+    myRobot.delay(60000) # 60 sec
+    # first close live stream window
+    type(Key.F4, KeyModifier.ALT)
+    myRobot.delay(5000)
+    # find maxmize icon
+    maximizeRegion = Region(1114,108,293,112)
+    maximizeRegion.click("1493181119642.png")
+    myRobot.delay(5000)
+    # check for BS sponsor message
+    tryAppColor = Color(79, 168, 201) # (1563, 766)
+    while myRobot.getPixelColor(1563, 766) == tryAppColor:
+        fastClick(1563, 766)
+        myRobot.delay(2000)
+
 if __name__ == "__main__":
-    #handleMissionEnd()
-    #exit(1)
-    targetLocation = Location(738, 384)
+    targetLocation = Location(706, 209)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

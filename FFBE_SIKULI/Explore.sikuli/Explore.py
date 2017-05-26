@@ -1,5 +1,5 @@
 moveCount = 0
-SUMMON_NUM = 0
+SUMMON_NUM = 3
 to_summon = False
 direeciton = 'UpDown'
 
@@ -21,10 +21,6 @@ def Battle():
         Utilities.summonIfAvailable(SUMMON_NUM)
     myRobot.delay(1500)
     Utilities.doMiddleCureIfNeeded()
-
-    myRobot.delay(500)
-    doSteal()
-    myRobot.delay(1000)
     
     Utilities.fastClick(783, 518)
     Utilities.fastClick(908, 462)

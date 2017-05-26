@@ -5,12 +5,14 @@ reload(Utilities)
 myRobot = JRobot()
 
 selectFollower = True
-start_phase = 0  # 0: beginning, 1: phase 1, 2: phase 2
-STEP_WAIT = 300
+start_phase = 1 # 0: beginning, 1: phase 1, 2: phase 2
+STEP_WAIT = 400
 buyStrength = True
 
 num_LB_used = [0, 0, 0, 0, 0]
 num_summon = 0
+num_round = 0
+alwaysSteal = True
 def revive(unitNum):
     # must use thunder summon
     # open healer menu
@@ -209,8 +211,11 @@ def followerAttackOnly():
 def setCommand():
     global num_LB_used
     global num_summon
+    global num_round
+    global alwaysSteal
     do_cure_unit = 0
     do_revive_unit = 0
+    num_round = num_round + 1
     #reviveAndCure()
     # after revive and cure, check LB
     if Utilities.lookHavingLB(1) and do_cure_unit != 1 and do_revive_unit != 1:
@@ -238,8 +243,11 @@ def setCommand():
     #        Utilities.log('FireTempleLog.txt', 'LB_log', 'check but no Summon')
     #    myRobot.delay(1000)
 
-    doSteal()
-    myRobot.delay(1000)
+    #if alwaysSteal or num_round == 1:
+    #    doSteal()
+    #myRobot.delay(1000)
+    #if Utilities.lookAbleToSummon():
+    #    Utilities.summonIfAvailable(3)
     followerAttackOnly()
     myRobot.delay(1000)
     #Utilities.manuallyKickOff()
@@ -299,18 +307,20 @@ def setBattleCommand():
     issueCommandIfWaitingForOne(setCommand)
 
 def doBattle():
+    global num_round
+    num_round = 0
     Utilities.log('FireTempleLog.txt', 'LB_log', 'do Battle')
     myRobot.delay(1500)
     while not Utilities.isWaitingForCommand():
         myRobot.delay(500)
-    Utilities.fastClick(727, 551)
-    myRobot.delay(500)
-    Utilities.fastClick(856, 316)
-    myRobot.delay(500)
-    Utilities.fastClick(912, 535)
-    myRobot.delay(500)
-    Utilities.fastClick(699, 385)
-    myRobot.delay(500)
+    Utilities.fastClick(794, 541)
+    myRobot.delay(300)
+    Utilities.fastClick(888, 541)
+    myRobot.delay(300)
+    Utilities.fastClick(794, 386)
+    myRobot.delay(300)
+    #Utilities.fastClick(888, 386)
+    #myRobot.delay(300)
 
     ResultRColor =  Color(245,247,249) # (865,339)
     totalTargetLBused = 0
@@ -423,18 +433,10 @@ def walkThroughPhaseOne():
     # now at page 3
     num_battle += walkUp(3, isBoundary=True)
     num_battle += walkLeft(1, isBoundary=True)
-
-    # go to reference position
-    myRobot.mouseMove(961, 494)
-    mouseDown(Button.LEFT)
-    mouseMove(0, 270)
-    myRobot.delay(2000)
-    mouseUp(Button.LEFT)
     
     # now go to zone 2
     num_battle += walkUp(5, isBoundary=True)
     num_battle += walkLeft(10)
- 
     
 def doRemainingBattles(numBattle, direction='UpDown'):
     while numBattle > 0:
@@ -564,8 +566,10 @@ def walkThroughPhaseTwo():
     myRobot.delay(2000)
     Utilities.fastClick(1125, 289)
     myRobot.delay(2000)
-
+    global alwaysSteal
+    alwaysSteal = False
     doBattle()
+    alwaysSteal = True
     myRobot.delay(2000)
 
     # exit

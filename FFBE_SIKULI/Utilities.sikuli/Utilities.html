@@ -162,23 +162,43 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     moveRegion.mouseMove(<span class="dig">0</span>, -<span class="dig">270</span>)
     moveRegion.mouseUp(Button.LEFT)
 
+<span class="kw">def</span> scrollMenuUp_fast():
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">685</span>)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">735</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">785</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">835</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">885</span>)
+    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">935</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">1003</span>)
+    myRobot.delay(<span class="dig">200</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">1002</span>)
+    myRobot.delay(<span class="dig">350</span>)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
 <span class="kw">def</span> scrollMenuDown_fast():
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">955</span>)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
-    <span class="cmt">#myRobot.delay(100)</span>
+    myRobot.delay(<span class="dig">100</span>)
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">905</span>)
-    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.delay(<span class="dig">100</span>)
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">855</span>)
-    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.delay(<span class="dig">100</span>)
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">805</span>)
-    <span class="cmt">#myRobot.delay(150)</span>
+    myRobot.delay(<span class="dig">100</span>)
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">755</span>)
     <span class="cmt">#myRobot.delay(150)</span>
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">705</span>)
     myRobot.delay(<span class="dig">100</span>)
     myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">655</span>)
     myRobot.delay(<span class="dig">200</span>)
-    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">660</span>)
+    myRobot.mouseMove(<span class="dig">935</span>, <span class="dig">656</span>)
     myRobot.delay(<span class="dig">350</span>)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
@@ -561,6 +581,39 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">print</span> <span class="str">"unit "</span>, unitNum, <span class="str">" no LB"</span>
         <span class="kw">return</span> False
 
+<span class="kw">def</span> selectFollowerAndLaunch(selectFollower):
+    followerColor = Color(<span class="dig">145</span>,<span class="dig">60</span>,<span class="dig">32</span>) <span class="cmt"># (1015,223)</span>
+    <span class="kw">if</span> selectFollower:
+        waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
+                func_after_wait=fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
+    <span class="kw">else</span>:
+        <span class="kw">def</span> waitAndSelectNoFollower():
+            myRobot.delay(<span class="dig">500</span>)
+            func_after_wait=selectStranger()
+        <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
+        waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+            func_after_wait=waitAndSelectNoFollower)
+
+    launchColor = Color(<span class="dig">0</span>, <span class="dig">43</span>, <span class="dig">68</span>)  <span class="cmt"># (913,951)</span>
+    waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
+
+<span class="kw">def</span> handleFollowerError():
+    OColor = Color(<span class="dig">239</span>, <span class="dig">241</span>, <span class="dig">244</span>) <span class="cmt"># (943, 602)</span>
+    KColor = Color(<span class="dig">251</span>, <span class="dig">251</span>, <span class="dig">252</span>) <span class="cmt"># (972, 596)</span>
+    EdgeColor = Color(<span class="dig">186</span>, <span class="dig">187</span>, <span class="dig">188</span>) <span class="cmt"># (1164, 432)</span>
+    isFollowerError = myRobot.getPixelColor(<span class="dig">943</span>, <span class="dig">602</span>) == OColor <span class="kw">and</span> \
+            myRobot.getPixelColor(<span class="dig">972</span>, <span class="dig">596</span>) == KColor <span class="kw">and</span> \
+            myRobot.getPixelColor(<span class="dig">1164</span>, <span class="dig">432</span>) == EdgeColor
+    <span class="kw">if</span> isFollowerError:
+        <span class="kw">print</span> <span class="str">"Follower Error detected, clicking OK"</span>
+        myRobot.mouseMove(<span class="dig">943</span>, <span class="dig">602</span>)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        myRobot.delay(<span class="dig">3000</span>)
+        selectFollowerAndLaunch(True)
+    <span class="kw">else</span>:
+        <span class="kw">print</span> <span class="str">"no follower error"</span>
+
 <span class="kw">def</span> handleCommunicationError():
     <span class="cmt"># detect communication error</span>
     OColor = Color(<span class="dig">242</span>, <span class="dig">245</span>, <span class="dig">248</span>)
@@ -586,13 +639,14 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="kw">with</span> open(log_file, open_mode) <span class="kw">as</span> f:
         f.write(log_msg)
 
-<span class="kw">def</span> handleMissionEnd():
+<span class="kw">def</span> handleMissionEnd(targetX=<span class="dig">1140</span>, targetY=<span class="dig">332</span>, waitTargetColor=Color(<span class="dig">254</span>, <span class="dig">237</span>, <span class="dig">56</span>)):
     <span class="cmt"># star color = java.awt.Color[r=254,g=237,b=56] (1140, 332)</span>
-    starColor = Color(<span class="dig">254</span>, <span class="dig">237</span>, <span class="dig">56</span>)
     firstNextStepIsDone = False
     secondNextStepIsDone = False
     EXPisDone = False
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1140</span>, <span class="dig">332</span>) != starColor:
+    <span class="kw">while</span> myRobot.getPixelColor(targetX, targetY) != waitTargetColor:
+        <span class="kw">print</span> <span class="str">"targetX ="</span>, targetX, <span class="str">", targetY ="</span>, targetY, <span class="str">", targetColor = "</span>, waitTargetColor
+        <span class="kw">print</span> <span class="str">"current = "</span>, myRobot.getPixelColor(targetX, targetY)
         handleCommunicationError()
 
         <span class="cmt"># first next step</span>
@@ -672,7 +726,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.delay(<span class="dig">500</span>)
 
 
-<span class="kw">def</span> waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[], func_wait_too_long=None, arg_wait_too_long=[], wait_max_count=<span class="dig">20</span>):
+<span class="kw">def</span> waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func_after_wait=None, arg_after_wait=[], wait_time_period=<span class="dig">500</span>, func_wait_too_long=None, arg_wait_too_long=[], wait_max_count=<span class="dig">20</span>):
     <span class="kw">global</span> UNIT_CENTER_LOCATIONS
     <span class="kw">print</span> <span class="str">'x = '</span>, x, <span class="str">', y = '</span>, y, <span class="str">', color = '</span>, color
     wait_count = <span class="dig">0</span>
@@ -685,7 +739,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
             wait_count = <span class="dig">0</span>
             <span class="kw">if</span> func_wait_too_long != None:
                 func_wait_too_long(*arg_wait_too_long)
-        myRobot.delay(<span class="dig">500</span>)
+        myRobot.delay(wait_time_period)
     <span class="kw">while</span> myRobot.getPixelColor(x, y) == color:
         <span class="kw">if</span> func_after_wait != None:
             func_after_wait(*arg_after_wait)
@@ -693,7 +747,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
             myRobot.mouseMove(x, y)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
-        myRobot.delay(<span class="dig">500</span>)
+        myRobot.delay(wait_time_period)
 
 <span class="kw">def</span> waitForColor(x, y, color, wait_msg):
     <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
@@ -906,10 +960,44 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         myRobot.delay(<span class="dig">1000</span>)
     <span class="kw">print</span> <span class="str">'back to DuOS Desktop'</span>
 
+<span class="kw">def</span> waitForBSFFBEDesktop2():
+    friendColor = Color(<span class="dig">255</span>,<span class="dig">184</span>,<span class="dig">254</span>) <span class="cmt"># (1189, 1025)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1189</span>,<span class="dig">1025</span>) != friendColor:
+        fastClick(<span class="dig">962</span>, <span class="dig">940</span>)
+    <span class="kw">print</span> <span class="str">'saw BS FFBE Desktop'</span>
+
+<span class="kw">def</span> closeBS():
+    myRobot.mouseMove(<span class="dig">897</span>, <span class="dig">0</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    BSCloseColor = Color(<span class="dig">69</span>, <span class="dig">67</span>, <span class="dig">82</span>) <span class="cmt"># (1897, 11)</span>
+    waitForColorAndDo(<span class="dig">1897</span>, <span class="dig">11</span>, BSCloseColor)
+    <span class="kw">print</span> <span class="str">'BS emulator closed'</span>
+
+<span class="kw">def</span> launchBS():
+    FFBEonDesktopColor = Color(<span class="dig">131</span>,<span class="dig">181</span>,<span class="dig">22</span>) <span class="cmt"># (113, 932)</span>
+    <span class="cmt">#FFBEColor = Color(222,53,24)  # (121, 972)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">113</span>, <span class="dig">932</span>) != FFBEonDesktopColor:
+        <span class="kw">print</span> <span class="str">'cannot see FFBE icon'</span>
+        exit(<span class="dig">1</span>)
+    fastClick(<span class="dig">113</span>,<span class="dig">932</span>)
+    myRobot.delay(<span class="dig">200</span>)
+    fastClick(<span class="dig">113</span>,<span class="dig">932</span>)
+    myRobot.delay(<span class="dig">60000</span>) <span class="cmt"># 60 sec</span>
+    <span class="cmt"># first close live stream window</span>
+    <span class="skw">type</span>(Key.F4, KeyModifier.ALT)
+    myRobot.delay(<span class="dig">5000</span>)
+    <span class="cmt"># find maxmize icon</span>
+    maximizeRegion = Region(<span class="dig">1114</span>,<span class="dig">108</span>,<span class="dig">293</span>,<span class="dig">112</span>)
+    maximizeRegion.<span class="skw">click</span>(<img src="1493181119642.png" />)
+    myRobot.delay(<span class="dig">5000</span>)
+    <span class="cmt"># check for BS sponsor message</span>
+    tryAppColor = Color(<span class="dig">79</span>, <span class="dig">168</span>, <span class="dig">201</span>) <span class="cmt"># (1563, 766)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1563</span>, <span class="dig">766</span>) == tryAppColor:
+        fastClick(<span class="dig">1563</span>, <span class="dig">766</span>)
+        myRobot.delay(<span class="dig">2000</span>)
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    <span class="cmt">#handleMissionEnd()</span>
-    <span class="cmt">#exit(1)</span>
-    targetLocation = Location(<span class="dig">738</span>, <span class="dig">384</span>)
+    targetLocation = Location(<span class="dig">706</span>, <span class="dig">209</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

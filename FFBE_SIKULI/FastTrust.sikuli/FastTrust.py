@@ -2,11 +2,19 @@ import java.awt.Color as Color
 import java.awt.Robot as JRobot
 import java.awt.event.InputEvent as InputEvent
 import Utilities
+import BonusGame
+import FightClub
+import CoFight
+from sikuli import *
 reload(Utilities)
 
 myRobot = JRobot()
 selectFollower = True
-buyStrength = False
+buyStrength = True
+resetPeriod = 150
+doBonusGame = True
+doFightClub = True
+doCoFight = True
 
 def enterFastMission():
     fastMissionColor = Color(99, 5, 8) # (703, 672)
@@ -23,7 +31,7 @@ def enterFastMission():
          
 
     # select follower
-    followerColor = Color(145,60,32) # (1015,223)    
+    followerColor = Color(145,60,32) # (1015,223)
     if selectFollower:
         Utilities.waitForColorAndDo(1015, 223, followerColor, 
                 func_after_wait=Utilities.fastClick, arg_after_wait=(810, 404))
@@ -70,6 +78,7 @@ def doBattles():
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         Utilities.handleCommunicationError()
+        Utilities.handleFollowerError()
 
     def checkAndRestartBSFFBE():
         BSFFBEColor = Color(230,191,216) # (330, 196)
@@ -85,7 +94,7 @@ def doBattles():
                     Utilities.fastClick(330, 196)
                 myRobot.delay(500)
             myRobot.delay(3000)
-            Utilities.log('RestartLog.txt', 'Restart', 'Restarted BS FFBE')                
+            Utilities.log('RestartLog.txt', 'Restart', 'Restarted BS FFBE')
 
     Utilities.waitForColorAndDo(958, 943, nextStepColor, 
             func_while_wait=attack,
@@ -190,6 +199,7 @@ def main():
     count = 0
     start = time.time()
     total_time = 0
+    setFollowerFilter()
     while True:
         if count == 0:
             start = time.time()
@@ -197,12 +207,201 @@ def main():
         executeOneRound()
         #if count % 10 == 0:
         #    harvestAndMakeHeal()
-        if count == 50:
+        if count % 50 == 0:
             total_time = time.time() - start
             Utilities.log('FastTrustLog.csv', 'FastTrust', str(total_time) + ',' + str(count))
+        if count == resetPeriod:
+            # back to front page
+            worldColor = Color(244, 137, 60) # (944, 808)
+            while myRobot.getPixelColor(944, 808) != worldColor:
+                Utilities.fastClick(1214, 225)
+                myRobot.delay(2000)
+                # check info menu here
+                
+            myRobot.delay(5000)
+            # play bonus game
+            if doBonusGame:
+                BonusGame.process(10)
+                myRobot.delay(2000)
+            if doFightClub:
+                FightClub.process()
+                myRobot.delay(2000)
+            if doCoFight:
+                CoFight.process()
+                myRobot.delay(2000)
+            restartBSandTheMission()
+            changeToRightTeam()
             count = 0
 
+def goToEarthTemple():
+    # wait for "World"
+    worldColor = Color(244, 137, 60) # (944, 808)
+    Utilities.waitForColorAndDo(944, 808, worldColor,
+            func_while_wait=Utilities.fastClick, arg_while_wait=[723, 228])
+    myRobot.delay(2000)
+    print("world seen")
+
+    # 1st level map, choose 1st island group
+    firstIslandGroupColor = Color(207, 180, 106) # (1185, 424)
+    Utilities.waitForColorAndDo(1185, 424, firstIslandGroupColor)
+    myRobot.delay(2000)
+    print("1st island done")
+
+    # 2nd level map, choose 1st island
+    firstIslandColor = Color(114, 146, 103)  # (1061, 462)
+    Utilities.waitForColorAndDo(1061, 462, firstIslandColor)
+    myRobot.delay(2000)
+    print("2nd island done")
+
+    # pull right to show earth temple
+    mouseMove(Location(693, 690))
+    mouseDown(Button.LEFT)
+    mouseMove(200, 0)
+    mouseUp(Button.LEFT)
+    myRobot.delay(2000)
+    print("earth temple shown")
+
+    # find temple and click it
+    templeRegion = Region(635,585,248,308)
+    templeRegion.click("1493178397516.png")
+    myRobot.delay(2000)
+
+
+def restartBSandTheMission():
+    Utilities.closeBS()
+    myRobot.delay(60000)
+    Utilities.launchBS()
+    myRobot.delay(1000)
+    Utilities.enterBSFFBE()
+    myRobot.delay(1000)
+    Utilities.waitForBSFFBEDesktop()
+    myRobot.delay(1000)
+    goToEarthTemple()
+    myRobot.delay(1000)
+    Utilities.log('RestartLog.txt', 'Restart', 'Restart the whole BS')
+
+def changeToRightTeam():
+    # select team
+    strengthenColor = Color(246, 72, 16) # 701,851
+    print("finding strengthen color")
+    while myRobot.getPixelColor(701,851) != strengthenColor:
+        Utilities.fastClick(808, 1021)
+        myRobot.delay(2000)
+    myRobot.delay(1000)
+
+    print("finding waterAxeColor color")
+    waterAxeColor = Color(70, 89, 157)  # (1090, 426)
+    while myRobot.getPixelColor(1090,426) != waterAxeColor:
+        Utilities.fastClick(1254, 408)
+        myRobot.delay(2000)
+    myRobot.delay(1000)
+
+    # back to front page
+    print("finding letter color")
+    letterColor = Color(249,232,225) # (1137, 178)
+    while myRobot.getPixelColor(1137, 178) != letterColor:
+        Utilities.fastClick(707, 1013)
+        myRobot.delay(3000)
+    myRobot.delay(1000)
+    print("leaving chang team")
+
+def setFollowerFilter():
+    fastMissionColor = Color(99, 5, 8) # (703, 672)
+    Utilities.waitForColorAndDo(703, 672, fastMissionColor, 
+            func_while_wait=Utilities.fastClick, arg_while_wait=(929, 160))
+
+    # wait for mission dismiss color and buy strength if necessary
+    missionDescNextStepColor = Color(0, 83, 196) # (954, 923)
+    if buyStrength:
+        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
+                func_while_wait=Utilities.buyStrength)
+    else:
+        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor)
+
+    # click filter
+    followerColor = Color(145,60,32) # (1015,223)    
+    Utilities.waitForColorAndDo(1015, 223, followerColor, 
+            func_after_wait=Utilities.fastClick, arg_after_wait=(1094, 233))
+    myRobot.delay(1000)
+
+    # choose Filtering
+    Utilities.fastClick(1072, 86)
+    myRobot.delay(1000)
+    
+    # clear everything
+    Utilities.fastClick(740, 1024)
+    myRobot.delay(1000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
+
+    # select preferred weapons
+    Utilities.fastClick(852, 547)
+    myRobot.delay(500)
+    Utilities.fastClick(919, 546)
+    myRobot.delay(500)
+    Utilities.fastClick(1140, 548)
+    myRobot.delay(500)
+    Utilities.fastClick(1214, 545)
+    myRobot.delay(500)
+    Utilities.fastClick(702, 623) # 2nd row
+    myRobot.delay(500)
+    Utilities.fastClick(781, 620)
+    myRobot.delay(500)
+    Utilities.fastClick(854, 623)
+    myRobot.delay(500)
+    Utilities.fastClick(925, 622)
+    myRobot.delay(500)
+    Utilities.fastClick(995, 624)
+    myRobot.delay(500)
+    Utilities.fastClick(1066, 619)
+    myRobot.delay(500)
+    Utilities.fastClick(1135, 624)
+    myRobot.delay(500)
+    Utilities.fastClick(1213, 627)
+    myRobot.delay(500)
+    Utilities.fastClick(710, 700) # 3rd row
+    myRobot.delay(500)
+    Utilities.fastClick(779, 698)
+    myRobot.delay(500)
+    Utilities.fastClick(924, 702)
+    myRobot.delay(500)
+    Utilities.fastClick(1067, 700)
+    myRobot.delay(500)
+    Utilities.fastClick(1140, 698)
+    myRobot.delay(1000)
+
+    # click confirm
+    Utilities.fastClick(958, 1008)
+    myRobot.delay(2000)
+
+    def clickReturnAndWait():
+        Utilities.fastClick(709,221)
+        myRobot.delay(1000)
+
+    # click two return
+    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, 
+            func_while_wait=clickReturnAndWait,
+            func_after_wait=clickReturnAndWait)
+    myRobot.delay(1000)                
+
+
 if __name__ == "__main__":
+    FFBEonDesktopColor = Color(131,181,22) # (113, 932)
+    startFromNothing = myRobot.getPixelColor(113, 932) == FFBEonDesktopColor
+    if startFromNothing:
+        Utilities.launchBS()
+        myRobot.delay(1000)
+        Utilities.enterBSFFBE()
+        myRobot.delay(1000)
+        Utilities.waitForBSFFBEDesktop()
+        print("after initial desktop")
+        myRobot.delay(1000)
+        changeToRightTeam()
+        print("after change to right teima")
+        myRobot.delay(2000)
+        goToEarthTemple()
+        myRobot.delay(1000)
+
     main()
     #steal()
     #harvestAndMakeHeal()

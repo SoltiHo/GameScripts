@@ -77,12 +77,14 @@ reload(Utilities)
 myRobot = JRobot()
 
 selectFollower = True
-start_phase = <span class="dig">0</span>  <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
-STEP_WAIT = <span class="dig">300</span>
+start_phase = <span class="dig">1</span> <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
+STEP_WAIT = <span class="dig">400</span>
 buyStrength = True
 
 num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
 num_summon = <span class="dig">0</span>
+num_round = <span class="dig">0</span>
+alwaysSteal = True
 <span class="kw">def</span> revive(unitNum):
     <span class="cmt"># must use thunder summon</span>
     <span class="cmt"># open healer menu</span>
@@ -281,8 +283,11 @@ num_summon = <span class="dig">0</span>
 <span class="kw">def</span> setCommand():
     <span class="kw">global</span> num_LB_used
     <span class="kw">global</span> num_summon
+    <span class="kw">global</span> num_round
+    <span class="kw">global</span> alwaysSteal
     do_cure_unit = <span class="dig">0</span>
     do_revive_unit = <span class="dig">0</span>
+    num_round = num_round + <span class="dig">1</span>
     <span class="cmt">#reviveAndCure()</span>
     <span class="cmt"># after revive and cure, check LB</span>
     <span class="kw">if</span> Utilities.lookHavingLB(<span class="dig">1</span>) <span class="kw">and</span> do_cure_unit != <span class="dig">1</span> <span class="kw">and</span> do_revive_unit != <span class="dig">1</span>:
@@ -310,8 +315,11 @@ num_summon = <span class="dig">0</span>
     <span class="cmt">#        Utilities.log('FireTempleLog.txt', 'LB_log', 'check but no Summon')</span>
     <span class="cmt">#    myRobot.delay(1000)</span>
 
-    doSteal()
-    myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt">#if alwaysSteal or num_round == 1:</span>
+    <span class="cmt">#    doSteal()</span>
+    <span class="cmt">#myRobot.delay(1000)</span>
+    <span class="cmt">#if Utilities.lookAbleToSummon():</span>
+    <span class="cmt">#    Utilities.summonIfAvailable(3)</span>
     followerAttackOnly()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt">#Utilities.manuallyKickOff()</span>
@@ -371,18 +379,20 @@ num_summon = <span class="dig">0</span>
     issueCommandIfWaitingForOne(setCommand)
 
 <span class="kw">def</span> doBattle():
+    <span class="kw">global</span> num_round
+    num_round = <span class="dig">0</span>
     Utilities.log(<span class="str">'FireTempleLog.txt'</span>, <span class="str">'LB_log'</span>, <span class="str">'do Battle'</span>)
     myRobot.delay(<span class="dig">1500</span>)
     <span class="kw">while</span> <span class="kw">not</span> Utilities.isWaitingForCommand():
         myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">727</span>, <span class="dig">551</span>)
-    myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">856</span>, <span class="dig">316</span>)
-    myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">912</span>, <span class="dig">535</span>)
-    myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">699</span>, <span class="dig">385</span>)
-    myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">794</span>, <span class="dig">541</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.fastClick(<span class="dig">888</span>, <span class="dig">541</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.fastClick(<span class="dig">794</span>, <span class="dig">386</span>)
+    myRobot.delay(<span class="dig">300</span>)
+    <span class="cmt">#Utilities.fastClick(888, 386)</span>
+    <span class="cmt">#myRobot.delay(300)</span>
 
     ResultRColor =  Color(<span class="dig">245</span>,<span class="dig">247</span>,<span class="dig">249</span>) <span class="cmt"># (865,339)</span>
     totalTargetLBused = <span class="dig">0</span>
@@ -496,17 +506,9 @@ num_summon = <span class="dig">0</span>
     num_battle += walkUp(<span class="dig">3</span>, isBoundary=True)
     num_battle += walkLeft(<span class="dig">1</span>, isBoundary=True)
 
-    <span class="cmt"># go to reference position</span>
-    myRobot.mouseMove(<span class="dig">961</span>, <span class="dig">494</span>)
-    mouseDown(Button.LEFT)
-    mouseMove(<span class="dig">0</span>, <span class="dig">270</span>)
-    myRobot.delay(<span class="dig">2000</span>)
-    mouseUp(Button.LEFT)
-
     <span class="cmt"># now go to zone 2</span>
     num_battle += walkUp(<span class="dig">5</span>, isBoundary=True)
     num_battle += walkLeft(<span class="dig">10</span>)
-
 
 <span class="kw">def</span> doRemainingBattles(numBattle, direction=<span class="str">'UpDown'</span>):
     <span class="kw">while</span> numBattle &gt; <span class="dig">0</span>:
@@ -636,8 +638,10 @@ num_summon = <span class="dig">0</span>
     myRobot.delay(<span class="dig">2000</span>)
     Utilities.fastClick(<span class="dig">1125</span>, <span class="dig">289</span>)
     myRobot.delay(<span class="dig">2000</span>)
-
+    <span class="kw">global</span> alwaysSteal
+    alwaysSteal = False
     doBattle()
+    alwaysSteal = True
     myRobot.delay(<span class="dig">2000</span>)
 
     <span class="cmt"># exit</span>
