@@ -247,7 +247,7 @@ def process(numRound):
         myRobot.delay(2000)
     myRobot.delay(2000)
 def checkProtectionSettingMenu():
-    noColor = Color(227, 234, 243) # (842, 748)
+    noColor = Color(205,217,232) # (842, 748)
     if myRobot.getPixelColor(842, 748) == noColor:
         Utilities.fastClick(842,748)
     dailyRewardBoxColor = Color(255, 255, 221) # (804, 800)
@@ -264,7 +264,7 @@ def changeToRightTeam():
         myRobot.delay(2000)
     myRobot.delay(1000)
 
-    firionColor = Color(154, 98, 0)  # (732, 401)
+    lingColor = Color(154, 98, 0)  # (732, 401)
     while myRobot.getPixelColor(732,401) != firionColor:
         Utilities.fastClick(1254, 408)
         myRobot.delay(2000)

@@ -319,7 +319,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">2000</span>)
     myRobot.delay(<span class="dig">2000</span>)
 <span class="kw">def</span> checkProtectionSettingMenu():
-    noColor = Color(<span class="dig">227</span>, <span class="dig">234</span>, <span class="dig">243</span>) <span class="cmt"># (842, 748)</span>
+    noColor = Color(<span class="dig">205</span>,<span class="dig">217</span>,<span class="dig">232</span>) <span class="cmt"># (842, 748)</span>
     <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">842</span>, <span class="dig">748</span>) == noColor:
         Utilities.fastClick(<span class="dig">842</span>,<span class="dig">748</span>)
     dailyRewardBoxColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">221</span>) <span class="cmt"># (804, 800)</span>
@@ -336,7 +336,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">2000</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
-    firionColor = Color(<span class="dig">154</span>, <span class="dig">98</span>, <span class="dig">0</span>)  <span class="cmt"># (732, 401)</span>
+    lingColor = Color(<span class="dig">154</span>, <span class="dig">98</span>, <span class="dig">0</span>)  <span class="cmt"># (732, 401)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">732</span>,<span class="dig">401</span>) != firionColor:
         Utilities.fastClick(<span class="dig">1254</span>, <span class="dig">408</span>)
         myRobot.delay(<span class="dig">2000</span>)

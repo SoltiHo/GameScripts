@@ -544,9 +544,9 @@ def handleFollowerError():
 
 def handleCommunicationError():
     # detect communication error
-    OColor = Color(242, 245, 248)
+    OColor = Color(243, 245, 248)
     KColor = Color(255, 255, 255)
-    EdgeColor = Color(254, 254, 254)
+    EdgeColor = Color(241, 243, 244)
     isCommunicationError = myRobot.getPixelColor(943, 620) == OColor and \
             myRobot.getPixelColor(969, 621) == KColor and \
             myRobot.getPixelColor(1178, 703) == EdgeColor
@@ -567,7 +567,7 @@ def log(log_filename, event_type, event_message, toDelete=False):
     with open(log_file, open_mode) as f:
         f.write(log_msg)
 
-def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(254, 237, 56)):
+def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(249, 219, 56)):
     # star color = java.awt.Color[r=254,g=237,b=56] (1140, 332)
     firstNextStepIsDone = False
     secondNextStepIsDone = False
@@ -578,21 +578,21 @@ def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(254, 237, 
         handleCommunicationError()
         
         # first next step
-        firstNextStepColor = Color(0, 39, 113) # (958, 943)
+        firstNextStepColor = Color(0, 40, 117) # (958, 943)
         if (not firstNextStepIsDone) and myRobot.getPixelColor(958, 943) == firstNextStepColor:
             firstNextStepIsDone = True
             myRobot.mouseMove(958, 943)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         # EXP_X color java.awt.Color[r=189,g=204,b=230], (912, 143)
-        EXP_X_color = Color(189, 204, 230)
+        EXP_X_color = Color(157, 172, 196)
         if (not EXPisDone) and myRobot.getPixelColor(912, 143) == EXP_X_color:
             EXPisDone = True
             myRobot.mouseMove(912, 143)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         # 2nd next step color java.awt.Color[r=254,g=254,b=254] (938,939)
-        secondNextStepColor = Color(254, 254, 254)
+        secondNextStepColor = Color(249, 250, 252)
         if (not secondNextStepIsDone) and myRobot.getPixelColor(938,939) == secondNextStepColor:
             print '2nd next step click'
             secondNextStepIsDone = True
@@ -609,7 +609,7 @@ def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(254, 237, 
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
         # Close Mission
-        goingRewardColor = Color(77, 9, 17) #(1053, 666)
+        goingRewardColor = Color(78, 9, 17) #(1053, 666)
         if myRobot.getPixelColor(1053, 666) == goingRewardColor:
             myRobot.mouseMove(810, 673)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -815,7 +815,7 @@ def enterBSFFBE():
 
 def waitForBSFFBEDesktop():
     print 'waiting for FFBE Desktop'
-    friendColor = Color(255,184,254) # (1189, 1025)
+    friendColor = Color(255,216,255) # (1189, 1025)
     while myRobot.getPixelColor(1189,1025) != friendColor:
         fastClick(995, 639)
         myRobot.delay(1000)
@@ -925,7 +925,7 @@ def launchBS():
         myRobot.delay(2000)
 
 if __name__ == "__main__":
-    targetLocation = Location(706, 209)
+    targetLocation = Location(945, 365)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

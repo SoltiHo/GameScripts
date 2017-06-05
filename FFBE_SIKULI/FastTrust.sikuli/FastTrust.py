@@ -11,18 +11,19 @@ reload(Utilities)
 myRobot = JRobot()
 selectFollower = True
 buyStrength = True
-resetPeriod = 150
-doBonusGame = True
+resetPeriod = 100
+doBonusGame = False
+numBonusGame = 8
 doFightClub = True
-doCoFight = True
+doCoFight = True  
 
 def enterFastMission():
-    fastMissionColor = Color(99, 5, 8) # (703, 672)
+    fastMissionColor = Color(99, 4, 7) # (703, 672)
     Utilities.waitForColorAndDo(703, 672, fastMissionColor, 
             func_while_wait=Utilities.fastClick, arg_while_wait=(929, 160))
 
     # wait for mission dismiss color and buy strength if necessary
-    missionDescNextStepColor = Color(0, 83, 196) # (954, 923)
+    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
     if buyStrength:
         Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
                 func_while_wait=Utilities.buyStrength)
@@ -31,7 +32,7 @@ def enterFastMission():
          
 
     # select follower
-    followerColor = Color(145,60,32) # (1015,223)
+    followerColor = Color(143,89,48) # (1015,223)
     if selectFollower:
         Utilities.waitForColorAndDo(1015, 223, followerColor, 
                 func_after_wait=Utilities.fastClick, arg_after_wait=(810, 404))
@@ -54,10 +55,10 @@ def steal():
     myRobot.delay(700)
 
 def doBattles():
-    nextStepColor = Color(0, 39, 113) # (958, 943)
-    AutoColor = Color(0, 136, 175) # (725, 1023)
+    nextStepColor = Color(0, 40, 117) # (958, 943)
+    AutoColor = Color(0, 140, 180) # (725, 1023)
     def attack():
-        monsterBloodColor = Color(143, 222, 77) # (846, 628)
+        monsterBloodColor = Color(145, 222, 79) # (846, 628)
         waitingForCommandColor = Color(6, 51, 120) # (850, 701)
         if myRobot.getPixelColor(846, 628) == monsterBloodColor and myRobot.getPixelColor(850, 701) == waitingForCommandColor:
             #steal()
@@ -100,6 +101,7 @@ def doBattles():
             func_while_wait=attack,
             func_wait_too_long=checkAndRestartBSFFBE,
             func_after_wait=Utilities.handleMissionEnd)
+    print("mission end handled")
 
 def executeOneRound():
     enterFastMission()
@@ -188,7 +190,7 @@ def harvestAndMakeHeal():
     myRobot.delay(2000)
 
     # click return
-    worldColor = Color(244, 137, 60) # (944, 808)
+    worldColor = Color(248, 145, 65) # (944, 808)
     Utilities.waitForColorAndDo(944, 808, worldColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=[723, 228])
     myRobot.delay(2000)
@@ -199,7 +201,7 @@ def main():
     count = 0
     start = time.time()
     total_time = 0
-    setFollowerFilter()
+    #setFollowerFilter()
     while True:
         if count == 0:
             start = time.time()
@@ -211,44 +213,69 @@ def main():
             total_time = time.time() - start
             Utilities.log('FastTrustLog.csv', 'FastTrust', str(total_time) + ',' + str(count))
         if count == resetPeriod:
+            Utilities.log('FastTrustLog.csv', 'reset', 'reset period triggerred:' + str(resetPeriod))
             # back to front page
-            worldColor = Color(244, 137, 60) # (944, 808)
+            worldColor = Color(248, 145, 65) # (944, 808)
+            gotoFrontPageColor = Color(209,3,3) # (1214,225)
             while myRobot.getPixelColor(944, 808) != worldColor:
-                Utilities.fastClick(1214, 225)
+                # checkProtectionSettingMenu
+                if myRobot.getPixelColor(1214,225) == gotoFrontPageColor:
+                    Utilities.log('FastTrustLog.csv', 'reset', 'click gotoFrontPage')
+                    Utilities.fastClick(1214, 225)
+                BonusGame.checkProtectionSettingMenu()
                 myRobot.delay(2000)
                 # check info menu here
-                
+            Utilities.log('FastTrustLog.csv', 'reset', 'saw world coor')
             myRobot.delay(5000)
             # play bonus game
             if doBonusGame:
-                BonusGame.process(10)
-                myRobot.delay(2000)
-            if doFightClub:
-                FightClub.process()
+                Utilities.log('FastTrustLog.csv', 'reset', 'do bonus game')
+                BonusGame.process(numBonusGame)
+                Utilities.log('FastTrustLog.csv', 'reset', 'bonus game completed')
                 myRobot.delay(2000)
             if doCoFight:
+                Utilities.log('FastTrustLog.csv', 'reset', 'do co-fight')
                 CoFight.process()
+                Utilities.log('FastTrustLog.csv', 'reset', 'co-fight completed')
                 myRobot.delay(2000)
+            if doFightClub:
+                Utilities.log('FastTrustLog.csv', 'reset', 'do fight club')
+                FightClub.process()
+                Utilities.log('FastTrustLog.csv', 'reset', 'fight club completed')
+                myRobot.delay(2000)
+            Utilities.log('FastTrustLog.csv', 'reset', 'restart BS and the mission')
             restartBSandTheMission()
-            changeToRightTeam()
+            Utilities.log('FastTrustLog.csv', 'reset', 'restart the mission completed')
             count = 0
 
 def goToEarthTemple():
     # wait for "World"
-    worldColor = Color(244, 137, 60) # (944, 808)
+    worldColor = Color(248, 145, 65) # (944, 808)
     Utilities.waitForColorAndDo(944, 808, worldColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=[723, 228])
     myRobot.delay(2000)
     print("world seen")
 
     # 1st level map, choose 1st island group
-    firstIslandGroupColor = Color(207, 180, 106) # (1185, 424)
-    Utilities.waitForColorAndDo(1185, 424, firstIslandGroupColor)
+    myRobot.delay(3000)
+    mouseMove(Location(693, 690))
+    mouseDown(Button.LEFT)
+    mouseMove(-200, 100)
+    mouseUp(Button.LEFT)
     myRobot.delay(2000)
+    mouseMove(Location(693, 690))
+    mouseDown(Button.LEFT)
+    mouseMove(-200, 100)
+    mouseUp(Button.LEFT)
+    myRobot.delay(2000)
+    firstIslandGroup = "firstIslandGroup.png"
+    firstGroupRegion = Region(941,314,262,239)
+    firstGroupRegion.click(firstIslandGroup)
+    myRobot.delay(5000)
     print("1st island done")
 
     # 2nd level map, choose 1st island
-    firstIslandColor = Color(114, 146, 103)  # (1061, 462)
+    firstIslandColor = Color(115, 147, 105)  # (1061, 462)
     Utilities.waitForColorAndDo(1061, 462, firstIslandColor)
     myRobot.delay(2000)
     print("2nd island done")
@@ -275,14 +302,16 @@ def restartBSandTheMission():
     Utilities.enterBSFFBE()
     myRobot.delay(1000)
     Utilities.waitForBSFFBEDesktop()
-    myRobot.delay(1000)
+    myRobot.delay(2000)
+    changeToRightTeam()
+    myRobot.delay(2000)
     goToEarthTemple()
     myRobot.delay(1000)
     Utilities.log('RestartLog.txt', 'Restart', 'Restart the whole BS')
 
 def changeToRightTeam():
     # select team
-    strengthenColor = Color(246, 72, 16) # 701,851
+    strengthenColor = Color(246, 66, 15) # 701,851
     print("finding strengthen color")
     while myRobot.getPixelColor(701,851) != strengthenColor:
         Utilities.fastClick(808, 1021)
@@ -290,16 +319,16 @@ def changeToRightTeam():
     myRobot.delay(1000)
 
     print("finding waterAxeColor color")
-    waterAxeColor = Color(70, 89, 157)  # (1090, 426)
+    waterAxeColor = Color(69, 88, 155)  # (1090, 426)
     while myRobot.getPixelColor(1090,426) != waterAxeColor:
         Utilities.fastClick(1254, 408)
         myRobot.delay(2000)
     myRobot.delay(1000)
 
-    # back to front page
+    # back to front pag
     print("finding letter color")
-    letterColor = Color(249,232,225) # (1137, 178)
-    while myRobot.getPixelColor(1137, 178) != letterColor:
+    letterColor = Color(180, 113, 99) # (1150, 175)
+    while myRobot.getPixelColor(1150, 175) != letterColor:
         Utilities.fastClick(707, 1013)
         myRobot.delay(3000)
     myRobot.delay(1000)

@@ -83,18 +83,19 @@ reload(Utilities)
 myRobot = JRobot()
 selectFollower = True
 buyStrength = True
-resetPeriod = <span class="dig">150</span>
-doBonusGame = True
+resetPeriod = <span class="dig">100</span>
+doBonusGame = False
+numBonusGame = <span class="dig">8</span>
 doFightClub = True
 doCoFight = True
 
 <span class="kw">def</span> enterFastMission():
-    fastMissionColor = Color(<span class="dig">99</span>, <span class="dig">5</span>, <span class="dig">8</span>) <span class="cmt"># (703, 672)</span>
+    fastMissionColor = Color(<span class="dig">99</span>, <span class="dig">4</span>, <span class="dig">7</span>) <span class="cmt"># (703, 672)</span>
     Utilities.waitForColorAndDo(<span class="dig">703</span>, <span class="dig">672</span>, fastMissionColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">929</span>, <span class="dig">160</span>))
 
     <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
-    missionDescNextStepColor = Color(<span class="dig">0</span>, <span class="dig">83</span>, <span class="dig">196</span>) <span class="cmt"># (954, 923)</span>
+    missionDescNextStepColor = Color(<span class="dig">0</span>, <span class="dig">92</span>, <span class="dig">201</span>) <span class="cmt"># (954, 923)</span>
     <span class="kw">if</span> buyStrength:
         Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor,
                 func_while_wait=Utilities.buyStrength)
@@ -103,7 +104,7 @@ doCoFight = True
 
 
     <span class="cmt"># select follower</span>
-    followerColor = Color(<span class="dig">145</span>,<span class="dig">60</span>,<span class="dig">32</span>) <span class="cmt"># (1015,223)</span>
+    followerColor = Color(<span class="dig">143</span>,<span class="dig">89</span>,<span class="dig">48</span>) <span class="cmt"># (1015,223)</span>
     <span class="kw">if</span> selectFollower:
         Utilities.waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
                 func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
@@ -126,10 +127,10 @@ doCoFight = True
     myRobot.delay(<span class="dig">700</span>)
 
 <span class="kw">def</span> doBattles():
-    nextStepColor = Color(<span class="dig">0</span>, <span class="dig">39</span>, <span class="dig">113</span>) <span class="cmt"># (958, 943)</span>
-    AutoColor = Color(<span class="dig">0</span>, <span class="dig">136</span>, <span class="dig">175</span>) <span class="cmt"># (725, 1023)</span>
+    nextStepColor = Color(<span class="dig">0</span>, <span class="dig">40</span>, <span class="dig">117</span>) <span class="cmt"># (958, 943)</span>
+    AutoColor = Color(<span class="dig">0</span>, <span class="dig">140</span>, <span class="dig">180</span>) <span class="cmt"># (725, 1023)</span>
     <span class="kw">def</span> attack():
-        monsterBloodColor = Color(<span class="dig">143</span>, <span class="dig">222</span>, <span class="dig">77</span>) <span class="cmt"># (846, 628)</span>
+        monsterBloodColor = Color(<span class="dig">145</span>, <span class="dig">222</span>, <span class="dig">79</span>) <span class="cmt"># (846, 628)</span>
         waitingForCommandColor = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">120</span>) <span class="cmt"># (850, 701)</span>
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">846</span>, <span class="dig">628</span>) == monsterBloodColor <span class="kw">and</span> myRobot.getPixelColor(<span class="dig">850</span>, <span class="dig">701</span>) == waitingForCommandColor:
             <span class="cmt">#steal()</span>
@@ -172,6 +173,7 @@ doCoFight = True
             func_while_wait=attack,
             func_wait_too_long=checkAndRestartBSFFBE,
             func_after_wait=Utilities.handleMissionEnd)
+    <span class="kw">print</span>(<span class="str">"mission end handled"</span>)
 
 <span class="kw">def</span> executeOneRound():
     enterFastMission()
@@ -260,7 +262,7 @@ doCoFight = True
     myRobot.delay(<span class="dig">2000</span>)
 
     <span class="cmt"># click return</span>
-    worldColor = Color(<span class="dig">244</span>, <span class="dig">137</span>, <span class="dig">60</span>) <span class="cmt"># (944, 808)</span>
+    worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
     Utilities.waitForColorAndDo(<span class="dig">944</span>, <span class="dig">808</span>, worldColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">723</span>, <span class="dig">228</span>])
     myRobot.delay(<span class="dig">2000</span>)
@@ -271,7 +273,7 @@ doCoFight = True
     count = <span class="dig">0</span>
     start = time.time()
     total_time = <span class="dig">0</span>
-    setFollowerFilter()
+    <span class="cmt">#setFollowerFilter()</span>
     <span class="kw">while</span> True:
         <span class="kw">if</span> count == <span class="dig">0</span>:
             start = time.time()
@@ -283,44 +285,69 @@ doCoFight = True
             total_time = time.time() - start
             Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'FastTrust'</span>, str(total_time) + <span class="str">','</span> + str(count))
         <span class="kw">if</span> count == resetPeriod:
+            Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'reset period triggerred:'</span> + str(resetPeriod))
             <span class="cmt"># back to front page</span>
-            worldColor = Color(<span class="dig">244</span>, <span class="dig">137</span>, <span class="dig">60</span>) <span class="cmt"># (944, 808)</span>
+            worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
+            gotoFrontPageColor = Color(<span class="dig">209</span>,<span class="dig">3</span>,<span class="dig">3</span>) <span class="cmt"># (1214,225)</span>
             <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>) != worldColor:
-                Utilities.fastClick(<span class="dig">1214</span>, <span class="dig">225</span>)
+                <span class="cmt"># checkProtectionSettingMenu</span>
+                <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1214</span>,<span class="dig">225</span>) == gotoFrontPageColor:
+                    Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'click gotoFrontPage'</span>)
+                    Utilities.fastClick(<span class="dig">1214</span>, <span class="dig">225</span>)
+                BonusGame.checkProtectionSettingMenu()
                 myRobot.delay(<span class="dig">2000</span>)
                 <span class="cmt"># check info menu here</span>
-
+            Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'saw world coor'</span>)
             myRobot.delay(<span class="dig">5000</span>)
             <span class="cmt"># play bonus game</span>
             <span class="kw">if</span> doBonusGame:
-                BonusGame.process(<span class="dig">10</span>)
-                myRobot.delay(<span class="dig">2000</span>)
-            <span class="kw">if</span> doFightClub:
-                FightClub.process()
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do bonus game'</span>)
+                BonusGame.process(numBonusGame)
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'bonus game completed'</span>)
                 myRobot.delay(<span class="dig">2000</span>)
             <span class="kw">if</span> doCoFight:
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do co-fight'</span>)
                 CoFight.process()
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'co-fight completed'</span>)
                 myRobot.delay(<span class="dig">2000</span>)
+            <span class="kw">if</span> doFightClub:
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do fight club'</span>)
+                FightClub.process()
+                Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'fight club completed'</span>)
+                myRobot.delay(<span class="dig">2000</span>)
+            Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'restart BS and the mission'</span>)
             restartBSandTheMission()
-            changeToRightTeam()
+            Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'restart the mission completed'</span>)
             count = <span class="dig">0</span>
 
 <span class="kw">def</span> goToEarthTemple():
     <span class="cmt"># wait for "World"</span>
-    worldColor = Color(<span class="dig">244</span>, <span class="dig">137</span>, <span class="dig">60</span>) <span class="cmt"># (944, 808)</span>
+    worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
     Utilities.waitForColorAndDo(<span class="dig">944</span>, <span class="dig">808</span>, worldColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=[<span class="dig">723</span>, <span class="dig">228</span>])
     myRobot.delay(<span class="dig">2000</span>)
     <span class="kw">print</span>(<span class="str">"world seen"</span>)
 
     <span class="cmt"># 1st level map, choose 1st island group</span>
-    firstIslandGroupColor = Color(<span class="dig">207</span>, <span class="dig">180</span>, <span class="dig">106</span>) <span class="cmt"># (1185, 424)</span>
-    Utilities.waitForColorAndDo(<span class="dig">1185</span>, <span class="dig">424</span>, firstIslandGroupColor)
+    myRobot.delay(<span class="dig">3000</span>)
+    mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
+    mouseDown(Button.LEFT)
+    mouseMove(-<span class="dig">200</span>, <span class="dig">100</span>)
+    mouseUp(Button.LEFT)
     myRobot.delay(<span class="dig">2000</span>)
+    mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
+    mouseDown(Button.LEFT)
+    mouseMove(-<span class="dig">200</span>, <span class="dig">100</span>)
+    mouseUp(Button.LEFT)
+    myRobot.delay(<span class="dig">2000</span>)
+    firstIslandGroup = <img src="firstIslandGroup.png" />
+    firstGroupRegion = Region(<span class="dig">941</span>,<span class="dig">314</span>,<span class="dig">262</span>,<span class="dig">239</span>)
+    firstGroupRegion.<span class="skw">click</span>(firstIslandGroup)
+    myRobot.delay(<span class="dig">5000</span>)
     <span class="kw">print</span>(<span class="str">"1st island done"</span>)
 
     <span class="cmt"># 2nd level map, choose 1st island</span>
-    firstIslandColor = Color(<span class="dig">114</span>, <span class="dig">146</span>, <span class="dig">103</span>)  <span class="cmt"># (1061, 462)</span>
+    firstIslandColor = Color(<span class="dig">115</span>, <span class="dig">147</span>, <span class="dig">105</span>)  <span class="cmt"># (1061, 462)</span>
     Utilities.waitForColorAndDo(<span class="dig">1061</span>, <span class="dig">462</span>, firstIslandColor)
     myRobot.delay(<span class="dig">2000</span>)
     <span class="kw">print</span>(<span class="str">"2nd island done"</span>)
@@ -347,14 +374,16 @@ doCoFight = True
     Utilities.enterBSFFBE()
     myRobot.delay(<span class="dig">1000</span>)
     Utilities.waitForBSFFBEDesktop()
-    myRobot.delay(<span class="dig">1000</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    changeToRightTeam()
+    myRobot.delay(<span class="dig">2000</span>)
     goToEarthTemple()
     myRobot.delay(<span class="dig">1000</span>)
     Utilities.log(<span class="str">'RestartLog.txt'</span>, <span class="str">'Restart'</span>, <span class="str">'Restart the whole BS'</span>)
 
 <span class="kw">def</span> changeToRightTeam():
     <span class="cmt"># select team</span>
-    strengthenColor = Color(<span class="dig">246</span>, <span class="dig">72</span>, <span class="dig">16</span>) <span class="cmt"># 701,851</span>
+    strengthenColor = Color(<span class="dig">246</span>, <span class="dig">66</span>, <span class="dig">15</span>) <span class="cmt"># 701,851</span>
     <span class="kw">print</span>(<span class="str">"finding strengthen color"</span>)
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">701</span>,<span class="dig">851</span>) != strengthenColor:
         Utilities.fastClick(<span class="dig">808</span>, <span class="dig">1021</span>)
@@ -362,16 +391,16 @@ doCoFight = True
     myRobot.delay(<span class="dig">1000</span>)
 
     <span class="kw">print</span>(<span class="str">"finding waterAxeColor color"</span>)
-    waterAxeColor = Color(<span class="dig">70</span>, <span class="dig">89</span>, <span class="dig">157</span>)  <span class="cmt"># (1090, 426)</span>
+    waterAxeColor = Color(<span class="dig">69</span>, <span class="dig">88</span>, <span class="dig">155</span>)  <span class="cmt"># (1090, 426)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1090</span>,<span class="dig">426</span>) != waterAxeColor:
         Utilities.fastClick(<span class="dig">1254</span>, <span class="dig">408</span>)
         myRobot.delay(<span class="dig">2000</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
-    <span class="cmt"># back to front page</span>
+    <span class="cmt"># back to front pag</span>
     <span class="kw">print</span>(<span class="str">"finding letter color"</span>)
-    letterColor = Color(<span class="dig">249</span>,<span class="dig">232</span>,<span class="dig">225</span>) <span class="cmt"># (1137, 178)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1137</span>, <span class="dig">178</span>) != letterColor:
+    letterColor = Color(<span class="dig">180</span>, <span class="dig">113</span>, <span class="dig">99</span>) <span class="cmt"># (1150, 175)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1150</span>, <span class="dig">175</span>) != letterColor:
         Utilities.fastClick(<span class="dig">707</span>, <span class="dig">1013</span>)
         myRobot.delay(<span class="dig">3000</span>)
     myRobot.delay(<span class="dig">1000</span>)

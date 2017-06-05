@@ -78,12 +78,30 @@ reload(Utilities)
 myRobot = JRobot()
 
 
+<span class="kw">def</span> isAtFrontMenu():
+    frontMenuColor = Color(<span class="dig">2</span>, <span class="dig">14</span>, <span class="dig">32</span>) <span class="cmt"># (1062, 918)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1062</span>, <span class="dig">918</span>) == frontMenuColor:
+        <span class="kw">return</span> True
+    <span class="kw">else</span>:
+        <span class="kw">return</span> False
+
+<span class="kw">def</span> isOutOfMp():
+    myRobot.delay(<span class="dig">2000</span>)
+    <span class="kw">return</span> <span class="kw">not</span> isAtFrontMenu()
+
+<span class="kw">def</span> returnToFrontMenuIfOutOfMP():
+    <span class="kw">if</span> isOutOfMp():
+        Utilities.fastClick(<span class="dig">1188</span>, <span class="dig">1018</span>) <span class="cmt"># click on return</span>
+    myRobot.delay(<span class="dig">2000</span>)
+
 <span class="kw">def</span> selectUnit1_AttackAll():
     Utilities.openMagicMenu(<span class="dig">1</span>)
     myRobot.delay(<span class="dig">500</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">1027</span>, <span class="dig">928</span>)
     myRobot.delay(<span class="dig">800</span>)
+    returnToFrontMenuIfOutOfMP()
+
 
 <span class="kw">def</span> selectUnit2_AttackAll():
     Utilities.openMagicMenu(<span class="dig">2</span>)
@@ -93,6 +111,7 @@ myRobot = JRobot()
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">1070</span>, <span class="dig">731</span>)
     myRobot.delay(<span class="dig">800</span>)
+    returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit3_AttackAll():
     Utilities.openMagicMenu(<span class="dig">3</span>)
@@ -106,6 +125,7 @@ myRobot = JRobot()
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">796</span>, <span class="dig">733</span>)
     myRobot.delay(<span class="dig">800</span>)
+    returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit4_twoMagic():
     Utilities.openMagicMenu(<span class="dig">4</span>)
@@ -128,10 +148,13 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">700</span>)
     Utilities.scrollMenuUp_fast()
     myRobot.delay(<span class="dig">700</span>)
-    Utilities.fastClick(<span class="dig">1070</span>, <span class="dig">831</span>)
+    <span class="cmt">#Utilities.fastClick(1070, 831) # thunder</span>
+    Utilities.fastClick(<span class="dig">778</span>, <span class="dig">828</span>) <span class="cmt"># snow</span>
     myRobot.delay(<span class="dig">1000</span>)
-    Utilities.fastClick(<span class="dig">1070</span>, <span class="dig">831</span>)
-    myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt">#Utilities.fastClick(1070, 831) # thunder</span>
+    Utilities.fastClick(<span class="dig">778</span>, <span class="dig">828</span>) <span class="cmt"># snow    </span>
+    <span class="cmt">#myRobot.delay(1000)</span>
+    returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit5_twoMagic():
     Utilities.openMagicMenu(<span class="dig">5</span>)
@@ -144,10 +167,16 @@ myRobot = JRobot()
     <span class="cmt"># select two thunder</span>
     Utilities.scrollMenuUp_fast()
     myRobot.delay(<span class="dig">700</span>)
-    Utilities.fastClick(<span class="dig">774</span>, <span class="dig">928</span>)
+    <span class="cmt">#Utilities.fastClick(774, 928) # thunder</span>
+    Utilities.fastClick(<span class="dig">1048</span>, <span class="dig">808</span>) <span class="cmt"># snow</span>
     myRobot.delay(<span class="dig">1000</span>)
-    Utilities.fastClick(<span class="dig">774</span>, <span class="dig">928</span>)
+    <span class="cmt">#Utilities.fastClick(774, 928) # thunder</span>
+    Utilities.fastClick(<span class="dig">1048</span>, <span class="dig">808</span>) <span class="cmt"># snow</span>
     myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt">#Utilities.fastClick(789, 829)  # for stone</span>
+    <span class="cmt">#myRobot.delay(1000)</span>
+    returnToFrontMenuIfOutOfMP()
+
 
 <span class="kw">def</span> checkProtectionSettingMenu():
     noColor = Color(<span class="dig">227</span>, <span class="dig">234</span>, <span class="dig">243</span>) <span class="cmt"># (842, 748)</span>
@@ -159,8 +188,8 @@ myRobot = JRobot()
         Utilities.fastClick(<span class="dig">1223</span>, <span class="dig">149</span>)
 
 <span class="kw">def</span> isInBattle():
-    menuColor = Color(<span class="dig">0</span>, <span class="dig">61</span>, <span class="dig">130</span>) <span class="cmt"># (1129, 1029)</span>
-    emptyUnitColor = Color(<span class="dig">1</span>, <span class="dig">6</span>, <span class="dig">18</span>) <span class="cmt"># (981, 930)</span>
+    menuColor = Color(<span class="dig">0</span>, <span class="dig">58</span>, <span class="dig">130</span>) <span class="cmt"># (1129, 1029)</span>
+    emptyUnitColor = Color(<span class="dig">1</span>, <span class="dig">7</span>, <span class="dig">19</span>) <span class="cmt"># (981, 930)</span>
     <span class="kw">if</span> (myRobot.getPixelColor(<span class="dig">1129</span>, <span class="dig">1029</span>) == menuColor) <span class="kw">and</span> (myRobot.getPixelColor(<span class="dig">981</span>, <span class="dig">930</span>) == emptyUnitColor):
         <span class="kw">return</span> True
     <span class="kw">else</span>:
@@ -185,9 +214,9 @@ myRobot = JRobot()
 
 <span class="kw">def</span> launchAttack():
     Utilities.fastClick(<span class="dig">1065</span>, <span class="dig">830</span>) <span class="cmt"># unit 5</span>
-    myRobot.delay(<span class="dig">100</span>)
+    <span class="cmt">#myRobot.delay(100)</span>
     Utilities.fastClick(<span class="dig">1076</span>, <span class="dig">724</span>) <span class="cmt"># unit 4</span>
-    myRobot.delay(<span class="dig">100</span>)
+    myRobot.delay(<span class="dig">500</span>)
     Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
     myRobot.delay(<span class="dig">300</span>)
     Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3</span>
@@ -206,7 +235,7 @@ myRobot = JRobot()
     Utilities.waitForColorAndDo(<span class="dig">909</span>, <span class="dig">517</span>, BarColor)
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># confirm</span>
-    yesColor = Color(<span class="dig">0</span>, <span class="dig">40</span>, <span class="dig">93</span>) <span class="cmt"># (1036, 598)</span>
+    yesColor = Color(<span class="dig">0</span>, <span class="dig">41</span>, <span class="dig">94</span>) <span class="cmt"># (1036, 598)</span>
     Utilities.waitForColorAndDo(<span class="dig">1036</span>, <span class="dig">598</span>, yesColor)
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># wait for "Begin Battle"</span>
@@ -225,7 +254,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">3000</span>)
 
     <span class="cmt"># Battle End</span>
-    endOColor = Color(<span class="dig">234</span>, <span class="dig">238</span>, <span class="dig">245</span>) <span class="cmt"># (944, 904)</span>
+    endOColor = Color(<span class="dig">244</span>, <span class="dig">246</span>, <span class="dig">250</span>) <span class="cmt"># (944, 904)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">904</span>) != endOColor:
         <span class="kw">print</span>(<span class="str">"waiting for end ok"</span>)
         myRobot.delay(<span class="dig">1000</span>)
@@ -233,12 +262,12 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">3000</span>)
     winColor = Color(<span class="dig">254</span>,<span class="dig">254</span>,<span class="dig">20</span>)  <span class="cmt"># (960, 200)</span>
     won = myRobot.getPixelColor(<span class="dig">960</span>, <span class="dig">200</span>) == winColor
-    secondEndOColor = Color(<span class="dig">231</span>, <span class="dig">235</span>, <span class="dig">240</span>) <span class="cmt"># (940, 1008)</span>
+    secondEndOColor = Color(<span class="dig">231</span>, <span class="dig">236</span>, <span class="dig">240</span>) <span class="cmt"># (940, 1008)</span>
     Utilities.waitForColorAndDo(<span class="dig">940</span>, <span class="dig">1008</span>, secondEndOColor,
             func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">944</span>, <span class="dig">904</span>))
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># wait for prepare</span>
-    prepareColor = Color(<span class="dig">98</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
+    prepareColor = Color(<span class="dig">103</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">866</span>, <span class="dig">999</span>) != prepareColor:
         <span class="kw">print</span>(<span class="str">"waiting for preparation sign"</span>)
         getRewardOColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (942, 702)</span>
@@ -250,22 +279,26 @@ myRobot = JRobot()
     <span class="kw">return</span> won
 
 <span class="kw">def</span> consumeAllBalls():
-    prepareColor = Color(<span class="dig">98</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
+    prepareColor = Color(<span class="dig">103</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">866</span>, <span class="dig">999</span>) != prepareColor:
         <span class="kw">print</span>(<span class="str">"waiting for preparation sign"</span>)
         myRobot.delay(<span class="dig">1000</span>)
 
-    firstBallColor = Color(<span class="dig">0</span>, <span class="dig">238</span>, <span class="dig">200</span>) <span class="cmt"># (910, 980)</span>
+    firstBallColor = Color(<span class="dig">0</span>, <span class="dig">238</span>, <span class="dig">197</span>) <span class="cmt"># (910, 980)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">910</span>, <span class="dig">980</span>) == firstBallColor:
         result = doOneFight()
         <span class="kw">print</span>(<span class="str">"One fight done, result = "</span> + str(result))
     <span class="cmt"># no ball now, return to front page</span>
-    myRobot.delay(<span class="dig">2000</span>)
-    worldColor = Color(<span class="dig">244</span>, <span class="dig">137</span>, <span class="dig">60</span>) <span class="cmt"># (944, 808)</span>
+    myRobot.delay(<span class="dig">5000</span>)
+    beforeCheckWorldColor = myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>)
+    Utilities.log(<span class="str">'debug.txt'</span>, <span class="str">'before checking world color, '</span>, str(beforeCheckWorldColor))
+    worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
+    prepareColor = Color(<span class="dig">103</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>) != worldColor:
-        Utilities.fastClick(<span class="dig">706</span>, <span class="dig">209</span>)
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">866</span>,<span class="dig">999</span>) == prepareColor:
+            Utilities.fastClick(<span class="dig">706</span>, <span class="dig">209</span>)
         <span class="kw">print</span>(<span class="str">"no more ball now, waiting for world color"</span>)
-        myRobot.delay(<span class="dig">2000</span>)
+        myRobot.delay(<span class="dig">5000</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> process():
@@ -276,7 +309,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">1000</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
-    firstBallColor = Color(<span class="dig">24</span>, <span class="dig">157</span>, <span class="dig">147</span>) <span class="cmt"># (703, 829)</span>
+    firstBallColor = Color(<span class="dig">24</span>, <span class="dig">159</span>, <span class="dig">146</span>) <span class="cmt"># (703, 829)</span>
     <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">703</span>, <span class="dig">829</span>) == firstBallColor:
         <span class="cmt"># got ball</span>
         Utilities.fastClick(<span class="dig">703</span>, <span class="dig">829</span>)
@@ -284,6 +317,12 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">2000</span>)
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="cmt">#print(isInBattle())</span>
+    <span class="cmt">#doOneFight()</span>
+    <span class="cmt">#setCommand()</span>
+    <span class="cmt">#myRobot.delay(1000)</span>
+    <span class="cmt">#launchAttack()</span>
+    <span class="cmt">#selectUnit4_twoMagic()</span>
     process()
 </pre>
 </body>
