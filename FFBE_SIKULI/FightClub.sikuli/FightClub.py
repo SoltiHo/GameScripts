@@ -1,6 +1,7 @@
 import java.awt.Color as Color
 import java.awt.Robot as JRobot
 import java.awt.event.InputEvent as InputEvent
+import BonusGame
 import Utilities
 reload(Utilities)
 myRobot = JRobot()
@@ -55,10 +56,8 @@ def selectUnit3_AttackAll():
     myRobot.delay(800)
     returnToFrontMenuIfOutOfMP()
 
-def selectUnit4_twoMagic():
-    Utilities.openMagicMenu(4)
-    myRobot.delay(700)
-    Utilities.scrollMenuDown_fast()
+def selectUnit3_StopMovement():
+    Utilities.openMagicMenu(3)
     myRobot.delay(700)
     Utilities.scrollMenuDown_fast()
     myRobot.delay(700)
@@ -67,20 +66,37 @@ def selectUnit4_twoMagic():
     Utilities.scrollMenuDown_fast()
     myRobot.delay(700)
     # select the skill
-    Utilities.fastClick(805, 813)
+    Utilities.fastClick(751, 824)
+    myRobot.delay(800)
+    returnToFrontMenuIfOutOfMP()
+
+def selectUnit4_deathDance():
+    Utilities.openMagicMenu(4)
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    Utilities.fastClick(788, 920) # death dance
+
+
+
+def selectUnit4_twoMagic():
+    Utilities.openMagicMenu(4)
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    # select the skill
+    Utilities.fastClick(742, 812)
     myRobot.delay(800)
     # select two thunder
     Utilities.scrollMenuUp_fast()
     myRobot.delay(700)
-    Utilities.scrollMenuUp_fast()
-    myRobot.delay(700)
-    Utilities.scrollMenuUp_fast()
-    myRobot.delay(700)
     #Utilities.fastClick(1070, 831) # thunder
-    Utilities.fastClick(778, 828) # snow
+    Utilities.fastClick(761, 816) # snow
     myRobot.delay(1000)
     #Utilities.fastClick(1070, 831) # thunder
-    Utilities.fastClick(778, 828) # snow    
+    Utilities.fastClick(761, 816) # snow    
     #myRobot.delay(1000)
     returnToFrontMenuIfOutOfMP()
     
@@ -105,15 +121,25 @@ def selectUnit5_twoMagic():
     #myRobot.delay(1000)
     returnToFrontMenuIfOutOfMP()
 
+def selectUnit5_stone():
+    Utilities.openMagicMenu(5)
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    # select the skill
+    Utilities.fastClick(789, 829)  # for stone
+    returnToFrontMenuIfOutOfMP()
 
-def checkProtectionSettingMenu():
-    noColor = Color(227, 234, 243) # (842, 748)
-    if myRobot.getPixelColor(842, 748) == noColor:
-        Utilities.fastClick(842,748)
-    dailyRewardBoxColor = Color(255, 255, 221) # (804, 800)
-    getRewardColor = Color(2, 16, 64) # (918, 883)
-    if (myRobot.getPixelColor(804, 800) == dailyRewardBoxColor) and (myRobot.getPixelColor(918, 883) == getRewardColor):
-        Utilities.fastClick(1223, 149)
+def selectUnit5_timeStop():
+    Utilities.openMagicMenu(5)
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    # select the skill
+    Utilities.fastClick(1074, 710)  # for stone
+    returnToFrontMenuIfOutOfMP()
 
 def isInBattle():
     menuColor = Color(0, 58, 130) # (1129, 1029)
@@ -123,7 +149,7 @@ def isInBattle():
     else:
         return False
 
-def setCommand():
+def setCommand(round):
     if Utilities.isUnitAlive(1):
         selectUnit1_AttackAll()
         myRobot.delay(1000)
@@ -131,12 +157,15 @@ def setCommand():
         selectUnit2_AttackAll()
         myRobot.delay(1000)
     if Utilities.isUnitAlive(3):
-        selectUnit3_AttackAll()
+        if round <= 2:
+            selectUnit3_AttackAll()
+        else:
+            selectUnit3_StopMovement()
         myRobot.delay(1000)
     if Utilities.isUnitAlive(4):
         selectUnit4_twoMagic()
         myRobot.delay(1000)
-    if Utilities.isUnitAlive(5):
+    if Utilities.isUnitAlive(5):    
         selectUnit5_twoMagic()
         myRobot.delay(1000) 
 
@@ -144,7 +173,7 @@ def launchAttack():
     Utilities.fastClick(1065, 830) # unit 5
     #myRobot.delay(100)
     Utilities.fastClick(1076, 724) # unit 4
-    myRobot.delay(500)
+    myRobot.delay(200)
     Utilities.fastClick(796, 831) # unit 2
     myRobot.delay(300)
     Utilities.fastClick(809, 946) # unit 3
@@ -172,9 +201,11 @@ def doOneFight():
     while not isInBattle():
         myRobot.delay(1000)
     # wait for waiting for command
+    round = 0
     while isInBattle():
         if Utilities.isWaitingForCommand():
-            setCommand()
+            round = round + 1
+            setCommand(round)
             myRobot.delay(1000)
             launchAttack()
         else:
@@ -188,11 +219,25 @@ def doOneFight():
         myRobot.delay(1000)
         Utilities.fastClick(1012, 724)
     myRobot.delay(3000)
+
     winColor = Color(254,254,20)  # (960, 200)
     won = myRobot.getPixelColor(960, 200) == winColor
-    secondEndOColor = Color(231, 236, 240) # (940, 1008)
-    Utilities.waitForColorAndDo(940, 1008, secondEndOColor,
-            func_while_wait=Utilities.fastClick, arg_while_wait=(944, 904))
+    Utilities.fastClick(944, 904)
+    myRobot.delay(3000)
+    
+    secondEndOColor = Color(255, 255, 255) # (941, 1006)
+   
+    def checkRewardFunc():
+        getRewardOColor = Color(255, 255, 255) # (942, 702)
+        if myRobot.getPixelColor(942, 702) == getRewardOColor:
+            Utilities.fastClick(942, 702)
+            myRobot.delay(1000)
+    def checkOkColor():
+        okColor = Color(244, 246, 250) # (944, 904)
+        if myRobot.getPixelColor(944, 904) == okColor:
+            Utilities.fastClick(944, 904)
+            myRobot.delay(1000)
+    Utilities.waitForColorAndDo(941, 1006, secondEndOColor)
     myRobot.delay(1000)
     # wait for prepare
     prepareColor = Color(103, 0, 0) # (866, 999)
@@ -219,13 +264,13 @@ def consumeAllBalls():
     # no ball now, return to front page
     myRobot.delay(5000)
     beforeCheckWorldColor = myRobot.getPixelColor(944, 808)
-    Utilities.log('debug.txt', 'before checking world color, ', str(beforeCheckWorldColor))
     worldColor = Color(248, 145, 65) # (944, 808)
     prepareColor = Color(103, 0, 0) # (866, 999)
     while myRobot.getPixelColor(944, 808) != worldColor:
         if myRobot.getPixelColor(866,999) == prepareColor:
             Utilities.fastClick(706, 209)
         print("no more ball now, waiting for world color")
+        Utilities.checkProtectionSettingMenu()
         myRobot.delay(5000)
     myRobot.delay(1000)
 
@@ -233,7 +278,7 @@ def process():
     fightClubColor = Color(153, 162, 187) # (747, 758)
     while myRobot.getPixelColor(747, 758) != fightClubColor:
         print("waiting for fight club")
-        checkProtectionSettingMenu()
+        BonusGame.checkProtectionSettingMenu()
         myRobot.delay(1000)
     myRobot.delay(1000)
 
@@ -247,8 +292,8 @@ def process():
 if __name__ == "__main__":
     #print(isInBattle())
     #doOneFight()
-    #setCommand()
+    #setCommand(3)
     #myRobot.delay(1000)
     #launchAttack()
-    #selectUnit4_twoMagic()
+    #setCommand(1)
     process()

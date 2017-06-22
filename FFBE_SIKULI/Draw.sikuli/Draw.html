@@ -1,0 +1,112 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+
+         .str {
+            color: rgb(128, 0, 0);
+         }
+
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+
+         a {
+            color: #9D2900;
+         }
+
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>Draw.sikuli</h2> <a href="Draw.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">import</span> java.awt.Color <span class="kw">as</span> Color
+<span class="kw">import</span> java.awt.Robot <span class="kw">as</span> JRobot
+<span class="kw">import</span> java.awt.event.InputEvent <span class="kw">as</span> InputEvent
+<span class="kw">import</span> Utilities
+<span class="kw">from</span> sikuli <span class="kw">import</span> *
+reload(Utilities)
+
+<span class="kw">def</span> main():
+    secondBigDrawColor = Color(<span class="dig">182</span>, <span class="dig">95</span>, <span class="dig">40</span>) <span class="cmt"># (1032, 593)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1032</span>, <span class="dig">593</span>, secondBigDrawColor, wait_time_period=<span class="dig">3000</span>,
+        func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">1127</span>, <span class="dig">717</span>))
+
+    firstNextColor = Color(<span class="dig">46</span>, <span class="dig">80</span>, <span class="dig">121</span>) <span class="cmt"># (931, 880)</span>
+    firstNextColor2 = Color(<span class="dig">161</span>, <span class="dig">177</span>, <span class="dig">204</span>) <span class="cmt"># (983, 958)</span>
+    <span class="kw">while</span> True:
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">931</span>, <span class="dig">880</span>) == firstNextColor:
+            Utilities.fastClick(<span class="dig">931</span>, <span class="dig">880</span>)
+            <span class="kw">break</span>
+        <span class="kw">elif</span> myRobot.getPixelColor(<span class="dig">983</span>, <span class="dig">958</span>) == firstNextColor2:
+            Utilities.fastClick(<span class="dig">983</span>, <span class="dig">958</span>)
+            <span class="kw">break</span>
+        Utilities.fastClick(<span class="dig">1215</span>, <span class="dig">169</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+    myRobot.delay(<span class="dig">2000</span>)
+    <span class="cmt">#Utilities.waitForColorAndDo(931, 880, firstNextColor, wait_time_period=1000,</span>
+    <span class="cmt">#    func_while_wait=Utilities.fastClick, arg_while_wait=(1135, 345))</span>
+
+    secondNextColor = Color(<span class="dig">58</span>, <span class="dig">76</span>, <span class="dig">130</span>) <span class="cmt"># (990, 973)</span>
+    Utilities.waitForColorAndDo(<span class="dig">990</span>, <span class="dig">973</span>, secondNextColor, wait_time_period=<span class="dig">1000</span>,
+        func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">1133</span>, <span class="dig">439</span>))
+
+    firstBigDrawColor = Color(<span class="dig">249</span>, <span class="dig">89</span>, <span class="dig">27</span>) <span class="cmt"># (1038, 703)</span>
+    Utilities.waitForColor(<span class="dig">1038</span>, <span class="dig">703</span>, firstBigDrawColor, <span class="str">"waiting for 1st big ndraw"</span>)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="kw">while</span> True:
+        main()
+</pre>
+</body>
+</html>

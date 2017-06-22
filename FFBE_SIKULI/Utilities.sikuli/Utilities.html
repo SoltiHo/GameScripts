@@ -731,7 +731,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="kw">print</span> <span class="str">'x = '</span>, x, <span class="str">', y = '</span>, y, <span class="str">', color = '</span>, color
     wait_count = <span class="dig">0</span>
     <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
-        <span class="kw">print</span> myRobot.getPixelColor(x, y)
+        <span class="kw">print</span> myRobot.getPixelColor(x, y), x, y
         <span class="kw">if</span> func_while_wait != None:
             func_while_wait(*arg_while_wait)
         wait_count += <span class="dig">1</span>
@@ -741,6 +741,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
                 func_wait_too_long(*arg_wait_too_long)
         myRobot.delay(wait_time_period)
     <span class="kw">while</span> myRobot.getPixelColor(x, y) == color:
+        <span class="kw">print</span> myRobot.getPixelColor(x, y), x, y, <span class="str">'after wait'</span>
         <span class="kw">if</span> func_after_wait != None:
             func_after_wait(*arg_after_wait)
         <span class="kw">else</span>:
@@ -749,10 +750,19 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         myRobot.delay(wait_time_period)
 
-<span class="kw">def</span> waitForColor(x, y, color, wait_msg):
+<span class="kw">def</span> waitForColor(x, y, color, wait_msg,  wait_time_period=<span class="dig">500</span>):
     <span class="kw">while</span> <span class="kw">not</span> myRobot.getPixelColor(x, y) == color:
         <span class="kw">print</span> wait_msg
-        myRobot.delay(<span class="dig">500</span>)
+        myRobot.delay(wait_time_period)
+
+<span class="kw">def</span> checkProtectionSettingMenu():
+    noColor = Color(<span class="dig">205</span>, <span class="dig">217</span>, <span class="dig">232</span>) <span class="cmt"># (842, 748)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">842</span>, <span class="dig">748</span>) == noColor:
+        Utilities.fastClick(<span class="dig">842</span>,<span class="dig">748</span>)
+    dailyRewardBoxColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">221</span>) <span class="cmt"># (804, 800)</span>
+    getRewardColor = Color(<span class="dig">2</span>, <span class="dig">16</span>, <span class="dig">64</span>) <span class="cmt"># (918, 883)</span>
+    <span class="kw">if</span> (myRobot.getPixelColor(<span class="dig">804</span>, <span class="dig">800</span>) == dailyRewardBoxColor) <span class="kw">and</span> (myRobot.getPixelColor(<span class="dig">918</span>, <span class="dig">883</span>) == getRewardColor):
+        Utilities.fastClick(<span class="dig">1223</span>, <span class="dig">149</span>)
 
 <span class="kw">def</span> buyStrength():
     buyStrengthColor = Color(<span class="dig">248</span>, <span class="dig">249</span>, <span class="dig">251</span>) <span class="cmt"># (1135, 541)</span>
@@ -997,12 +1007,11 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         myRobot.delay(<span class="dig">2000</span>)
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    targetLocation = Location(<span class="dig">945</span>, <span class="dig">365</span>)
+    targetLocation = Location(<span class="dig">929</span>, <span class="dig">372</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
     myRobot.delay(<span class="dig">3000</span>)
-
 
     <span class="cmt">#wait(3)</span>
 

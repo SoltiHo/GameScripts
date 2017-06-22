@@ -639,6 +639,7 @@ def process():
 if __name__ == "__main__":
     #doRemainingBattles(15, 'LeftRight')
     #walkThroughPhaseTwo()
+    doRemainingBattles(50)
     process()
     #enterMission()
     #setCommand()

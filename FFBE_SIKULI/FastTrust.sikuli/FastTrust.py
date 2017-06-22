@@ -12,10 +12,10 @@ myRobot = JRobot()
 selectFollower = True
 buyStrength = True
 resetPeriod = 100
-doBonusGame = False
-numBonusGame = 8
-doFightClub = True
-doCoFight = True  
+doBonusGame = True
+numBonusGame = 2
+doFightClub = False
+doCoFight = False
 
 def enterFastMission():
     fastMissionColor = Color(99, 4, 7) # (703, 672)
@@ -46,6 +46,10 @@ def enterFastMission():
 
     launchColor = Color(0, 43, 68)  # (913,951)
     Utilities.waitForColorAndDo(913, 951, launchColor)
+
+    # wait for menu before exiting
+    #menuColor = Color(0, 17, 51) # (1185, 1054)
+    #Utilities.waitForColor(1185, 1054, menuColor, 'wait for menu before exiting', wait_time_period=1000)
 
 def steal():
     # To steal
@@ -87,7 +91,7 @@ def doBattles():
             Utilities.fastClick(330, 196)
             myRobot.delay(5000)
             menuColor = Color(0, 17, 51) # (1150, 1032)
-            while myRobot.getPixelColor(1189,1025) != menuColor:
+            while myRobot.getPixelColor(1150, 1032) != menuColor:
                 blackColor = Color(0, 0, 0)
                 if myRobot.getPixelColor(353, 220) == blackColor:
                     Utilities.fastClick(998, 242)
@@ -201,10 +205,11 @@ def main():
     count = 0
     start = time.time()
     total_time = 0
-    #setFollowerFilter()
+    
     while True:
         if count == 0:
             start = time.time()
+            setFollowerFilter()
         count += 1
         executeOneRound()
         #if count % 10 == 0:
@@ -319,9 +324,10 @@ def changeToRightTeam():
     myRobot.delay(1000)
 
     print("finding waterAxeColor color")
-    waterAxeColor = Color(69, 88, 155)  # (1090, 426)
-    while myRobot.getPixelColor(1090,426) != waterAxeColor:
+    waterAxeColor = Color(26,21,21)  # (1082, 381)
+    while myRobot.getPixelColor(1082, 381) != waterAxeColor:
         Utilities.fastClick(1254, 408)
+        BonusGame.checkProtectionSettingMenu()
         myRobot.delay(2000)
     myRobot.delay(1000)
 
@@ -335,12 +341,12 @@ def changeToRightTeam():
     print("leaving chang team")
 
 def setFollowerFilter():
-    fastMissionColor = Color(99, 5, 8) # (703, 672)
+    fastMissionColor = Color(99, 4, 7) # (703, 672)
     Utilities.waitForColorAndDo(703, 672, fastMissionColor, 
             func_while_wait=Utilities.fastClick, arg_while_wait=(929, 160))
 
     # wait for mission dismiss color and buy strength if necessary
-    missionDescNextStepColor = Color(0, 83, 196) # (954, 923)
+    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
     if buyStrength:
         Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
                 func_while_wait=Utilities.buyStrength)
@@ -348,7 +354,7 @@ def setFollowerFilter():
         Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor)
 
     # click filter
-    followerColor = Color(145,60,32) # (1015,223)    
+    followerColor = Color(143, 89, 48) # (1015,223) 
     Utilities.waitForColorAndDo(1015, 223, followerColor, 
             func_after_wait=Utilities.fastClick, arg_after_wait=(1094, 233))
     myRobot.delay(1000)
@@ -364,17 +370,23 @@ def setFollowerFilter():
     myRobot.delay(1000)
 
     # select preferred weapons
-    Utilities.fastClick(852, 547)
+    Utilities.fastClick(702, 543) # 1st row
     myRobot.delay(500)
-    Utilities.fastClick(919, 546)
+    Utilities.fastClick(778, 543)
+    myRobot.delay(500)
+    #Utilities.fastClick(854, 543)
+    #smyRobot.delay(500)
+    Utilities.fastClick(925, 543)
+    myRobot.delay(500)
+    Utilities.fastClick(999, 545)
+    myRobot.delay(500)
+    Utilities.fastClick(1071, 543)
     myRobot.delay(500)
     Utilities.fastClick(1140, 548)
     myRobot.delay(500)
     Utilities.fastClick(1214, 545)
     myRobot.delay(500)
     Utilities.fastClick(702, 623) # 2nd row
-    myRobot.delay(500)
-    Utilities.fastClick(781, 620)
     myRobot.delay(500)
     Utilities.fastClick(854, 623)
     myRobot.delay(500)
@@ -392,11 +404,11 @@ def setFollowerFilter():
     myRobot.delay(500)
     Utilities.fastClick(779, 698)
     myRobot.delay(500)
-    Utilities.fastClick(924, 702)
+    Utilities.fastClick(927, 697)
     myRobot.delay(500)
-    Utilities.fastClick(1067, 700)
+    Utilities.fastClick(1143, 695)
     myRobot.delay(500)
-    Utilities.fastClick(1140, 698)
+    Utilities.fastClick(1213, 693)
     myRobot.delay(1000)
 
     # click confirm
@@ -408,7 +420,7 @@ def setFollowerFilter():
         myRobot.delay(1000)
 
     # click two return
-    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, 
+    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, wait_time_period=2000,
             func_while_wait=clickReturnAndWait,
             func_after_wait=clickReturnAndWait)
     myRobot.delay(1000)                
@@ -430,7 +442,7 @@ if __name__ == "__main__":
         myRobot.delay(2000)
         goToEarthTemple()
         myRobot.delay(1000)
-
+    
     main()
     #steal()
     #harvestAndMakeHeal()

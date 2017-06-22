@@ -659,7 +659,7 @@ def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func
     print 'x = ', x, ', y = ', y, ', color = ', color
     wait_count = 0
     while not myRobot.getPixelColor(x, y) == color:
-        print myRobot.getPixelColor(x, y)
+        print myRobot.getPixelColor(x, y), x, y
         if func_while_wait != None:
             func_while_wait(*arg_while_wait)
         wait_count += 1
@@ -669,6 +669,7 @@ def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func
                 func_wait_too_long(*arg_wait_too_long)
         myRobot.delay(wait_time_period)
     while myRobot.getPixelColor(x, y) == color:
+        print myRobot.getPixelColor(x, y), x, y, 'after wait'
         if func_after_wait != None:
             func_after_wait(*arg_after_wait)
         else:
@@ -677,10 +678,19 @@ def waitForColorAndDo(x, y, color, func_while_wait=None, arg_while_wait=[], func
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         myRobot.delay(wait_time_period)
 
-def waitForColor(x, y, color, wait_msg):
+def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
     while not myRobot.getPixelColor(x, y) == color:
         print wait_msg
-        myRobot.delay(500)
+        myRobot.delay(wait_time_period)
+
+def checkProtectionSettingMenu():
+    noColor = Color(205, 217, 232) # (842, 748)
+    if myRobot.getPixelColor(842, 748) == noColor:
+        Utilities.fastClick(842,748)
+    dailyRewardBoxColor = Color(255, 255, 221) # (804, 800)
+    getRewardColor = Color(2, 16, 64) # (918, 883)
+    if (myRobot.getPixelColor(804, 800) == dailyRewardBoxColor) and (myRobot.getPixelColor(918, 883) == getRewardColor):
+        Utilities.fastClick(1223, 149)
 
 def buyStrength():
     buyStrengthColor = Color(248, 249, 251) # (1135, 541)
@@ -925,12 +935,11 @@ def launchBS():
         myRobot.delay(2000)
 
 if __name__ == "__main__":
-    targetLocation = Location(945, 365)
+    targetLocation = Location(929, 372)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
     myRobot.delay(3000)
-
     
     #wait(3)
   

@@ -91,7 +91,7 @@ def selectUnit6_defense():
 
 
 def checkProtectionSettingMenu():
-    noColor = Color(227, 234, 243) # (842, 748)
+    noColor = Color(205, 217, 232) # (842, 748)
     if myRobot.getPixelColor(842, 748) == noColor:
         Utilities.fastClick(842,748)
     dailyRewardBoxColor = Color(255, 255, 221) # (804, 800)
