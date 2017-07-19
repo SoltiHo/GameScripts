@@ -602,7 +602,7 @@ def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(249, 219, 
         print '2nd next  = ', secondNextStepIsDone
 
         # Friend
-        noApplyColor = Color(255, 255, 255) # (780, 784)
+        noApplyColor = Color(252, 252, 253 ) # (780, 784)
         if myRobot.getPixelColor(780, 784) == noApplyColor:
             myRobot.mouseMove(780, 784)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -686,11 +686,11 @@ def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
 def checkProtectionSettingMenu():
     noColor = Color(205, 217, 232) # (842, 748)
     if myRobot.getPixelColor(842, 748) == noColor:
-        Utilities.fastClick(842,748)
+        fastClick(842,748)
     dailyRewardBoxColor = Color(255, 255, 221) # (804, 800)
     getRewardColor = Color(2, 16, 64) # (918, 883)
     if (myRobot.getPixelColor(804, 800) == dailyRewardBoxColor) and (myRobot.getPixelColor(918, 883) == getRewardColor):
-        Utilities.fastClick(1223, 149)
+        fastClick(1223, 149)
 
 def buyStrength():
     buyStrengthColor = Color(248, 249, 251) # (1135, 541)
@@ -818,7 +818,7 @@ def switchEmulator():
     myRobot.delay(1000)
 
 def enterBSFFBE():
-    BSFFBEColor = Color(230,191,216) # (330, 196)
+    BSFFBEColor = Color(254, 246, 237) # (330, 196)
     waitForColorAndDo(330, 196, BSFFBEColor,
             func_after_wait=fastClick, arg_after_wait=(330, 196))
     print 'entered BS FFBE'
@@ -935,7 +935,7 @@ def launchBS():
         myRobot.delay(2000)
 
 if __name__ == "__main__":
-    targetLocation = Location(929, 372)
+    targetLocation = Location(1042, 637)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

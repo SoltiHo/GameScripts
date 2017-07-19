@@ -6,72 +6,97 @@ import Utilities
 reload(Utilities)
 myRobot = JRobot()
 
-
-def selectUnit1_DecreaseLighting():
-    Utilities.openMagicMenu(1)
-    myRobot.delay(2000)
-    # select the skill
-    Utilities.fastClick(785, 924)
-    myRobot.delay(800)
-
-def selectUnit1_Destroy():
+def selectUnit1_AccurateShoot():
     Utilities.openMagicMenu(1)
     myRobot.delay(2000)
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
     # select the skill
-    Utilities.fastClick(1057, 813)
+    Utilities.fastClick(759, 952)
+    myRobot.delay(800)
+
+def selectUnit1Manual_AccurateShoot():
+    Utilities.openMagicMenu(1)
+    myRobot.delay(2000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
+    # select the skill
+    Utilities.fastClick(1045, 839)
     myRobot.delay(800)
 
 def selectUnit2_chainSaw():
     Utilities.openMagicMenu(2)
     myRobot.delay(2000)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
+    myRobot.delay(1500)
     # select the skill
-    Utilities.fastClick(750, 922)
-    myRobot.delay(800)
+    Utilities.fastClick(1091, 819)
+    myRobot.delay(1500)
 
-def selectUnit3_decreaseAttack():
-    Utilities.openMagicMenu(3)
+def selectUnit2Manual_chainSaw():
+    Utilities.openMagicMenu(2)
     myRobot.delay(2000)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
+    myRobot.delay(1500)
     # select the skill
-    Utilities.fastClick(1054, 835)
-    myRobot.delay(800)
+    Utilities.fastClick(812, 821)
+    myRobot.delay(1500)
 
-def selectUnit3_decreaseDefense():
-    Utilities.openMagicMenu(3)
+def selectUnit4_BreakShoot():
+    Utilities.openMagicMenu(4)
     myRobot.delay(2000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
     # select the skill
-    Utilities.fastClick(787, 836)
+    Utilities.fastClick(1052, 921)
     myRobot.delay(800)
 
-def selectUnit4_encourage():
+def selectUnit4Manual_BreakShoot():
+    Utilities.openMagicMenu(4)
+    myRobot.delay(2000)
+    # select the skill
+    Utilities.fastClick(736, 927)
+    myRobot.delay(800)
+
+def selectUnit4_AccurateShoot():
     Utilities.openMagicMenu(4)
     myRobot.delay(2000)
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
+    # select the skill
+    Utilities.fastClick(737, 939)
+    myRobot.delay(800)
+
+def selectUnit3_encourage():
+    Utilities.openMagicMenu(3)
+    myRobot.delay(2000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
     # select the skill
-    Utilities.fastClick(786, 909)
+    Utilities.fastClick(1049, 935)
     myRobot.delay(1000)
     # select the team
-    Utilities.fastClick(786, 909)
+    Utilities.fastClick(796, 856)
     myRobot.delay(1000) 
-    
-def selectUnit4_defense():
-    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[3])
-    mouseDown(Button.LEFT)
-    mouseMove(0, 100)
-    mouseUp(Button.LEFT)
+
+def selectUnit3Manual_encourage():
+    Utilities.openMagicMenu(3)
+    myRobot.delay(2000)
+    Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
+    # select the skill
+    Utilities.fastClick(806, 914)
+    myRobot.delay(1000)
+    # select the team
+    Utilities.fastClick(796, 856)
+    myRobot.delay(1000) 
+
 
 def selectUnit5_chainSaw():
     Utilities.openMagicMenu(5)
@@ -79,7 +104,16 @@ def selectUnit5_chainSaw():
     Utilities.scrollMenuDown_fast()
     myRobot.delay(700)
     # select the skill
-    Utilities.fastClick(801, 718)
+    Utilities.fastClick(1031, 833)
+    myRobot.delay(800)
+
+def selectUnit5Manual_chainSaw():
+    Utilities.openMagicMenu(5)
+    myRobot.delay(1500)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(700)
+    # select the skill
+    Utilities.fastClick(772, 926)
     myRobot.delay(800)
 
 def selectUnit6_defense():
@@ -89,7 +123,13 @@ def selectUnit6_defense():
     mouseUp(Button.LEFT)
     myRobot.delay(1000)
 
-
+def selectUnit3_defense():
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[2])
+    mouseDown(Button.LEFT)
+    mouseMove(0, 100)
+    mouseUp(Button.LEFT)
+    myRobot.delay(1000)
+    
 def checkProtectionSettingMenu():
     noColor = Color(205, 217, 232) # (842, 748)
     if myRobot.getPixelColor(842, 748) == noColor:
@@ -107,13 +147,13 @@ def isInBattle():
         return False
 
 def set1stCommand():
-    selectUnit1_DecreaseLighting()
+    selectUnit1_AccurateShoot()
     myRobot.delay(1000)
     selectUnit2_chainSaw()
     myRobot.delay(1000)
-    selectUnit3_decreaseAttack()
+    selectUnit3_encourage()
     myRobot.delay(1000)
-    selectUnit4_encourage()
+    selectUnit4_BreakShoot()
     myRobot.delay(1000)
     selectUnit5_chainSaw()
     myRobot.delay(1000)
@@ -121,27 +161,80 @@ def set1stCommand():
     myRobot.delay(1000)
 
 def set2ndCommand():
-    selectUnit1_Destroy()
+    selectUnit1_AccurateShoot()
     myRobot.delay(1000)
     selectUnit2_chainSaw()
     myRobot.delay(1000)
-    selectUnit3_decreaseDefense()
-    myRobot.delay(1000)
-    selectUnit4_defense()
+    selectUnit4_AccurateShoot()
     myRobot.delay(1000)
     selectUnit5_chainSaw()
     myRobot.delay(1000)
     selectUnit6_defense()
     myRobot.delay(1000)
+    selectUnit3_defense()
+
+def processManual():
+    setManualCommand()
+    myRobot.delay(2000)
+    launchAttackManual()
+    myRobot.delay(5000)
+    
+
+def setManualCommand():
+    selectUnit1Manual_AccurateShoot()
+    myRobot.delay(1000)
+    selectUnit2Manual_chainSaw()
+    myRobot.delay(1000)
+    selectUnit3Manual_encourage()
+    myRobot.delay(1000)
+    selectUnit4Manual_BreakShoot()
+    myRobot.delay(1000)
+    selectUnit5Manual_chainSaw()
+    myRobot.delay(1000)
+    
+def launchAttackManual():
+    Utilities.fastClick(809, 946) # unit 3
+    myRobot.delay(3000)
+    
+    Utilities.fastClick(1076, 724) # unit 4
+    myRobot.delay(100)
+    Utilities.fastClick(793, 720) # unit 1
+    myRobot.delay(100)
+    Utilities.fastClick(1062, 943) # unit 6
+
+    myRobot.delay(1700)
+    Utilities.fastClick(1065, 830) # unit 5
+    myRobot.delay(100)
+    Utilities.fastClick(796, 831) # unit 2
+    myRobot.delay(20000)
+
+def launchAttackManual2():
+    Utilities.fastClick(809, 946) # unit 3
+    myRobot.delay(3000)
+
+    Utilities.fastClick(1062, 943) # unit 6
+    myRobot.delay(100)
+    Utilities.fastClick(1076, 724) # unit 4
+    myRobot.delay(100)
+    Utilities.fastClick(793, 720) # unit 1
+   
+    
+
+    myRobot.delay(1700)
+    Utilities.fastClick(1065, 830) # unit 5
+    myRobot.delay(100)
+    Utilities.fastClick(796, 831) # unit 2
+    myRobot.delay(20000)
 
 def launchAttack():
-    Utilities.fastClick(1076, 724) # unit 4
-    Utilities.fastClick(1062, 943) # unit 6
     Utilities.fastClick(809, 946) # unit 3
+    Utilities.fastClick(1062, 943) # unit 6
     myRobot.delay(2000)
-
+    Utilities.fastClick(1076, 724) # unit 4
+    myRobot.delay(100)
     Utilities.fastClick(793, 720) # unit 1
-    myRobot.delay(1600)
+
+    myRobot.delay(1700)
     Utilities.fastClick(1065, 830) # unit 5
     myRobot.delay(100)
     Utilities.fastClick(796, 831) # unit 2
@@ -159,13 +252,14 @@ def doOneFight():
     while isInBattle():
         if Utilities.isWaitingForCommand():
             myRobot.delay(2000)
-            if roundCount == 1:
-                set1stCommand()
-            else:
-                set2ndCommand()
-            roundCount += 1
-            myRobot.delay(1000)
-            launchAttack()
+            if Utilities.isWaitingForCommand():
+                if roundCount == 1:
+                    set1stCommand()
+                else:
+                    set2ndCommand()
+                roundCount += 1
+                myRobot.delay(1000)
+                launchAttack()
         else:
             print("waiting for waiting for command")
         myRobot.delay(3000)
@@ -174,15 +268,15 @@ def doOneFight():
     #battleEndMessageColor = Color(0, 18, 70) # (1046, 143)
     #Utilities.waitForColorAndDo(1046, 143, battleEndMessageColor)
     # Battle End
-    titanHeadColor = Color(87, 61, 41)  # (945, 365)
-    Utilities.handleMissionEnd(targetX=945, targetY=365, waitTargetColor=titanHeadColor)
+    CofightMenuHeaderColor = Color(228, 121, 122)  # (981,404)
+    Utilities.handleMissionEnd(targetX=981, targetY=404, waitTargetColor=CofightMenuHeaderColor)
     # wait for mission menu
-    topMissionColor = Color(116, 22, 28) # (703, 611)
-    Utilities.waitForColor(703, 611, topMissionColor, "waiting for back to mission menu")
+    targetMissionColor = Color(195, 177, 179) # (826,783)
+    Utilities.waitForColor(826,783, targetMissionColor, "waiting for back to mission menu")
 
 def enterMission():
-    topMissionColor = Color(116, 22, 28) # (703, 611)
-    Utilities.waitForColorAndDo(703, 611, topMissionColor)
+    targetMissionColor = Color(195, 177, 179) # (826,783)
+    Utilities.waitForColorAndDo(826,783, targetMissionColor)
 
     # wait for mission dismiss color and buy strength if necessary
     missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
@@ -203,8 +297,8 @@ def changeToRightTeam():
         myRobot.delay(2000)
     myRobot.delay(1000)
 
-    targetUnitColor = Color(78, 66, 50)  # (957, 413)
-    while myRobot.getPixelColor(957, 413) != targetUnitColor:
+    targetUnitColor = Color(73, 45, 7)  # (834,413)
+    while myRobot.getPixelColor(834,413) != targetUnitColor:
         Utilities.fastClick(1254, 408)
         myRobot.delay(2000)
         print("waiting for targetUnitColor")
@@ -218,19 +312,127 @@ def changeToRightTeam():
         myRobot.delay(3000)
     myRobot.delay(1000)
 
-def process():
-    changeToRightTeam()
-    
-    TitanHamletColor = Color(171, 156, 71) # (730, 228)
-    Utilities.waitForColorAndDo(730, 228, TitanHamletColor, wait_time_period=2000,
-            func_while_wait=Utilities.fastClick, arg_while_wait=(822, 514))
+def gotoCofightMenu():
+    #CofightBannerColor = Color(97, 244, 245) # (1015,446)
+    #Utilities.waitForColorAndDo(1015,446, CofightBannerColor, wait_time_period=2000,
+    #        func_while_wait=Utilities.fastClick, arg_while_wait=(822, 514))
+    rewardExchangeColor = Color(110, 84, 63) # (1212, 89)
+    while myRobot.getPixelColor(1212, 89) != rewardExchangeColor:
+        Utilities.fastClick(822, 514)
+        myRobot.delay(3000)
+
+    cofightBannerIcon = "cofightBannerIcon.png"
+    cofightBannerRegion = Region(664,156,202,911)
+    cofightBannerRegion.click(cofightBannerIcon)
     myRobot.delay(1000)
-    # wait for Bach page
-    titanHeadColor = Color(87, 61, 41)  # (945, 365)
-    Utilities.waitForColor(945, 365, titanHeadColor, "waiting for Titan head")
+    # wait for cofight menu
+    CofightMenuHeaderColor = Color(228, 121, 122)  # (981,404)
+    Utilities.waitForColor(981,404, CofightMenuHeaderColor, "waiting for CofightMenuHeader")
+    myRobot.delay(1000)
+
+def setFollowerFilter():
+    targetMissionColor = Color(195, 177, 179) # (826,783)
+    Utilities.waitForColorAndDo(826, 783, targetMissionColor, 
+            func_while_wait=Utilities.fastClick, arg_while_wait=(826, 783))
+
+    # wait for mission dismiss color and buy strength if necessary
+    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
+    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
+            func_while_wait=Utilities.buyStrength)
+
+    # click filter
+    followerColor = Color(143, 89, 48) # (1015,223) 
+    Utilities.waitForColorAndDo(1015, 223, followerColor, 
+            func_after_wait=Utilities.fastClick, arg_after_wait=(1094, 233))
+    myRobot.delay(1000)
+
+    # choose Filtering
+    Utilities.fastClick(1072, 86)
+    myRobot.delay(1000)
+    
+    # clear everything
+    Utilities.fastClick(740, 1024)
+    myRobot.delay(1000)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(1000)
+
+    # select preferred weapons
+    Utilities.fastClick(702, 543) # 1st row
+    myRobot.delay(500)
+    #Utilities.fastClick(778, 543)
+    #myRobot.delay(500)
+    #Utilities.fastClick(854, 543)
+    #smyRobot.delay(500)
+    #Utilities.fastClick(925, 543)
+    #myRobot.delay(500)
+    Utilities.fastClick(999, 545)
+    myRobot.delay(500)
+    Utilities.fastClick(1071, 543)
+    myRobot.delay(500)
+    Utilities.fastClick(1140, 548)
+    myRobot.delay(500)
+    Utilities.fastClick(1214, 545)
+    myRobot.delay(500)
+    #Utilities.fastClick(702, 623) # 2nd row
+    #myRobot.delay(500)
+    #Utilities.fastClick(778, 623)
+    #myRobot.delay(500)
+    Utilities.fastClick(854, 623)
+    myRobot.delay(500)
+    Utilities.fastClick(925, 622)
+    myRobot.delay(500)
+    Utilities.fastClick(995, 624)
+    myRobot.delay(500)
+    #Utilities.fastClick(1066, 619)
+    #myRobot.delay(500)
+    Utilities.fastClick(1135, 624)
+    myRobot.delay(500)
+    Utilities.fastClick(1213, 627)
+    myRobot.delay(500)
+    Utilities.fastClick(710, 700) # 3rd row
+    myRobot.delay(500)
+    Utilities.fastClick(779, 698)
+    myRobot.delay(500)
+    #Utilities.fastClick(854, 698)
+    #myRobot.delay(500)
+    #Utilities.fastClick(927, 697)
+    #myRobot.delay(500)
+    #Utilities.fastClick(995, 697)
+    #myRobot.delay(500)
+    #Utilities.fastClick(1143, 695)
+    #myRobot.delay(500)
+    Utilities.fastClick(1213, 693)
+    myRobot.delay(1000)
+
+    # click confirm
+    Utilities.fastClick(958, 1008)
     myRobot.delay(2000)
+
+    def clickReturnAndWait():
+        Utilities.fastClick(709,221)
+        myRobot.delay(1000)
+
+    # click two return
+    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, wait_time_period=2000,
+            func_while_wait=clickReturnAndWait,
+            func_after_wait=clickReturnAndWait)
+    myRobot.delay(1000)                
+
+
+def process():
+    changeToRightTeam() 
+    myRobot.delay(2000)
+    gotoCofightMenu()
+    myRobot.delay(2000)
+    setFollowerFilter()
+    myRobot.delay(2000)
+    
     firstBallColor = Color(57, 181, 47) # (1142, 305)
-    while myRobot.getPixelColor(1142, 305) == firstBallColor:
+    forthBallColor = Color(90, 235, 45) # (1221, 301)
+    targetBallColor = forthBallColor
+    targetBallX = 1221
+    targetBallY = 301
+    while myRobot.getPixelColor(targetBallX, targetBallY) == targetBallColor:
         # got ball
         doOneFight()
         myRobot.delay(2000)
@@ -245,7 +447,11 @@ if __name__ == "__main__":
     #Utilities.handleMissionEnd(targetX=932, targetY=364, waitTargetColor=titanHeadColor)
     #enterMission()
     #changeToRightTeam()
-    process()
+    #process()
+    #set1stCommand()
     #set2ndCommand()
     #myRobot.delay(2000)
     #launchAttack()
+    #myRobot.delay(20000)
+    launchAttackManual2()
+    #processManual()

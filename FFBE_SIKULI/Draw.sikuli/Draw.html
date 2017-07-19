@@ -76,7 +76,7 @@
 <span class="kw">import</span> Utilities
 <span class="kw">from</span> sikuli <span class="kw">import</span> *
 reload(Utilities)
-
+myRobot = JRobot()
 <span class="kw">def</span> main():
     secondBigDrawColor = Color(<span class="dig">182</span>, <span class="dig">95</span>, <span class="dig">40</span>) <span class="cmt"># (1032, 593)</span>
     Utilities.waitForColorAndDo(<span class="dig">1032</span>, <span class="dig">593</span>, secondBigDrawColor, wait_time_period=<span class="dig">3000</span>,

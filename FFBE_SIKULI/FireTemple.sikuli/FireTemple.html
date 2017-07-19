@@ -319,7 +319,7 @@ alwaysSteal = True
     <span class="cmt">#    doSteal()</span>
     <span class="cmt">#myRobot.delay(1000)</span>
     <span class="cmt">#if Utilities.lookAbleToSummon():</span>
-    <span class="cmt">#    Utilities.summonIfAvailable(3)</span>
+    <span class="cmt">#    Utilities.summonIfAvailable(2)</span>
     followerAttackOnly()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt">#Utilities.manuallyKickOff()</span>
@@ -711,7 +711,7 @@ alwaysSteal = True
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#doRemainingBattles(15, 'LeftRight')</span>
     <span class="cmt">#walkThroughPhaseTwo()</span>
-    doRemainingBattles(<span class="dig">50</span>)
+    doRemainingBattles(<span class="dig">50</span>) <span class="cmt">#, direction='LeftRight')</span>
     process()
     <span class="cmt">#enterMission()</span>
     <span class="cmt">#setCommand()</span>

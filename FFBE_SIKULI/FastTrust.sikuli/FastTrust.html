@@ -85,9 +85,42 @@ selectFollower = True
 buyStrength = True
 resetPeriod = <span class="dig">100</span>
 doBonusGame = True
-numBonusGame = <span class="dig">2</span>
-doFightClub = False
+numBonusGame = <span class="dig">5</span>
+doFightClub = True
 doCoFight = False
+
+
+<span class="kw">def</span> selectFollowerAndLaunch():
+    <span class="kw">while</span> True:
+        <span class="cmt"># select follower</span>
+        followerColor = Color(<span class="dig">143</span>,<span class="dig">89</span>,<span class="dig">48</span>) <span class="cmt"># (1015,223)</span>
+        <span class="kw">if</span> selectFollower:
+            Utilities.waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
+                    func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
+        <span class="kw">else</span>:
+            <span class="kw">def</span> waitAndSelectNoFollower():
+                myRobot.delay(<span class="dig">500</span>)
+                func_after_wait=Utilities.selectStranger()
+            <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
+            Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
+                func_after_wait=waitAndSelectNoFollower)
+
+        launchColor = Color(<span class="dig">0</span>, <span class="dig">43</span>, <span class="dig">68</span>)  <span class="cmt"># (913,951)</span>
+        Utilities.waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
+
+        <span class="cmt"># wait for menu before exiting</span>
+        menuColor = Color(<span class="dig">0</span>, <span class="dig">17</span>, <span class="dig">51</span>) <span class="cmt"># (1185, 1054)</span>
+        errorOColor = Color(<span class="dig">0</span>, <span class="dig">34</span>, <span class="dig">98</span>) <span class="cmt"># (945, 599)</span>
+        completed = True
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1185</span>, <span class="dig">1054</span>) != menuColor:
+            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">945</span>, <span class="dig">599</span>) == errorOColor:
+                Utilities.fastClick(<span class="dig">945</span>, <span class="dig">599</span>)
+                completed = False
+                <span class="kw">break</span>
+            Utilities.handleCommunicationError()
+        <span class="kw">if</span> completed:
+            <span class="kw">break</span>
 
 <span class="kw">def</span> enterFastMission():
     fastMissionColor = Color(<span class="dig">99</span>, <span class="dig">4</span>, <span class="dig">7</span>) <span class="cmt"># (703, 672)</span>
@@ -102,26 +135,8 @@ doCoFight = False
     <span class="kw">else</span>:
         Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor)
 
+    selectFollowerAndLaunch()
 
-    <span class="cmt"># select follower</span>
-    followerColor = Color(<span class="dig">143</span>,<span class="dig">89</span>,<span class="dig">48</span>) <span class="cmt"># (1015,223)</span>
-    <span class="kw">if</span> selectFollower:
-        Utilities.waitForColorAndDo(<span class="dig">1015</span>, <span class="dig">223</span>, followerColor,
-                func_after_wait=Utilities.fastClick, arg_after_wait=(<span class="dig">810</span>, <span class="dig">404</span>))
-    <span class="kw">else</span>:
-        <span class="kw">def</span> waitAndSelectNoFollower():
-            myRobot.delay(<span class="dig">500</span>)
-            func_after_wait=Utilities.selectStranger()
-        <span class="cmt">#followerColor = Color(22, 41, 54) # (916, 248)</span>
-        Utilities.waitForColorAndDo(<span class="dig">1096</span>, <span class="dig">223</span>, followerColor,
-            func_after_wait=waitAndSelectNoFollower)
-
-    launchColor = Color(<span class="dig">0</span>, <span class="dig">43</span>, <span class="dig">68</span>)  <span class="cmt"># (913,951)</span>
-    Utilities.waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
-
-    <span class="cmt"># wait for menu before exiting</span>
-    <span class="cmt">#menuColor = Color(0, 17, 51) # (1185, 1054)</span>
-    <span class="cmt">#Utilities.waitForColor(1185, 1054, menuColor, 'wait for menu before exiting', wait_time_period=1000)</span>
 
 <span class="kw">def</span> steal():
     <span class="cmt"># To steal</span>
@@ -396,8 +411,8 @@ doCoFight = False
     myRobot.delay(<span class="dig">1000</span>)
 
     <span class="kw">print</span>(<span class="str">"finding waterAxeColor color"</span>)
-    waterAxeColor = Color(<span class="dig">26</span>,<span class="dig">21</span>,<span class="dig">21</span>)  <span class="cmt"># (1082, 381)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1082</span>, <span class="dig">381</span>) != waterAxeColor:
+    waterAxeColor = Color(<span class="dig">197</span>, <span class="dig">165</span>, <span class="dig">96</span>)  <span class="cmt"># (718,421)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">718</span>,<span class="dig">421</span>) != waterAxeColor:
         Utilities.fastClick(<span class="dig">1254</span>, <span class="dig">408</span>)
         BonusGame.checkProtectionSettingMenu()
         myRobot.delay(<span class="dig">2000</span>)
@@ -444,12 +459,12 @@ doCoFight = False
     <span class="cmt"># select preferred weapons</span>
     Utilities.fastClick(<span class="dig">702</span>, <span class="dig">543</span>) <span class="cmt"># 1st row</span>
     myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">778</span>, <span class="dig">543</span>)
-    myRobot.delay(<span class="dig">500</span>)
+    <span class="cmt">#Utilities.fastClick(778, 543)</span>
+    <span class="cmt">#myRobot.delay(500)</span>
     <span class="cmt">#Utilities.fastClick(854, 543)</span>
     <span class="cmt">#smyRobot.delay(500)</span>
-    Utilities.fastClick(<span class="dig">925</span>, <span class="dig">543</span>)
-    myRobot.delay(<span class="dig">500</span>)
+    <span class="cmt">#Utilities.fastClick(925, 543)</span>
+    <span class="cmt">#myRobot.delay(500)</span>
     Utilities.fastClick(<span class="dig">999</span>, <span class="dig">545</span>)
     myRobot.delay(<span class="dig">500</span>)
     Utilities.fastClick(<span class="dig">1071</span>, <span class="dig">543</span>)
@@ -458,8 +473,10 @@ doCoFight = False
     myRobot.delay(<span class="dig">500</span>)
     Utilities.fastClick(<span class="dig">1214</span>, <span class="dig">545</span>)
     myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">702</span>, <span class="dig">623</span>) <span class="cmt"># 2nd row</span>
-    myRobot.delay(<span class="dig">500</span>)
+    <span class="cmt">#Utilities.fastClick(702, 623) # 2nd row</span>
+    <span class="cmt">#myRobot.delay(500)</span>
+    <span class="cmt">#Utilities.fastClick(778, 623)</span>
+    <span class="cmt">#myRobot.delay(500)</span>
     Utilities.fastClick(<span class="dig">854</span>, <span class="dig">623</span>)
     myRobot.delay(<span class="dig">500</span>)
     Utilities.fastClick(<span class="dig">925</span>, <span class="dig">622</span>)
@@ -476,10 +493,14 @@ doCoFight = False
     myRobot.delay(<span class="dig">500</span>)
     Utilities.fastClick(<span class="dig">779</span>, <span class="dig">698</span>)
     myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">927</span>, <span class="dig">697</span>)
+    Utilities.fastClick(<span class="dig">854</span>, <span class="dig">698</span>)
     myRobot.delay(<span class="dig">500</span>)
-    Utilities.fastClick(<span class="dig">1143</span>, <span class="dig">695</span>)
+    <span class="cmt">#Utilities.fastClick(927, 697)</span>
+    <span class="cmt">#myRobot.delay(500)</span>
+    Utilities.fastClick(<span class="dig">995</span>, <span class="dig">697</span>)
     myRobot.delay(<span class="dig">500</span>)
+    <span class="cmt">#Utilities.fastClick(1143, 695)</span>
+    <span class="cmt">#myRobot.delay(500)</span>
     Utilities.fastClick(<span class="dig">1213</span>, <span class="dig">693</span>)
     myRobot.delay(<span class="dig">1000</span>)
 

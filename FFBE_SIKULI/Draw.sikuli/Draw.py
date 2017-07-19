@@ -4,7 +4,7 @@ import java.awt.event.InputEvent as InputEvent
 import Utilities
 from sikuli import *
 reload(Utilities)
-
+myRobot = JRobot()
 def main():
     secondBigDrawColor = Color(182, 95, 40) # (1032, 593)
     Utilities.waitForColorAndDo(1032, 593, secondBigDrawColor, wait_time_period=3000,

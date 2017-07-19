@@ -9,14 +9,15 @@ import Utilities
 reload(Utilities)
 myRobot = JRobot()
 
-resetCycleInMin = 1
+resetCycleInMin = 600
 doFightClub = True
-doCoFight = True
+doCoFight = False
 doBonusGame = False
+numBonusGame = 1
 
 def isStillRunning():
-    FFBEColor = Color(80, 137, 166) # (929, 372)
-    if myRobot.getPixelColor(929, 372) == FFBEColor:
+    FFBEColor = Color(190, 180, 180) # (1171, 234)
+    if myRobot.getPixelColor(1171, 234) == FFBEColor:
         return False
     return True
 
@@ -25,13 +26,17 @@ def recover():
     print "recover"
     #myRobot.delay(10000)
     # first, go back to FFBE
-    Utilities.fastClick(1169, 200)
+    Utilities.fastClick(1171, 234)
     myRobot.delay(5000)
     # wait for combat screen
-    combatBackgroundColor = Color(166, 63, 50) # (1126, 161)
+    combatBackgroundColor = Color(185, 69, 48) # (1126, 161)
+    playMissionYesColor = Color(255, 255, 255) # (1087, 626)
     while myRobot.getPixelColor(1126, 161) != combatBackgroundColor:
         Utilities.fastClick(983, 827)
+        if myRobot.getPixelColor(1087, 626) == playMissionYesColor:
+            Utilities.fastClick(1087, 626)
         print "waiting for combat background"
+        
         myRobot.delay(3000)
 
     # pause speedup
@@ -48,7 +53,7 @@ def recover():
     myRobot.delay(2000)
 
     # click Auto
-    Utilities.fastClick(768, 996)
+    Utilities.fastClick(768, 1036)
     Utilities.log('LBDroidXLog.txt', 'recover', 'recover completed')
     
 def launchDroidXToDesktop():
@@ -63,19 +68,19 @@ def launchDroidXToDesktop():
 
     # click ignore
     type(Key.F4, KeyModifier.ALT)
-    myRobot.delay(3000)
+    myRobot.delay(60000)
 
     # maximize window
     type(' ', KeyModifier.ALT)
     myRobot.delay(3000)
     type('x')
-    myRobot.delay(3000)
+    myRobot.delay(10000)
     Utilities.log('LBDroidXLog.txt', 'launch', 'droidX maximized')
 
 def loadAutoKey():
     # open key auto
-    autoKeyColor = Color(0, 119, 217) # (780, 346)
-    Utilities.waitForColorAndDo(780, 346, autoKeyColor, wait_time_period=6000)    
+    autoKeyColor = Color(0, 119, 217) # (811, 340)
+    Utilities.waitForColorAndDo(811, 340, autoKeyColor, wait_time_period=6000)    
     noCategoryColor = Color(59, 131, 225) # (754, 327)
     Utilities.waitForColorAndDo(754, 327, noCategoryColor, wait_time_period=4000)
     myScriptColor = Color(59, 131, 225) # (776, 210)
@@ -84,8 +89,8 @@ def loadAutoKey():
 
 def launchFFBEToDesktop():
     # launch FFBE
-    FFBEColor = Color(246, 210, 222) # (1175, 207)
-    Utilities.waitForColorAndDo(1175, 207, FFBEColor, wait_time_period=3000)
+    FFBEColor = Color(190, 180, 180) # (1171, 234)
+    Utilities.waitForColorAndDo(1171, 234, FFBEColor, wait_time_period=3000)
     desktopFriendColor = Color(108, 37, 76) # (1218, 1043)
     while myRobot.getPixelColor(1218, 1043) != desktopFriendColor:
         Utilities.fastClick(1037, 653)

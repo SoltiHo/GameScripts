@@ -247,7 +247,7 @@ def setCommand():
     #    doSteal()
     #myRobot.delay(1000)
     #if Utilities.lookAbleToSummon():
-    #    Utilities.summonIfAvailable(3)
+    #    Utilities.summonIfAvailable(2)
     followerAttackOnly()
     myRobot.delay(1000)
     #Utilities.manuallyKickOff()
@@ -639,7 +639,7 @@ def process():
 if __name__ == "__main__":
     #doRemainingBattles(15, 'LeftRight')
     #walkThroughPhaseTwo()
-    doRemainingBattles(50)
+    doRemainingBattles(50) #, direction='LeftRight')
     process()
     #enterMission()
     #setCommand()

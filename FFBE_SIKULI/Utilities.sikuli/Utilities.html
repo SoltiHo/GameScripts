@@ -674,7 +674,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         <span class="kw">print</span> <span class="str">'2nd next  = '</span>, secondNextStepIsDone
 
         <span class="cmt"># Friend</span>
-        noApplyColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (780, 784)</span>
+        noApplyColor = Color(<span class="dig">252</span>, <span class="dig">252</span>, <span class="dig">253</span> ) <span class="cmt"># (780, 784)</span>
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">780</span>, <span class="dig">784</span>) == noApplyColor:
             myRobot.mouseMove(<span class="dig">780</span>, <span class="dig">784</span>)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -758,11 +758,11 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
 <span class="kw">def</span> checkProtectionSettingMenu():
     noColor = Color(<span class="dig">205</span>, <span class="dig">217</span>, <span class="dig">232</span>) <span class="cmt"># (842, 748)</span>
     <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">842</span>, <span class="dig">748</span>) == noColor:
-        Utilities.fastClick(<span class="dig">842</span>,<span class="dig">748</span>)
+        fastClick(<span class="dig">842</span>,<span class="dig">748</span>)
     dailyRewardBoxColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">221</span>) <span class="cmt"># (804, 800)</span>
     getRewardColor = Color(<span class="dig">2</span>, <span class="dig">16</span>, <span class="dig">64</span>) <span class="cmt"># (918, 883)</span>
     <span class="kw">if</span> (myRobot.getPixelColor(<span class="dig">804</span>, <span class="dig">800</span>) == dailyRewardBoxColor) <span class="kw">and</span> (myRobot.getPixelColor(<span class="dig">918</span>, <span class="dig">883</span>) == getRewardColor):
-        Utilities.fastClick(<span class="dig">1223</span>, <span class="dig">149</span>)
+        fastClick(<span class="dig">1223</span>, <span class="dig">149</span>)
 
 <span class="kw">def</span> buyStrength():
     buyStrengthColor = Color(<span class="dig">248</span>, <span class="dig">249</span>, <span class="dig">251</span>) <span class="cmt"># (1135, 541)</span>
@@ -890,7 +890,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> enterBSFFBE():
-    BSFFBEColor = Color(<span class="dig">230</span>,<span class="dig">191</span>,<span class="dig">216</span>) <span class="cmt"># (330, 196)</span>
+    BSFFBEColor = Color(<span class="dig">254</span>, <span class="dig">246</span>, <span class="dig">237</span>) <span class="cmt"># (330, 196)</span>
     waitForColorAndDo(<span class="dig">330</span>, <span class="dig">196</span>, BSFFBEColor,
             func_after_wait=fastClick, arg_after_wait=(<span class="dig">330</span>, <span class="dig">196</span>))
     <span class="kw">print</span> <span class="str">'entered BS FFBE'</span>
@@ -1007,7 +1007,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         myRobot.delay(<span class="dig">2000</span>)
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    targetLocation = Location(<span class="dig">929</span>, <span class="dig">372</span>)
+    targetLocation = Location(<span class="dig">1042</span>, <span class="dig">637</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

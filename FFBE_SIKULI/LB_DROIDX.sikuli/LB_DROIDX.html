@@ -81,14 +81,15 @@
 reload(Utilities)
 myRobot = JRobot()
 
-resetCycleInMin = <span class="dig">1</span>
+resetCycleInMin = <span class="dig">600</span>
 doFightClub = True
-doCoFight = True
+doCoFight = False
 doBonusGame = False
+numBonusGame = <span class="dig">1</span>
 
 <span class="kw">def</span> isStillRunning():
-    FFBEColor = Color(<span class="dig">80</span>, <span class="dig">137</span>, <span class="dig">166</span>) <span class="cmt"># (929, 372)</span>
-    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">929</span>, <span class="dig">372</span>) == FFBEColor:
+    FFBEColor = Color(<span class="dig">190</span>, <span class="dig">180</span>, <span class="dig">180</span>) <span class="cmt"># (1171, 234)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1171</span>, <span class="dig">234</span>) == FFBEColor:
         <span class="kw">return</span> False
     <span class="kw">return</span> True
 
@@ -97,13 +98,17 @@ doBonusGame = False
     <span class="kw">print</span> <span class="str">"recover"</span>
     <span class="cmt">#myRobot.delay(10000)</span>
     <span class="cmt"># first, go back to FFBE</span>
-    Utilities.fastClick(<span class="dig">1169</span>, <span class="dig">200</span>)
+    Utilities.fastClick(<span class="dig">1171</span>, <span class="dig">234</span>)
     myRobot.delay(<span class="dig">5000</span>)
     <span class="cmt"># wait for combat screen</span>
-    combatBackgroundColor = Color(<span class="dig">166</span>, <span class="dig">63</span>, <span class="dig">50</span>) <span class="cmt"># (1126, 161)</span>
+    combatBackgroundColor = Color(<span class="dig">185</span>, <span class="dig">69</span>, <span class="dig">48</span>) <span class="cmt"># (1126, 161)</span>
+    playMissionYesColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (1087, 626)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1126</span>, <span class="dig">161</span>) != combatBackgroundColor:
         Utilities.fastClick(<span class="dig">983</span>, <span class="dig">827</span>)
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1087</span>, <span class="dig">626</span>) == playMissionYesColor:
+            Utilities.fastClick(<span class="dig">1087</span>, <span class="dig">626</span>)
         <span class="kw">print</span> <span class="str">"waiting for combat background"</span>
+
         myRobot.delay(<span class="dig">3000</span>)
 
     <span class="cmt"># pause speedup</span>
@@ -120,7 +125,7 @@ doBonusGame = False
     myRobot.delay(<span class="dig">2000</span>)
 
     <span class="cmt"># click Auto</span>
-    Utilities.fastClick(<span class="dig">768</span>, <span class="dig">996</span>)
+    Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1036</span>)
     Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'recover'</span>, <span class="str">'recover completed'</span>)
 
 <span class="kw">def</span> launchDroidXToDesktop():
@@ -135,19 +140,19 @@ doBonusGame = False
 
     <span class="cmt"># click ignore</span>
     <span class="skw">type</span>(Key.F4, KeyModifier.ALT)
-    myRobot.delay(<span class="dig">3000</span>)
+    myRobot.delay(<span class="dig">60000</span>)
 
     <span class="cmt"># maximize window</span>
     <span class="skw">type</span>(<span class="str">' '</span>, KeyModifier.ALT)
     myRobot.delay(<span class="dig">3000</span>)
     <span class="skw">type</span>(<span class="str">'x'</span>)
-    myRobot.delay(<span class="dig">3000</span>)
+    myRobot.delay(<span class="dig">10000</span>)
     Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'droidX maximized'</span>)
 
 <span class="kw">def</span> loadAutoKey():
     <span class="cmt"># open key auto</span>
-    autoKeyColor = Color(<span class="dig">0</span>, <span class="dig">119</span>, <span class="dig">217</span>) <span class="cmt"># (780, 346)</span>
-    Utilities.waitForColorAndDo(<span class="dig">780</span>, <span class="dig">346</span>, autoKeyColor, wait_time_period=<span class="dig">6000</span>)
+    autoKeyColor = Color(<span class="dig">0</span>, <span class="dig">119</span>, <span class="dig">217</span>) <span class="cmt"># (811, 340)</span>
+    Utilities.waitForColorAndDo(<span class="dig">811</span>, <span class="dig">340</span>, autoKeyColor, wait_time_period=<span class="dig">6000</span>)
     noCategoryColor = Color(<span class="dig">59</span>, <span class="dig">131</span>, <span class="dig">225</span>) <span class="cmt"># (754, 327)</span>
     Utilities.waitForColorAndDo(<span class="dig">754</span>, <span class="dig">327</span>, noCategoryColor, wait_time_period=<span class="dig">4000</span>)
     myScriptColor = Color(<span class="dig">59</span>, <span class="dig">131</span>, <span class="dig">225</span>) <span class="cmt"># (776, 210)</span>
@@ -156,8 +161,8 @@ doBonusGame = False
 
 <span class="kw">def</span> launchFFBEToDesktop():
     <span class="cmt"># launch FFBE</span>
-    FFBEColor = Color(<span class="dig">246</span>, <span class="dig">210</span>, <span class="dig">222</span>) <span class="cmt"># (1175, 207)</span>
-    Utilities.waitForColorAndDo(<span class="dig">1175</span>, <span class="dig">207</span>, FFBEColor, wait_time_period=<span class="dig">3000</span>)
+    FFBEColor = Color(<span class="dig">190</span>, <span class="dig">180</span>, <span class="dig">180</span>) <span class="cmt"># (1171, 234)</span>
+    Utilities.waitForColorAndDo(<span class="dig">1171</span>, <span class="dig">234</span>, FFBEColor, wait_time_period=<span class="dig">3000</span>)
     desktopFriendColor = Color(<span class="dig">108</span>, <span class="dig">37</span>, <span class="dig">76</span>) <span class="cmt"># (1218, 1043)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1218</span>, <span class="dig">1043</span>) != desktopFriendColor:
         Utilities.fastClick(<span class="dig">1037</span>, <span class="dig">653</span>)

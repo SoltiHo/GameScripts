@@ -87,20 +87,29 @@ myRobot = JRobot()
         <span class="kw">return</span> False
 
 <span class="kw">def</span> isOutOfMp():
-    myRobot.delay(<span class="dig">2000</span>)
-    <span class="kw">return</span> <span class="kw">not</span> isAtFrontMenu()
+    outOfMP = True
+    <span class="kw">for</span> waitCount <span class="kw">in</span> range(<span class="dig">0</span>,<span class="dig">4</span>):
+        myRobot.delay(<span class="dig">500</span>)
+        <span class="kw">if</span> isAtFrontMenu():
+            outOfMP = False
+            <span class="kw">break</span>
+    <span class="kw">return</span> outOfMP
 
 <span class="kw">def</span> returnToFrontMenuIfOutOfMP():
     <span class="kw">if</span> isOutOfMp():
         Utilities.fastClick(<span class="dig">1188</span>, <span class="dig">1018</span>) <span class="cmt"># click on return</span>
-    myRobot.delay(<span class="dig">2000</span>)
+        myRobot.delay(<span class="dig">2000</span>)
+        <span class="kw">if</span> <span class="kw">not</span> isAtFrontMenu():
+            <span class="cmt"># double magic, needs 2 return</span>
+            Utilities.fastClick(<span class="dig">1188</span>, <span class="dig">1018</span>) <span class="cmt"># click on return again</span>
+    myRobot.delay(<span class="dig">500</span>)
 
 <span class="kw">def</span> selectUnit1_AttackAll():
     Utilities.openMagicMenu(<span class="dig">1</span>)
     myRobot.delay(<span class="dig">500</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">1027</span>, <span class="dig">928</span>)
-    myRobot.delay(<span class="dig">800</span>)
+    <span class="cmt">#myRobot.delay(800)</span>
     returnToFrontMenuIfOutOfMP()
 
 
@@ -111,7 +120,7 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">500</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">1070</span>, <span class="dig">731</span>)
-    myRobot.delay(<span class="dig">800</span>)
+    <span class="cmt">#myRobot.delay(800)</span>
     returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit3_AttackAll():
@@ -125,7 +134,7 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">700</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">796</span>, <span class="dig">733</span>)
-    myRobot.delay(<span class="dig">800</span>)
+    <span class="cmt">#myRobot.delay(800)</span>
     returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit3_StopMovement():
@@ -139,7 +148,7 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">700</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">751</span>, <span class="dig">824</span>)
-    myRobot.delay(<span class="dig">800</span>)
+    <span class="cmt">#myRobot.delay(800)</span>
     returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit4_deathDance():
@@ -149,7 +158,27 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">700</span>)
     Utilities.fastClick(<span class="dig">788</span>, <span class="dig">920</span>) <span class="cmt"># death dance</span>
 
+<span class="kw">def</span> selectUnit4_light():
+    Utilities.openMagicMenu(<span class="dig">4</span>)
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">700</span>)
+    <span class="cmt"># select the skill</span>
+    Utilities.fastClick(<span class="dig">1033</span>, <span class="dig">814</span>)
+    returnToFrontMenuIfOutOfMP()
 
+<span class="kw">def</span> selectUnit4_storm():
+    Utilities.openMagicMenu(<span class="dig">4</span>)
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">700</span>)
+    <span class="cmt"># select the skill</span>
+    Utilities.fastClick(<span class="dig">1064</span>, <span class="dig">916</span>)
+    returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit4_twoMagic():
     Utilities.openMagicMenu(<span class="dig">4</span>)
@@ -195,20 +224,33 @@ myRobot = JRobot()
 
 <span class="kw">def</span> selectUnit5_stone():
     Utilities.openMagicMenu(<span class="dig">5</span>)
-    myRobot.delay(<span class="dig">700</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">700</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">789</span>, <span class="dig">829</span>)  <span class="cmt"># for stone</span>
     returnToFrontMenuIfOutOfMP()
 
+<span class="kw">def</span> selectUnit5_lightBeam():
+    Utilities.openMagicMenu(<span class="dig">5</span>)
+    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">1000</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">1000</span>)
+    <span class="cmt"># select the skill</span>
+    Utilities.fastClick(<span class="dig">1047</span>, <span class="dig">816</span>)
+    returnToFrontMenuIfOutOfMP()
+
 <span class="kw">def</span> selectUnit5_timeStop():
     Utilities.openMagicMenu(<span class="dig">5</span>)
-    myRobot.delay(<span class="dig">700</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">700</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     Utilities.scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">700</span>)
+    myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># select the skill</span>
     Utilities.fastClick(<span class="dig">1074</span>, <span class="dig">710</span>)  <span class="cmt"># for stone</span>
     returnToFrontMenuIfOutOfMP()
@@ -235,17 +277,20 @@ myRobot = JRobot()
             selectUnit3_StopMovement()
         myRobot.delay(<span class="dig">1000</span>)
     <span class="kw">if</span> Utilities.isUnitAlive(<span class="dig">4</span>):
-        selectUnit4_twoMagic()
+        selectUnit4_storm()
         myRobot.delay(<span class="dig">1000</span>)
     <span class="kw">if</span> Utilities.isUnitAlive(<span class="dig">5</span>):
-        selectUnit5_twoMagic()
+        <span class="kw">if</span> round &lt;= <span class="dig">2</span>:
+            selectUnit5_lightBeam()
+        <span class="kw">else</span>:
+            selectUnit5_timeStop()
         myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> launchAttack():
     Utilities.fastClick(<span class="dig">1065</span>, <span class="dig">830</span>) <span class="cmt"># unit 5</span>
-    <span class="cmt">#myRobot.delay(100)</span>
+    <span class="cmt">#myRobot.delay(1300)</span>
     Utilities.fastClick(<span class="dig">1076</span>, <span class="dig">724</span>) <span class="cmt"># unit 4</span>
-    myRobot.delay(<span class="dig">200</span>)
+    myRobot.delay(<span class="dig">100</span>)
     Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
     myRobot.delay(<span class="dig">300</span>)
     Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3</span>
@@ -364,10 +409,10 @@ myRobot = JRobot()
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#print(isInBattle())</span>
     <span class="cmt">#doOneFight()</span>
-    <span class="cmt">#setCommand(3)</span>
-    <span class="cmt">#myRobot.delay(1000)</span>
-    <span class="cmt">#launchAttack()</span>
     <span class="cmt">#setCommand(1)</span>
+    <span class="cmt">#myRobot.delay(3000)</span>
+    <span class="cmt">#launchAttack()</span>
+    <span class="cmt">#myRobot.delay(10000)</span>
     process()
 </pre>
 </body>
