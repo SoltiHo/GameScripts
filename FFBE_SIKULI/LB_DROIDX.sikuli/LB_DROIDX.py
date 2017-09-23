@@ -9,9 +9,9 @@ import Utilities
 reload(Utilities)
 myRobot = JRobot()
 
-resetCycleInMin = 600
+resetCycleInMin = 120
 doFightClub = True
-doCoFight = False
+doCoFight = True
 doBonusGame = False
 numBonusGame = 1
 
@@ -105,8 +105,8 @@ def changeToRightTeam():
         myRobot.delay(2000)
     myRobot.delay(1000)
 
-    targetUnitColor = Color(240, 227, 212)  # (871, 413)
-    while myRobot.getPixelColor(871, 413) != targetUnitColor:
+    targetUnitColor = Color(11, 57, 37)  # (1023,397)
+    while myRobot.getPixelColor(1023,397) != targetUnitColor:
         Utilities.fastClick(1268, 423)
         myRobot.delay(2000)
         print("waiting for targetUnitColor")
@@ -132,16 +132,16 @@ def gotoMonsterMountain():
     myRobot.delay(3000)
     mouseMove(Location(1189, 406))
     mouseDown(Button.LEFT)
-    mouseMove(-200, 100)
+    mouseMove(-400, 200)
     mouseUp(Button.LEFT)
     myRobot.delay(2000)
     mouseMove(Location(1189, 406))
     mouseDown(Button.LEFT)
-    mouseMove(-200, 100)
+    mouseMove(-400, 200)
     mouseUp(Button.LEFT)
     myRobot.delay(2000)
     firstIslandGroup = "firstIslandGroup.png"
-    firstGroupRegion = Region(941,314,262,239)
+    firstGroupRegion = Region(753,242,456,372)
     firstGroupRegion.click(firstIslandGroup)
     myRobot.delay(5000)
     print("1st island done")
@@ -219,17 +219,17 @@ def kickoff():
     myRobot.delay(3000)
 
 def setupAttackCmd():
-    Utilities.openMagicMenu(2)
+    Utilities.openMagicMenu(3)
     myRobot.delay(2000)
-    scrollMenuDown_fast()
-    myRobot.delay(2000)
-    Utilities.fastClick(782, 818)
+    #scrollMenuDown_fast()
+    #myRobot.delay(2000)
+    Utilities.fastClick(1059, 804)
     myRobot.delay(2000)
     # click AUTO
     Utilities.fastClick(768, 1033)
-    myRobot.delay(1000)
+    myRobot.delay(2000)
     Utilities.fastClick(768, 1033)
-    myRobot.delay(3000)
+    myRobot.delay(1000)
 
 def setupAttackIfWaiting():
     swordColor = Color(147, 138, 124) # (718,674)
@@ -258,9 +258,14 @@ def stopAndFinishTheFight():
 
 def handleMissionEnd():
     # 1st next step
+    def clickAndCheckCommError():
+        commErrorColor = Color(3, 47, 97) # (966, 639)
+        if myRobot.getPixelColor(966, 639) == commErrorColor:
+            Utilities.fastClick(966, 639)
+        Utilities.fastClick(844, 572)
     firstNextStepColor = Color(0, 14, 66) # (956, 956)
     Utilities.waitForColorAndDo(956, 956, firstNextStepColor, 
-            func_while_wait=Utilities.fastClick, arg_while_wait=(844, 572))
+            func_while_wait=clickAndCheckCommError, arg_while_wait=())
     # unit results and 2nd next step
     #starColor = Color(255, 102, 204) # (764, 784)
     #Utilities.waitForColorAndDo(764, 784, starColor, 
@@ -320,7 +325,7 @@ def main():
 def launchLBMissionFromDesktop():
     launchDroidXToDesktop()
     Utilities.log('LBDroidXLog.txt', 'launch', 'arrived Desktop')
-    myRobot.delay(5000)
+    myRobot.delay(30000)
     loadAutoKey()
     Utilities.log('LBDroidXLog.txt', 'launch', 'autokey launched')
     myRobot.delay(5000)
@@ -350,9 +355,11 @@ def terminateAndCloseMission():
 
 def process(minToReset=180):
     global resetCycleInMin
-    resetCycleInMin = minToReset
-    launchLBMissionFromDesktop()
-    myRobot.delay(3000)
+    DroidXBackgroundColor = Color(240, 240, 240) # (378, 863)
+    if myRobot.getPixelColor(378, 863) != DroidXBackgroundColor:
+        resetCycleInMin = minToReset
+        launchLBMissionFromDesktop()
+        myRobot.delay(3000)
     main()
     myRobot.delay(5000)
     terminateAndCloseMission()
@@ -377,7 +384,7 @@ if __name__ == "__main__":
             myRobot.delay(2000)
         if doCoFight:
             Utilities.log('LBDroidXLog.txt', 'reset', 'do co-fight')
-            CoFight.process()
+            CoFight.CoFightRunner.process()
             Utilities.log('LBDroidXLog.txt', 'reset', 'co-fight completed')
             myRobot.delay(2000)
         if doFightClub:

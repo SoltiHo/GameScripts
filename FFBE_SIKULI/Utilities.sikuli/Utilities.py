@@ -713,10 +713,10 @@ def fastClick(x, y):
 def isWaitingForCommand():
     menuColor = Color(255, 255, 255) # 1139, 1034
     waitingForCommandColor1 = Color(6, 51, 120) # (850, 701)
-    waitingForCommandColor2 = Color(6, 53, 124) # (828, 809)
+    waitingForCommandColor2 = Color(6, 52, 123) # (828, 809)
     waitingForCommandColor3 = Color(6, 45, 120) # (821, 921)
     waitingForCommandColor4 = Color(6, 50, 117) # (1155, 700)
-    waitingForCommandColor5 = Color(6, 51, 117) # (1153, 808)
+    waitingForCommandColor5 = Color(6, 50, 116) # (1153, 808)
     is_someone_waiting = (
         (myRobot.getPixelColor(850, 701) == waitingForCommandColor1) or
         (myRobot.getPixelColor(828, 809) == waitingForCommandColor2) or
@@ -934,8 +934,33 @@ def launchBS():
         fastClick(1563, 766)
         myRobot.delay(2000)
 
+def select_defense(unitNum):
+    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - 1])
+    mouseDown(Button.LEFT)
+    mouseMove(0, 100)
+    mouseUp(Button.LEFT)
+    myRobot.delay(1000)
+
+def launchAttackManual():
+    Utilities.fastClick(793, 720) # unit 1
+    myRobot.delay(400)
+    Utilities.fastClick(1029, 935) # unit 6
+
+    myRobot.delay(400)
+    Utilities.fastClick(796, 831) # unit 2
+
+
+def launchAttackManual_Mine():
+    Utilities.fastClick(809, 946) # unit 3  (400)
+    myRobot.delay(300)
+    Utilities.fastClick(793, 720) # unit 1
+    myRobot.delay(2000)
+    Utilities.fastClick(796, 831) # unit 2
+
+
+
 if __name__ == "__main__":
-    targetLocation = Location(1042, 637)
+    targetLocation = Location(975, 799)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

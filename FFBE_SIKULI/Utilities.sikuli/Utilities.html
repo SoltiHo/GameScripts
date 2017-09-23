@@ -785,10 +785,10 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
 <span class="kw">def</span> isWaitingForCommand():
     menuColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># 1139, 1034</span>
     waitingForCommandColor1 = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">120</span>) <span class="cmt"># (850, 701)</span>
-    waitingForCommandColor2 = Color(<span class="dig">6</span>, <span class="dig">53</span>, <span class="dig">124</span>) <span class="cmt"># (828, 809)</span>
+    waitingForCommandColor2 = Color(<span class="dig">6</span>, <span class="dig">52</span>, <span class="dig">123</span>) <span class="cmt"># (828, 809)</span>
     waitingForCommandColor3 = Color(<span class="dig">6</span>, <span class="dig">45</span>, <span class="dig">120</span>) <span class="cmt"># (821, 921)</span>
     waitingForCommandColor4 = Color(<span class="dig">6</span>, <span class="dig">50</span>, <span class="dig">117</span>) <span class="cmt"># (1155, 700)</span>
-    waitingForCommandColor5 = Color(<span class="dig">6</span>, <span class="dig">51</span>, <span class="dig">117</span>) <span class="cmt"># (1153, 808)</span>
+    waitingForCommandColor5 = Color(<span class="dig">6</span>, <span class="dig">50</span>, <span class="dig">116</span>) <span class="cmt"># (1153, 808)</span>
     is_someone_waiting = (
         (myRobot.getPixelColor(<span class="dig">850</span>, <span class="dig">701</span>) == waitingForCommandColor1) <span class="kw">or</span>
         (myRobot.getPixelColor(<span class="dig">828</span>, <span class="dig">809</span>) == waitingForCommandColor2) <span class="kw">or</span>
@@ -1006,8 +1006,33 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         fastClick(<span class="dig">1563</span>, <span class="dig">766</span>)
         myRobot.delay(<span class="dig">2000</span>)
 
+<span class="kw">def</span> select_defense(unitNum):
+    mouseMove(UNIT_CENTER_LOCATIONS[unitNum - <span class="dig">1</span>])
+    mouseDown(Button.LEFT)
+    mouseMove(<span class="dig">0</span>, <span class="dig">100</span>)
+    mouseUp(Button.LEFT)
+    myRobot.delay(<span class="dig">1000</span>)
+
+<span class="kw">def</span> launchAttackManual():
+    Utilities.fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
+    myRobot.delay(<span class="dig">400</span>)
+    Utilities.fastClick(<span class="dig">1029</span>, <span class="dig">935</span>) <span class="cmt"># unit 6</span>
+
+    myRobot.delay(<span class="dig">400</span>)
+    Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
+
+
+<span class="kw">def</span> launchAttackManual_Mine():
+    Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3  (400)</span>
+    myRobot.delay(<span class="dig">300</span>)
+    Utilities.fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
+    myRobot.delay(<span class="dig">2000</span>)
+    Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
+
+
+
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    targetLocation = Location(<span class="dig">1042</span>, <span class="dig">637</span>)
+    targetLocation = Location(<span class="dig">975</span>, <span class="dig">799</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

@@ -81,9 +81,9 @@
 reload(Utilities)
 myRobot = JRobot()
 
-resetCycleInMin = <span class="dig">600</span>
+resetCycleInMin = <span class="dig">120</span>
 doFightClub = True
-doCoFight = False
+doCoFight = True
 doBonusGame = False
 numBonusGame = <span class="dig">1</span>
 
@@ -177,8 +177,8 @@ numBonusGame = <span class="dig">1</span>
         myRobot.delay(<span class="dig">2000</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
-    targetUnitColor = Color(<span class="dig">240</span>, <span class="dig">227</span>, <span class="dig">212</span>)  <span class="cmt"># (871, 413)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">871</span>, <span class="dig">413</span>) != targetUnitColor:
+    targetUnitColor = Color(<span class="dig">11</span>, <span class="dig">57</span>, <span class="dig">37</span>)  <span class="cmt"># (1023,397)</span>
+    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1023</span>,<span class="dig">397</span>) != targetUnitColor:
         Utilities.fastClick(<span class="dig">1268</span>, <span class="dig">423</span>)
         myRobot.delay(<span class="dig">2000</span>)
         <span class="kw">print</span>(<span class="str">"waiting for targetUnitColor"</span>)
@@ -204,16 +204,16 @@ numBonusGame = <span class="dig">1</span>
     myRobot.delay(<span class="dig">3000</span>)
     mouseMove(Location(<span class="dig">1189</span>, <span class="dig">406</span>))
     mouseDown(Button.LEFT)
-    mouseMove(-<span class="dig">200</span>, <span class="dig">100</span>)
+    mouseMove(-<span class="dig">400</span>, <span class="dig">200</span>)
     mouseUp(Button.LEFT)
     myRobot.delay(<span class="dig">2000</span>)
     mouseMove(Location(<span class="dig">1189</span>, <span class="dig">406</span>))
     mouseDown(Button.LEFT)
-    mouseMove(-<span class="dig">200</span>, <span class="dig">100</span>)
+    mouseMove(-<span class="dig">400</span>, <span class="dig">200</span>)
     mouseUp(Button.LEFT)
     myRobot.delay(<span class="dig">2000</span>)
     firstIslandGroup = <img src="firstIslandGroup.png" />
-    firstGroupRegion = Region(<span class="dig">941</span>,<span class="dig">314</span>,<span class="dig">262</span>,<span class="dig">239</span>)
+    firstGroupRegion = Region(<span class="dig">753</span>,<span class="dig">242</span>,<span class="dig">456</span>,<span class="dig">372</span>)
     firstGroupRegion.<span class="skw">click</span>(firstIslandGroup)
     myRobot.delay(<span class="dig">5000</span>)
     <span class="kw">print</span>(<span class="str">"1st island done"</span>)
@@ -291,17 +291,17 @@ numBonusGame = <span class="dig">1</span>
     myRobot.delay(<span class="dig">3000</span>)
 
 <span class="kw">def</span> setupAttackCmd():
-    Utilities.openMagicMenu(<span class="dig">2</span>)
+    Utilities.openMagicMenu(<span class="dig">3</span>)
     myRobot.delay(<span class="dig">2000</span>)
-    scrollMenuDown_fast()
-    myRobot.delay(<span class="dig">2000</span>)
-    Utilities.fastClick(<span class="dig">782</span>, <span class="dig">818</span>)
+    <span class="cmt">#scrollMenuDown_fast()</span>
+    <span class="cmt">#myRobot.delay(2000)</span>
+    Utilities.fastClick(<span class="dig">1059</span>, <span class="dig">804</span>)
     myRobot.delay(<span class="dig">2000</span>)
     <span class="cmt"># click AUTO</span>
     Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1033</span>)
-    myRobot.delay(<span class="dig">1000</span>)
+    myRobot.delay(<span class="dig">2000</span>)
     Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1033</span>)
-    myRobot.delay(<span class="dig">3000</span>)
+    myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> setupAttackIfWaiting():
     swordColor = Color(<span class="dig">147</span>, <span class="dig">138</span>, <span class="dig">124</span>) <span class="cmt"># (718,674)</span>
@@ -330,9 +330,14 @@ numBonusGame = <span class="dig">1</span>
 
 <span class="kw">def</span> handleMissionEnd():
     <span class="cmt"># 1st next step</span>
+    <span class="kw">def</span> clickAndCheckCommError():
+        commErrorColor = Color(<span class="dig">3</span>, <span class="dig">47</span>, <span class="dig">97</span>) <span class="cmt"># (966, 639)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">966</span>, <span class="dig">639</span>) == commErrorColor:
+            Utilities.fastClick(<span class="dig">966</span>, <span class="dig">639</span>)
+        Utilities.fastClick(<span class="dig">844</span>, <span class="dig">572</span>)
     firstNextStepColor = Color(<span class="dig">0</span>, <span class="dig">14</span>, <span class="dig">66</span>) <span class="cmt"># (956, 956)</span>
     Utilities.waitForColorAndDo(<span class="dig">956</span>, <span class="dig">956</span>, firstNextStepColor,
-            func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">844</span>, <span class="dig">572</span>))
+            func_while_wait=clickAndCheckCommError, arg_while_wait=())
     <span class="cmt"># unit results and 2nd next step</span>
     <span class="cmt">#starColor = Color(255, 102, 204) # (764, 784)</span>
     <span class="cmt">#Utilities.waitForColorAndDo(764, 784, starColor, </span>
@@ -392,7 +397,7 @@ numBonusGame = <span class="dig">1</span>
 <span class="kw">def</span> launchLBMissionFromDesktop():
     launchDroidXToDesktop()
     Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'arrived Desktop'</span>)
-    myRobot.delay(<span class="dig">5000</span>)
+    myRobot.delay(<span class="dig">30000</span>)
     loadAutoKey()
     Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'autokey launched'</span>)
     myRobot.delay(<span class="dig">5000</span>)
@@ -422,9 +427,11 @@ numBonusGame = <span class="dig">1</span>
 
 <span class="kw">def</span> process(minToReset=<span class="dig">180</span>):
     <span class="kw">global</span> resetCycleInMin
-    resetCycleInMin = minToReset
-    launchLBMissionFromDesktop()
-    myRobot.delay(<span class="dig">3000</span>)
+    DroidXBackgroundColor = Color(<span class="dig">240</span>, <span class="dig">240</span>, <span class="dig">240</span>) <span class="cmt"># (378, 863)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">378</span>, <span class="dig">863</span>) != DroidXBackgroundColor:
+        resetCycleInMin = minToReset
+        launchLBMissionFromDesktop()
+        myRobot.delay(<span class="dig">3000</span>)
     main()
     myRobot.delay(<span class="dig">5000</span>)
     terminateAndCloseMission()
@@ -449,7 +456,7 @@ numBonusGame = <span class="dig">1</span>
             myRobot.delay(<span class="dig">2000</span>)
         <span class="kw">if</span> doCoFight:
             Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'reset'</span>, <span class="str">'do co-fight'</span>)
-            CoFight.process()
+            CoFight.CoFightRunner.process()
             Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'reset'</span>, <span class="str">'co-fight completed'</span>)
             myRobot.delay(<span class="dig">2000</span>)
         <span class="kw">if</span> doFightClub:

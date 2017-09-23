@@ -8,11 +8,12 @@ selectFollower = True
 start_phase = 1 # 0: beginning, 1: phase 1, 2: phase 2
 STEP_WAIT = 400
 buyStrength = True
-
+toSummon = False
+summonIdx = 2
 num_LB_used = [0, 0, 0, 0, 0]
 num_summon = 0
 num_round = 0
-alwaysSteal = True
+alwaysSteal = False
 def revive(unitNum):
     # must use thunder summon
     # open healer menu
@@ -193,9 +194,9 @@ def reviveAndCure():
 def doSteal():
     if not Utilities.lookHavingLB(5):
         Utilities.openMagicMenu(5)
-        myRobot.delay(500)
-        Utilities.fastClick(745, 819)
-    myRobot.delay(500)
+        myRobot.delay(1000)
+        Utilities.fastClick(1084, 928)
+    myRobot.delay(1000)
 
 def followerAttackOnly():
     mouseMove(Utilities.UNIT_CENTER_LOCATIONS[5])
@@ -243,11 +244,11 @@ def setCommand():
     #        Utilities.log('FireTempleLog.txt', 'LB_log', 'check but no Summon')
     #    myRobot.delay(1000)
 
-    #if alwaysSteal or num_round == 1:
-    #    doSteal()
-    #myRobot.delay(1000)
-    #if Utilities.lookAbleToSummon():
-    #    Utilities.summonIfAvailable(2)
+    if num_round == 1:
+        doSteal()
+    myRobot.delay(1000)
+    if toSummon and Utilities.lookAbleToSummon():
+        Utilities.summonIfAvailable(summonIdx)
     followerAttackOnly()
     myRobot.delay(1000)
     #Utilities.manuallyKickOff()
@@ -569,7 +570,7 @@ def walkThroughPhaseTwo():
     global alwaysSteal
     alwaysSteal = False
     doBattle()
-    alwaysSteal = True
+    alwaysSteal = False
     myRobot.delay(2000)
 
     # exit

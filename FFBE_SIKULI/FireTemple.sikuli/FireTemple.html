@@ -80,11 +80,12 @@ selectFollower = True
 start_phase = <span class="dig">1</span> <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
 STEP_WAIT = <span class="dig">400</span>
 buyStrength = True
-
+toSummon = False
+summonIdx = <span class="dig">2</span>
 num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
 num_summon = <span class="dig">0</span>
 num_round = <span class="dig">0</span>
-alwaysSteal = True
+alwaysSteal = False
 <span class="kw">def</span> revive(unitNum):
     <span class="cmt"># must use thunder summon</span>
     <span class="cmt"># open healer menu</span>
@@ -265,9 +266,9 @@ alwaysSteal = True
 <span class="kw">def</span> doSteal():
     <span class="kw">if</span> <span class="kw">not</span> Utilities.lookHavingLB(<span class="dig">5</span>):
         Utilities.openMagicMenu(<span class="dig">5</span>)
-        myRobot.delay(<span class="dig">500</span>)
-        Utilities.fastClick(<span class="dig">745</span>, <span class="dig">819</span>)
-    myRobot.delay(<span class="dig">500</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">1084</span>, <span class="dig">928</span>)
+    myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> followerAttackOnly():
     mouseMove(Utilities.UNIT_CENTER_LOCATIONS[<span class="dig">5</span>])
@@ -315,11 +316,11 @@ alwaysSteal = True
     <span class="cmt">#        Utilities.log('FireTempleLog.txt', 'LB_log', 'check but no Summon')</span>
     <span class="cmt">#    myRobot.delay(1000)</span>
 
-    <span class="cmt">#if alwaysSteal or num_round == 1:</span>
-    <span class="cmt">#    doSteal()</span>
-    <span class="cmt">#myRobot.delay(1000)</span>
-    <span class="cmt">#if Utilities.lookAbleToSummon():</span>
-    <span class="cmt">#    Utilities.summonIfAvailable(2)</span>
+    <span class="kw">if</span> num_round == <span class="dig">1</span>:
+        doSteal()
+    myRobot.delay(<span class="dig">1000</span>)
+    <span class="kw">if</span> toSummon <span class="kw">and</span> Utilities.lookAbleToSummon():
+        Utilities.summonIfAvailable(summonIdx)
     followerAttackOnly()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt">#Utilities.manuallyKickOff()</span>
@@ -641,7 +642,7 @@ alwaysSteal = True
     <span class="kw">global</span> alwaysSteal
     alwaysSteal = False
     doBattle()
-    alwaysSteal = True
+    alwaysSteal = False
     myRobot.delay(<span class="dig">2000</span>)
 
     <span class="cmt"># exit</span>
