@@ -5,19 +5,27 @@ import Utilities
 import BonusGame
 import FightClub
 import CoFight
+import Expedition
 from sikuli import *
 reload(Utilities)
 
 myRobot = JRobot()
 selectFollower = True
-setFilter = False
+
+setFilter = True
+sList = []
+eqList = [13,14,15,16,17,18,21,22,23,24,26,27,28,32,38]
+genList = []
+
 buyStrength = True
 resetPeriod = 100
-doBonusGame = False
-numBonusGame = 4
+doBonusGame = True
+numBonusGame = 5
 doFightClub = True
-doCoFight = True
+doCoFight = False
+doExpedition = True
 
+targetTeamColor = {'color': Color(144, 41, 46), 'x': 1162, 'y': 401}
 
 def selectFollowerAndLaunch():
     while True:
@@ -73,6 +81,35 @@ def steal():
     myRobot.delay(700)
     Utilities.fastClick(820, 918)
     myRobot.delay(700)
+    
+def isNewCommError():
+    OColor = Color(255, 255, 255) # (942,592)
+    boardColor = Color(0, 15, 52) # (1134,534)
+    backgroundColor = Color(0, 0, 0) # (1072,323)
+    isCommError = myRobot.getPixelColor(942,592) == OColor and \
+            myRobot.getPixelColor(1134,534) == boardColor and \
+            myRobot.getPixelColor(1072,323) == backgroundColor
+    return isCommError
+    
+def handleNewCommError():
+    if not isNewCommError():
+        return
+    # click OK
+    Utilities.fastClick(942,592)
+    myRobot.delay(3000)
+    
+    # now handle the error
+    while not Utilities.isWaitingForCommand():
+        Utilities.fastClick(1105, 612) # click continue the fight
+        myRobot.delay(1000)
+    myRobot.delay(1000)
+    while Utilities.isWaitingForCommand():
+        Utilities.fastClick(806, 724)
+        Utilities.fastClick(812, 837)
+        myRobot.delay(500)
+    myRobot.delay(1000)
+    
+        
 
 def doBattles():
     nextStepColor = Color(0, 40, 117) # (958, 943)
@@ -100,22 +137,27 @@ def doBattles():
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         Utilities.handleCommunicationError()
         Utilities.handleFollowerError()
+        handleNewCommError()
 
     def checkAndRestartBSFFBE():
-        BSFFBEColor = Color(230,191,216) # (330, 196)
+        BSFFBEColor = Color(254, 246, 237) # (330, 196)
         if myRobot.getPixelColor(330, 196) == BSFFBEColor:
             Utilities.fastClick(330, 196)
             myRobot.delay(5000)
             menuColor = Color(0, 17, 51) # (1150, 1032)
+            continueFightColor = Color(243,245,250) # (1070,600)
             while myRobot.getPixelColor(1150, 1032) != menuColor:
                 blackColor = Color(0, 0, 0)
                 if myRobot.getPixelColor(353, 220) == blackColor:
                     Utilities.fastClick(998, 242)
                 if myRobot.getPixelColor(330, 196) == BSFFBEColor:
                     Utilities.fastClick(330, 196)
+                if myRobot.getPixelColor(1070,600) == continueFightColor:
+                    Utilities.fastClick(1070,600)
                 myRobot.delay(500)
+                
             myRobot.delay(3000)
-            Utilities.log('RestartLog.txt', 'Restart', 'Restarted BS FFBE')
+            Utilities.log('CrashRecoverLog.txt', 'Restart', 'Restarted BS FFBE')
 
     Utilities.waitForColorAndDo(958, 943, nextStepColor, 
             func_while_wait=attack,
@@ -226,7 +268,10 @@ def main():
         if count == 0:
             start = time.time()
             if setFilter:
-                setFollowerFilter()
+                missionX=721
+                missionY=687
+                missionColor = Color(30,1,1)
+                Utilities.setFollowerFilter(missionX,missionY,missionColor,sList,eqList,genList)
         count += 1
         executeOneRound()
         #if count % 10 == 0:
@@ -264,6 +309,11 @@ def main():
                 Utilities.log('FastTrustLog.csv', 'reset', 'do co-fight')
                 CoFight.CoFightRunner.process()
                 Utilities.log('FastTrustLog.csv', 'reset', 'co-fight completed')
+                myRobot.delay(2000)
+            if doExpedition:
+                Utilities.log('FastTrustLog.csv', 'reset', 'do expedition')
+                Expedition.ExpeditionRunner.process()
+                Utilities.log('FastTrustLog.csv', 'reset', 'expedition completed')
                 myRobot.delay(2000)
             Utilities.log('FastTrustLog.csv', 'reset', 'restart BS and the mission')
             restartBSandTheMission()
@@ -325,312 +375,14 @@ def restartBSandTheMission():
     myRobot.delay(1000)
     Utilities.waitForBSFFBEDesktop()
     myRobot.delay(2000)
-    changeToRightTeam()
+    Utilities.changeToRightTeam(
+            targetTeamColor['x'],
+            targetTeamColor['y'],
+            targetTeamColor['color'])
     myRobot.delay(2000)
     goToEarthTemple()
     myRobot.delay(1000)
     Utilities.log('RestartLog.txt', 'Restart', 'Restart the whole BS')
-
-def changeToRightTeam():
-    # select team
-    strengthenColor = Color(246, 66, 15) # 701,851
-    print("finding strengthen color")
-    while myRobot.getPixelColor(701,851) != strengthenColor:
-        Utilities.fastClick(808, 1021)
-        myRobot.delay(2000)
-    myRobot.delay(1000)
-
-    print("finding waterAxeColor color")
-    waterAxeColor = Color(97, 75, 75)  # (1194,417)
-    while myRobot.getPixelColor(1194,417) != waterAxeColor:
-        Utilities.fastClick(1254, 408)
-        BonusGame.BonusGame.checkProtectionSettingMenu()
-        myRobot.delay(2000)
-    myRobot.delay(1000)
-
-    # back to front pag
-    print("finding letter color")
-    letterColor = Color(180, 113, 99) # (1150, 175)
-    while myRobot.getPixelColor(1150, 175) != letterColor:
-        Utilities.fastClick(707, 1013)
-        myRobot.delay(3000)
-    myRobot.delay(1000)
-    print("leaving chang team")
-
-def setFollowerFilter():
-    fastMissionColor = Color(99, 4, 7) # (703, 672)
-    Utilities.waitForColorAndDo(703, 672, fastMissionColor, 
-            func_while_wait=Utilities.fastClick, arg_while_wait=(929, 160))
-
-    # wait for mission dismiss color and buy strength if necessary
-    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
-    if buyStrength:
-        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
-                func_while_wait=Utilities.buyStrength)
-    else:
-        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor)
-
-    # click filter
-    followerColor = Color(143, 89, 48) # (1015,223) 
-    Utilities.waitForColorAndDo(1015, 223, followerColor, 
-            func_after_wait=Utilities.fastClick, arg_after_wait=(1094, 233))
-    myRobot.delay(1000)
-
-    # choose Filtering
-    Utilities.fastClick(1072, 86)
-    myRobot.delay(1000)
-    
-    # clear everything
-    Utilities.fastClick(740, 1024)
-    myRobot.delay(1000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-
-    # select preferred weapons
-    #Utilities.fastClick(702, 543) # 1st row
-    #myRobot.delay(500)
-    #Utilities.fastClick(778, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(925, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(999, 545)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1071, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1140, 548)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1214, 545)
-    #myRobot.delay(500)
-    #Utilities.fastClick(702, 623) # 2nd row
-    #myRobot.delay(500)
-    #Utilities.fastClick(778, 623)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 623)
-    #myRobot.delay(500)
-    #Utilities.fastClick(925, 622)
-    #myRobot.delay(500)
-    #Utilities.fastClick(995, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1066, 619)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1135, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1213, 627)
-    #myRobot.delay(500)
-    #Utilities.fastClick(710, 700) # 3rd row
-    #myRobot.delay(500)
-    #Utilities.fastClick(779, 698)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 698)
-    #myRobot.delay(500)
-    #Utilities.fastClick(927, 697)
-    #myRobot.delay(500)
-    #Utilities.fastClick(995, 697)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1066, 695)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1143, 695)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1213, 693)
-    #myRobot.delay(1000)
-
-    # select generation
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    
-    Utilities.fastClick(721, 624) # 1st row, FFBE
-    myRobot.delay(500)
-    Utilities.fastClick(814, 624) # FFI
-    myRobot.delay(500)
-    Utilities.fastClick(907, 624)
-    myRobot.delay(500)
-    #Utilities.fastClick(1000, 624)
-    #myRobot.delay(500)
-    Utilities.fastClick(1093, 624)
-    myRobot.delay(500)
-    Utilities.fastClick(1186, 624)
-    myRobot.delay(500)
-    Utilities.fastClick(721, 699) # 2nd row, FFVI
-    myRobot.delay(500)
-    Utilities.fastClick(814, 699)
-    myRobot.delay(500)
-    Utilities.fastClick(907, 699)
-    myRobot.delay(500)
-    Utilities.fastClick(1000, 699)
-    myRobot.delay(500)
-    Utilities.fastClick(1093, 699)
-    myRobot.delay(500)
-    Utilities.fastClick(1186, 699)
-    myRobot.delay(500)
-    Utilities.fastClick(721, 774) # 3rd row, FFXIV
-    myRobot.delay(500)
-    Utilities.fastClick(814, 774)
-    myRobot.delay(500)
-    Utilities.fastClick(907, 774)  # FFT
-    myRobot.delay(500)
-    Utilities.fastClick(1000, 774)
-    myRobot.delay(500)
-    Utilities.fastClick(767, 918)  # sepcial row, ANOTHER
-    myRobot.delay(500)
-
-    # click confirm
-    Utilities.fastClick(958, 1008)
-    myRobot.delay(2000)
-
-    def clickReturnAndWait():
-        Utilities.fastClick(709,221)
-        myRobot.delay(1000)
-
-    # click two return
-    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, wait_time_period=2000,
-            func_while_wait=clickReturnAndWait,
-            func_after_wait=clickReturnAndWait)
-    myRobot.delay(1000)                
-
-def setFollowerFilterSpecial():
-    fastMissionColor = Color(99, 4, 7) # (703, 672)
-    Utilities.waitForColorAndDo(703, 672, fastMissionColor, 
-            func_while_wait=Utilities.fastClick, arg_while_wait=(929, 160))
-
-    # wait for mission dismiss color and buy strength if necessary
-    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
-    if buyStrength:
-        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor,
-                func_while_wait=Utilities.buyStrength)
-    else:
-        Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor)
-
-    # click filter
-    followerColor = Color(143, 89, 48) # (1015,223) 
-    Utilities.waitForColorAndDo(1015, 223, followerColor, 
-            func_after_wait=Utilities.fastClick, arg_after_wait=(1094, 233))
-    myRobot.delay(1000)
-
-    # choose Filtering
-    Utilities.fastClick(1072, 86)
-    myRobot.delay(1000)
-    
-    # clear everything
-    Utilities.fastClick(740, 1024)
-    myRobot.delay(1000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-
-    # select preferred weapons
-    #Utilities.fastClick(702, 543) # 1st row
-    #myRobot.delay(500)
-    #Utilities.fastClick(778, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 543)
-    #smyRobot.delay(500)
-    #Utilities.fastClick(925, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(999, 545)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1071, 543)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1140, 548)
-    #myRobot.delay(500)
-    Utilities.fastClick(1214, 545)
-    myRobot.delay(500)
-    #Utilities.fastClick(702, 623) # 2nd row
-    #myRobot.delay(500)
-    #Utilities.fastClick(778, 623)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 623)
-    #myRobot.delay(500)
-    #Utilities.fastClick(925, 622)
-    #myRobot.delay(500)
-    #Utilities.fastClick(995, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1066, 619)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1135, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1213, 627)
-    #myRobot.delay(500)
-    #Utilities.fastClick(710, 700) # 3rd row
-    #myRobot.delay(500)
-    #Utilities.fastClick(779, 698)
-    #myRobot.delay(500)
-    #Utilities.fastClick(854, 698)
-    #myRobot.delay(500)
-    #Utilities.fastClick(927, 697)
-    #myRobot.delay(500)
-    #Utilities.fastClick(995, 697)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1143, 695)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1213, 693)
-    #myRobot.delay(1000)    
-    
-    # select green magic
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    Utilities.fastClick(1141, 842)
-    myRobot.delay(500) 
-
-    # select generation 
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    Utilities.scrollMenuDown_fast()
-    myRobot.delay(1000)
-    
-    #Utilities.fastClick(721, 624) # 1st row, FFBE
-    #myRobot.delay(500)
-    #Utilities.fastClick(814, 624) # FFI
-    #myRobot.delay(500)
-    #Utilities.fastClick(907, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1000, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1093, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1186, 624)
-    #myRobot.delay(500)
-    #Utilities.fastClick(721, 699) # 2nd row, FFVI
-    #myRobot.delay(500)
-    #Utilities.fastClick(814, 699)
-    #myRobot.delay(500)
-    #Utilities.fastClick(907, 699)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1000, 699)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1093, 699)
-    #myRobot.delay(500)
-    #Utilities.fastClick(1186, 699)
-    #myRobot.delay(500)
-    #Utilities.fastClick(721, 774) # 3rd row, FFXIV
-    #myRobot.delay(500)
-    #Utilities.fastClick(814, 774)
-    #myRobot.delay(500)
-    Utilities.fastClick(907, 774)  # FFT
-    myRobot.delay(500)
-    #Utilities.fastClick(1000, 774)
-    #myRobot.delay(500)
-    #Utilities.fastClick(767, 918)  # sepcial row, ANOTHER
-    #myRobot.delay(500)
-
-    # click confirm
-    Utilities.fastClick(958, 1008)
-    myRobot.delay(2000)
-
-    def clickReturnAndWait():
-        Utilities.fastClick(709,221)
-        myRobot.delay(1000)
-
-    # click two return
-    Utilities.waitForColorAndDo(954, 923, missionDescNextStepColor, wait_time_period=2000,
-            func_while_wait=clickReturnAndWait,
-            func_after_wait=clickReturnAndWait)
-    myRobot.delay(1000)                
-
 
 
 if __name__ == "__main__":
@@ -644,7 +396,10 @@ if __name__ == "__main__":
         Utilities.waitForBSFFBEDesktop()
         print("after initial desktop")
         myRobot.delay(1000)
-        changeToRightTeam()
+        Utilities.changeToRightTeam(
+                targetTeamColor['x'],
+                targetTeamColor['y'],
+                targetTeamColor['color'])
         print("after change to right teima")
         myRobot.delay(2000)
         goToEarthTemple()

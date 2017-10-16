@@ -66,6 +66,9 @@ def isBloodLowerThanHalf(unitNum): #unitNum is 1 based
         #print "unit ", unitNum, " is fine"
         return False
 
+def launch(unitNum):
+    fastClick(UNIT_CENTER_LOCATIONS[unitNum - 1].getX(), UNIT_CENTER_LOCATIONS[unitNum - 1].getY())
+
 def defense(unitNum): #unitNum is 1 based
     center_x = UNIT_CENTER_LOCATIONS[unitNum - 1].getX()
     center_y = UNIT_CENTER_LOCATIONS[unitNum - 1].getY()
@@ -480,7 +483,7 @@ def isInBattle():
         return False
     else:
         myRobot.delay(500)
-        if myRobot.getPixelColor(1231, 998) == inBattleColor:
+        if not myRobot.getPixelColor(1231, 998) == inBattleColor:
             return False
         return True
 
@@ -595,14 +598,15 @@ def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(249, 219, 
         secondNextStepColor = Color(249, 250, 252)
         if (not secondNextStepIsDone) and myRobot.getPixelColor(938,939) == secondNextStepColor:
             print '2nd next step click'
+            waitForColorAndDo(938,939,secondNextStepColor)
             secondNextStepIsDone = True
-            myRobot.mouseMove(959, 940)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            #myRobot.mouseMove(959, 940)
+            #myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            #myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
         print '2nd next  = ', secondNextStepIsDone
 
         # Friend
-        noApplyColor = Color(252, 252, 253 ) # (780, 784)
+        noApplyColor = Color(255, 255, 255 ) # (780, 784)
         if myRobot.getPixelColor(780, 784) == noApplyColor:
             myRobot.mouseMove(780, 784)
             myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -809,6 +813,7 @@ def closeBSFFBE():
     FFBETopColor = Color(226, 176, 156) # (202, 10)
     waitForColorAndDo(202, 10, FFBETopColor,
             func_after_wait=fastClick, arg_after_wait=(310, 10))
+    myRobot.mouseMove(327, 205)
     print 'BS FFBE closed'
 
 
@@ -823,12 +828,25 @@ def enterBSFFBE():
             func_after_wait=fastClick, arg_after_wait=(330, 196))
     print 'entered BS FFBE'
 
+def reopenBSFFBE():
+    closeBSFFBE()
+    myRobot.delay(10)
+    enterBSFFBE()
+    myRobot.delay(5)
+    log('RestartLog.txt', 'Restart', 'Black screen, reopen FFBE.')
+    
+
 def waitForBSFFBEDesktop():
     print 'waiting for FFBE Desktop'
     friendColor = Color(255,216,255) # (1189, 1025)
+    wait_count = 0
     while myRobot.getPixelColor(1189,1025) != friendColor:
         fastClick(995, 639)
         myRobot.delay(1000)
+        wait_count += 1
+        if wait_count == 40:
+            wait_count = 0
+            reopenBSFFBE()
     print 'saw BS FFBE Desktop'
 
 def waitForDuOSFFBEMissionEnd():
@@ -942,29 +960,275 @@ def select_defense(unitNum):
     myRobot.delay(1000)
 
 def launchAttackManual():
-    Utilities.fastClick(793, 720) # unit 1
+    fastClick(793, 720) # unit 1
     myRobot.delay(400)
-    Utilities.fastClick(1029, 935) # unit 6
+    fastClick(1029, 935) # unit 6
 
     myRobot.delay(400)
-    Utilities.fastClick(796, 831) # unit 2
+    fastClick(796, 831) # unit 2
 
 
 def launchAttackManual_Mine():
-    Utilities.fastClick(809, 946) # unit 3  (400)
+    fastClick(809, 946) # unit 3  (400)
     myRobot.delay(300)
-    Utilities.fastClick(793, 720) # unit 1
+    fastClick(793, 720) # unit 1
     myRobot.delay(2000)
-    Utilities.fastClick(796, 831) # unit 2
+    fastClick(796, 831) # unit 2
+
+def changeToRightTeam(targetX, targetY, targetColor):
+    # select team
+    strengthenColor = Color(246, 66, 15) # 701,851
+    while myRobot.getPixelColor(701,851) != strengthenColor:
+        fastClick(808, 1021)
+        checkProtectionSettingMenu()
+        myRobot.delay(2000)
+    myRobot.delay(1000)
+
+    while myRobot.getPixelColor(targetX,targetY) != targetColor:
+        fastClick(1254, 408)
+        myRobot.delay(2000)
+        print("waiting for targetUnitColor")
+    myRobot.delay(1000)
+
+    # back to front page
+    letterColor = Color(161,86,78) # (1150,175)
+    while myRobot.getPixelColor(1150, 175) != letterColor:
+        fastClick(707, 1013)
+        print("waiting for letter color, ", myRobot.getPixelColor(1150, 175))
+        myRobot.delay(3000)
+    myRobot.delay(1000)
+
+def goToMissionMenu(bannerRegion, bannerImage, missionX, missionY, missionColor):
+    rewardExchangeColor = Color(110, 84, 63) # (1212, 89)
+    while myRobot.getPixelColor(1212, 89) != rewardExchangeColor:
+        fastClick(822, 514)
+        myRobot.delay(3000)
+
+    bannerRegion.click(bannerImage)
+    myRobot.delay(1000)
+    
+    waitForColor(missionX, missionY, missionColor, 'waitting for mission color')
+    myRobot.delay(1000)
 
 
+def enterMission(targetMissionX, targetMissionY, targetMissionColor, toBuyStrength=True):
+    waitForColorAndDo(targetMissionX, targetMissionY, targetMissionColor,
+            func_while_wait=fastClick, arg_while_wait=(929, 160))
 
+    # wait for mission dismiss color and buy strength if necessary
+    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
+
+    # must buy strength
+    if toBuyStrength:
+        waitForColorAndDo(954, 923, missionDescNextStepColor,
+                func_while_wait=buyStrength)
+    else:
+        waitForColorAndDo(954, 923, missionDescNextStepColor)
+
+    # select follower
+    followerColor = Color(143,89,48) # (1015,223)    
+    # must select Follower
+    waitForColorAndDo(1015, 223, followerColor, 
+            func_after_wait=fastClick, arg_after_wait=(810, 404))
+
+    launchColor = Color(0, 43, 68)  # (913,951)
+    waitForColorAndDo(913, 951, launchColor)
+
+    # wait for MENU in battle
+    menuColor = Color(0, 50, 130) # (1148, 1022)
+    while myRobot.getPixelColor(1148, 1022) != menuColor:
+        handleCommunicationError()
+        myRobot.delay(1000)
+
+def setFollowerFilter(missionX, missionY, missionColor, starList, equipmentList, generationList, butStrength=True):
+    waitForColorAndDo(missionX, missionY, missionColor)
+
+    # wait for mission dismiss color and buy strength if necessary
+    missionDescNextStepColor = Color(0, 92, 201) # (954, 923)
+    if buyStrength:
+        waitForColorAndDo(954, 923, missionDescNextStepColor,
+                func_while_wait=buyStrength)
+    else:
+        waitForColorAndDo(954, 923, missionDescNextStepColor)
+
+    # click filter
+    followerColor = Color(143, 89, 48) # (1015,223) 
+    waitForColorAndDo(1015, 223, followerColor, 
+            func_after_wait=fastClick, arg_after_wait=(1094, 233))
+    myRobot.delay(1000)
+
+    # choose Filtering
+    fastClick(1072, 86)
+    myRobot.delay(1000)
+    
+    # clear everything
+    fastClick(740, 1024)
+    myRobot.delay(1000)
+
+    # select Star first
+    # choose equipments
+    StarPositionDict = {
+            1:(733, 214),
+            2:(850, 214),
+            3:(962, 214),
+            4:(1079, 214),
+            5:(1192, 214),
+            6:(733, 308),      
+    }
+    for s in starList:
+        fastClick(StarPositionDict[s][0], StarPositionDict[s][1])
+        myRobot.delay(500)
+    myRobot.delay(1000)
+    
+    # move to equipment menu
+    scrollMenuDown_fast()
+    myRobot.delay(1000)
+    scrollMenuDown_fast()
+    myRobot.delay(1000)
+
+    # choose equipments
+    EquipmentPositionDict = {
+            11:(708, 425),
+            12:(781, 425),
+            13:(850, 425),
+            14:(925, 425),
+            15:(993, 425),
+            16:(1067, 425),
+            17:(1138, 425),
+            18:(1211, 425),
+            21:(708, 500),
+            22:(781, 500),
+            23:(850, 500),
+            24:(925, 500),
+            25:(993, 500),
+            26:(1067, 500),
+            27:(1138, 500),
+            28:(1211, 500),
+            31:(708, 575),
+            32:(781, 575),
+            33:(850, 575),
+            34:(925, 575),
+            35:(993, 575),
+            36:(1067, 575),
+            37:(1138, 575),
+            38:(1211, 575),      
+    }
+    for equi in equipmentList:
+        fastClick(EquipmentPositionDict[equi][0], EquipmentPositionDict[equi][1])
+        myRobot.delay(500)
+    myRobot.delay(1000)
+    
+    if len(generationList) > 0:
+        # select generation
+        scrollMenuDown_fast()
+        myRobot.delay(1000)
+        scrollMenuDown_fast()
+        myRobot.delay(1000)
+    
+        GenerationPositionDict = {
+                'BE':(718, 690),
+                1:(813, 690),
+                2:(904, 690),
+                3:(997, 690),
+                4:(1087, 690),
+                5:(1185, 690),
+                6:(718, 763),
+                7:(813, 763),
+                9:(904, 763),
+                10:(997, 763),
+                11:(1087, 763),
+                12:(1185, 763),
+                13:(718, 836),
+                14:(813, 836),
+                15:(904, 836),
+                'T':(997, 836),
+                0:(1087, 836),
+                'ANOTHER':(763, 922)
+        }
+        for gen in generationList:
+            fastClick(GenerationPositionDict[gen][0], GenerationPositionDict[gen][1])
+            myRobot.delay(500)
+        myRobot.delay(1000)
+
+    # return to mission
+    filteredColor = Color(72, 8, 15) # (1086,233)
+    waitForColorAndDo(1086,233, filteredColor,
+            func_while_wait=fastClick, arg_while_wait=(956, 1024),
+            func_after_wait=fastClick, arg_after_wait=(721, 216),
+            wait_time_period=1000)
+    myRobot.delay(1000)
+
+    waitForColorAndDo(954, 923, missionDescNextStepColor,
+            func_after_wait=fastClick, arg_after_wait=(721, 216),
+            wait_time_period=1000)
+    myRobot.delay(1000)
+    
+    waitForColor(missionX, missionY, missionColor, 'mission color')
+
+def AttackOnly(unitNum):
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[unitNum - 1])
+    mouseDown(Button.LEFT)
+    mouseMove(0, 100)
+    mouseUp(Button.LEFT)
+    myRobot.delay(500)
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[unitNum - 1])
+    mouseDown(Button.LEFT)
+    mouseMove(0, -100)
+    mouseUp(Button.LEFT)
+
+def Defense(unitNum):
+    mouseMove(Utilities.UNIT_CENTER_LOCATIONS[unitNum - 1])
+    mouseDown(Button.LEFT)
+    mouseMove(0, 100)
+    mouseUp(Button.LEFT)
+
+def scrollMenuDownN(numPage):
+    while numPage > 0:
+        scrollMenuDown_fast()
+        myRobot.delay(1000)
+        numPage -= 1
+
+def scrollMenuUpN(numPage):
+    while numPage > 0:
+        scrollMenuUp_fast()
+        myRobot.delay(1000)
+        numPage -= 1
+        
+def moveMenuPage(moveNum):
+    if moveNum > 0:
+        scrollMenuDownN(moveNum)
+    else:
+        scrollMenuUpN(-moveNum)
+
+def setCommand(unitNum, clickList):
+    openMagicMenu(unitNum)
+    myRobot.delay(1000)
+    for item in clickList:
+        moveMenuPage(item['move'])
+        fastClick(item['pos'][0], item['pos'][1])
+        myRobot.delay(1000)
+    myRobot.delay(1500)
+
+def findSkill(skillImage):
+    skillRegion = Region(666,669,387,306)
+    pageCount = 0
+    while skillRegion.exists(Pattern(skillImage).similar(0.9)) is None:
+        scrollMenuDownN(1)
+        pageCount += 1
+        myRobot.delay(1000)
+        if pageCount == 10:
+            print("can't find the skill")
+            exit(1)
+    skillRegion.click(Pattern(skillImage).similar(0.9))
+    myRobot.delay(1000)
+
+    
 if __name__ == "__main__":
-    targetLocation = Location(975, 799)
+    targetLocation = Location(1162, 401)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
     myRobot.delay(3000)
-    
+
     #wait(3)
   

@@ -8,8 +8,8 @@ selectFollower = True
 start_phase = 1 # 0: beginning, 1: phase 1, 2: phase 2
 STEP_WAIT = 400
 buyStrength = True
-toSummon = False
-summonIdx = 2
+toSummon = True
+summonIdx = 5
 num_LB_used = [0, 0, 0, 0, 0]
 num_summon = 0
 num_round = 0
@@ -195,7 +195,7 @@ def doSteal():
     if not Utilities.lookHavingLB(5):
         Utilities.openMagicMenu(5)
         myRobot.delay(1000)
-        Utilities.fastClick(1084, 928)
+        Utilities.fastClick(1077, 823)
     myRobot.delay(1000)
 
 def followerAttackOnly():
@@ -443,7 +443,7 @@ def doRemainingBattles(numBattle, direction='UpDown'):
     while numBattle > 0:
         while True:
             Utilities.moveAround(direction)
-            if Utilities.isInBattle():                
+            if Utilities.isWaitingForCommand():                
                 doBattle()
                 break
         numBattle -= 1
@@ -640,7 +640,7 @@ def process():
 if __name__ == "__main__":
     #doRemainingBattles(15, 'LeftRight')
     #walkThroughPhaseTwo()
-    doRemainingBattles(50) #, direction='LeftRight')
+    doRemainingBattles(50)#, direction='LeftRight')
     process()
     #enterMission()
     #setCommand()

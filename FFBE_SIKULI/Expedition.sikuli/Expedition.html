@@ -80,13 +80,14 @@ myRobot = JRobot()
 
 <span class="kw">class</span> ExpeditionRunner:
     LockColor = Color(<span class="dig">138</span>, <span class="dig">138</span>, <span class="dig">138</span>) <span class="cmt"># (1030,706)</span>
+    MissionFailColor = Color(<span class="dig">166</span>, <span class="dig">187</span>, <span class="dig">200</span>) <span class="cmt"># (1046,510)</span>
     AchievementColor = Color(<span class="dig">186</span>, <span class="dig">101</span>, <span class="dig">225</span>) <span class="cmt"># (1203,233)</span>
     completedIcon = <img src="completedIcon.png" />
     completedIconRegion = Region(<span class="dig">908</span>,<span class="dig">465</span>,<span class="dig">135</span>,<span class="dig">544</span>)
     missionTypeA = <img src="missionTypeA.png" />
-    missionTypeB = None
+    missionTypeB = <img src="missionTypeB.png" />
     missionTypeC = <img src="missionTypeC.png" />
-    missionTypeD = None
+    missionTypeD = <img src="missionTypeD.png" />
     missionTypeS = <img src="missionTypeS.png" />
     missionRegion = Region(<span class="dig">1132</span>,<span class="dig">412</span>,<span class="dig">89</span>,<span class="dig">430</span>)
     autoFillColor = Color(<span class="dig">19</span>,<span class="dig">49</span>,<span class="dig">84</span>) <span class="cmt"># (852,1019)</span>
@@ -98,7 +99,7 @@ myRobot = JRobot()
 
     @staticmethod
     <span class="kw">def</span> hasMissionCompleted():
-        NoMissionCompleteColor = Color(<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (1253,836)</span>
+        NoMissionCompleteColor = Color(<span class="dig">13</span>, <span class="dig">18</span>, <span class="dig">52</span>) <span class="cmt"># (1253,836)</span>
         <span class="kw">return</span> myRobot.getPixelColor(<span class="dig">1253</span>,<span class="dig">836</span>) != NoMissionCompleteColor
 
     @staticmethod
@@ -109,8 +110,6 @@ myRobot = JRobot()
                 Utilities.fastClick(<span class="dig">1180</span>,<span class="dig">796</span>)
             myRobot.delay(<span class="dig">1000</span>)
 
-        Utilities.waitForColorAndDo(<span class="dig">703</span>, <span class="dig">672</span>, fastMissionColor,
-        func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">929</span>, <span class="dig">160</span>))
 
     @staticmethod
     <span class="kw">def</span> clickAllCompletedMissions():
@@ -125,17 +124,31 @@ myRobot = JRobot()
         FailColor = Color(<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (...)</span>
         <span class="kw">while</span> True:
             <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1030</span>,<span class="dig">706</span>) == ExpeditionRunner.LockColor:
+                Utilities.fastClick(<span class="dig">1030</span>,<span class="dig">706</span>)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'One succeeded'</span>)
                 ExpeditionRunner.collectItems()
                 <span class="kw">break</span>
+            <span class="kw">elif</span> myRobot.getPixelColor(<span class="dig">1046</span>,<span class="dig">510</span>) == ExpeditionRunner.MissionFailColor:
+                Utilities.fastClick(<span class="dig">1046</span>,<span class="dig">510</span>)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'One succeeded'</span>)
+                ExpeditionRunner.collectItems()
+                <span class="kw">break</span>
+            Utilities.handleCommunicationError()
             myRobot.delay(<span class="dig">1000</span>)
+        Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'No more completed mission'</span>)
 
     @staticmethod
     <span class="kw">def</span> collectItems():
         nextStepColor = Color(<span class="dig">18</span>, <span class="dig">71</span>, <span class="dig">141</span>) <span class="cmt"># (942,1025)</span>
-        Utilities.waitForColorAndDo(<span class="dig">942</span>,<span class="dig">1025</span>, nextStepColor)
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">942</span>,<span class="dig">1025</span>) != nextStepColor:
+            Utilities.fastClick(<span class="dig">942</span>,<span class="dig">1025</span>)
+            Utilities.handleCommunicationError()
+            myRobot.delay(<span class="dig">500</span>)
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1203</span>,<span class="dig">233</span>) != ExpeditionRunner.AchievementColor:
             Utilities.fastClick(<span class="dig">959</span>, <span class="dig">1032</span>)
+            Utilities.handleCommunicationError()
             myRobot.delay(<span class="dig">1000</span>)
+        Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Item collected'</span>)
 
     @staticmethod
     <span class="kw">def</span> autoFillAndLaunch():
@@ -159,22 +172,64 @@ myRobot = JRobot()
         Utilities.waitForColor(<span class="dig">1203</span>,<span class="dig">233</span>, ExpeditionRunner.AchievementColor, <span class="str">'waiting for achievenment color'</span>, wait_time_period=<span class="dig">1000</span>)
 
     @staticmethod
-    <span class="kw">def</span> clickOneMission():
+    <span class="kw">def</span> refillMissions():
         ExpeditionRunner.waitForAchievementColor()
-        <span class="cmt"># A --&gt; B --&gt; C --&gt; S --&gt; D</span>
-        <span class="kw">if</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeA):
-            ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeA)
-        <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeC):
-            ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeC)
-        <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeS):
-            ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeS)
+        missionFullColor = Color(<span class="dig">71</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (1003,371)</span>
+        myRobot.delay(<span class="dig">1000</span>)
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1003</span>,<span class="dig">371</span>) != missionFullColor:
+            <span class="cmt"># A --&gt; B --&gt; C --&gt; S --&gt; D</span>
+            <span class="kw">if</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeA):
+                ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeA)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Selected type A'</span>)
+            <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeB):
+                ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeB)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Selected type B'</span>)
+            <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeC):
+                ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeC)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Selected type C'</span>)
+            <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeS):
+                ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeS)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Selected type S'</span>)
+            <span class="kw">elif</span> ExpeditionRunner.missionRegion.exists(ExpeditionRunner.missionTypeD):
+                ExpeditionRunner.missionRegion.<span class="skw">click</span>(ExpeditionRunner.missionTypeD)
+                Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'Selected type D'</span>)
+            <span class="kw">else</span>:
+                <span class="kw">print</span> <span class="str">'suppose mission full'</span>
+                sys.exit(-<span class="dig">1</span>)
+                <span class="cmt"># mission full, no need to click more</span>
+            ExpeditionRunner.autoFillAndLaunch()
+            ExpeditionRunner.waitForAchievementColor()
+            myRobot.delay(<span class="dig">2000</span>)
 
-        ExpeditionRunner.autoFillAndLaunch()
+    @staticmethod
+    <span class="kw">def</span> returnHome():
+        ExpeditionRunner.waitForAchievementColor()
+        worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944,808)</span>
+        returnColor = Color(<span class="dig">137</span>, <span class="dig">149</span>, <span class="dig">184</span>) <span class="cmt"># (723,239)</span>
+        Utilities.waitForColorAndDo(<span class="dig">723</span>,<span class="dig">239</span>,returnColor)
+        Utilities.waitForColor(<span class="dig">944</span>,<span class="dig">808</span>,worldColor, <span class="str">'waiting for world'</span>)
+
+
+    @staticmethod
+    <span class="kw">def</span> process():
+        <span class="kw">if</span> ExpeditionRunner.hasMissionCompleted():
+            ExpeditionRunner.enterExpeditionMenu()
+            myRobot.delay(<span class="dig">1000</span>)
+            ExpeditionRunner.clickAllCompletedMissions()
+            myRobot.delay(<span class="dig">1000</span>)
+            ExpeditionRunner.refillMissions()
+            myRobot.delay(<span class="dig">1000</span>)
+            ExpeditionRunner.returnHome()
+        <span class="kw">else</span>:
+            Utilities.log(<span class="str">'Expedition.txt'</span>, <span class="str">'Log'</span>, <span class="str">'no mission to harvest'</span>)
+
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#ExpeditionRunner.clickAllCompletedMissions()</span>
     <span class="cmt">#ExpeditionRunner.collectItems()</span>
-    ExpeditionRunner.clickOneMission()
+    <span class="cmt">#ExpeditionRunner.refillMissions()</span>
+    <span class="cmt">#print(ExpeditionRunner.hasMissionCompleted())</span>
+    ExpeditionRunner.process()
 </pre>
 </body>
 </html>

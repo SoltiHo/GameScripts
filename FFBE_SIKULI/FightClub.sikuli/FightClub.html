@@ -177,6 +177,24 @@ myRobot = JRobot()
     <span class="cmt">#myRobot.delay(800)</span>
     returnToFrontMenuIfOutOfMP()
 
+
+<span class="kw">def</span> selectUnit2_TwoUltima():
+    Utilities.openMagicMenu(<span class="dig">2</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(<span class="dig">500</span>)
+    <span class="cmt"># double magic</span>
+    Utilities.fastClick(<span class="dig">785</span>, <span class="dig">936</span>)
+    myRobot.delay(<span class="dig">700</span>)
+    <span class="cmt"># select the skill</span>
+    Utilities.fastClick(<span class="dig">1058</span>, <span class="dig">820</span>) <span class="cmt"># Ultima</span>
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.fastClick(<span class="dig">1058</span>, <span class="dig">820</span>) <span class="cmt"># Ultima</span>
+    <span class="cmt">#myRobot.delay(800)</span>
+    returnToFrontMenuIfOutOfMP()
+
+
+
 <span class="kw">def</span> selectUnit2_StormRain():
     Utilities.openMagicMenu(<span class="dig">2</span>)
     myRobot.delay(<span class="dig">500</span>)
@@ -216,7 +234,7 @@ myRobot = JRobot()
     Utilities.scrollMenuDown_fast()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># select the skill</span>
-    Utilities.fastClick(<span class="dig">1048</span>, <span class="dig">927</span>)
+    Utilities.fastClick(<span class="dig">1081</span>, <span class="dig">907</span>)
     returnToFrontMenuIfOutOfMP()
 
 <span class="kw">def</span> selectUnit3_HP():
@@ -229,7 +247,7 @@ myRobot = JRobot()
     Utilities.scrollMenuDown_fast()
     myRobot.delay(<span class="dig">1000</span>)
     <span class="cmt"># select the skill</span>
-    Utilities.fastClick(<span class="dig">1052</span>, <span class="dig">847</span>)
+    Utilities.fastClick(<span class="dig">1081</span>, <span class="dig">805</span>)
     myRobot.delay(<span class="dig">1000</span>)
     Utilities.fastClick(<span class="dig">799</span>, <span class="dig">932</span>)
     returnToFrontMenuIfOutOfMP()
@@ -386,10 +404,10 @@ myRobot = JRobot()
             Utilities.isLBAvailable_BS(True)
             myRobot.delay(<span class="dig">1000</span>)
             returnToFrontMenuIfOutOfMP()
-        <span class="kw">elif</span> round &lt;= <span class="dig">2</span>:
+        <span class="kw">elif</span> round &lt;= <span class="dig">20</span>:
             selectUnit5_twoMagic()
         <span class="kw">else</span>:
-            selectUnit5_twoMagic()
+            selectUnit5_Stone()
         myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> launchAttack_2MirageWaterBonStormTimestop(round):
@@ -415,28 +433,17 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">100</span>)
     Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
 
+
 <span class="kw">def</span> launchAttack_typical2Mirage3Magic(round):
-    <span class="kw">if</span> round &lt;= <span class="dig">10</span>:
-        Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3   </span>
-        myRobot.delay(<span class="dig">200</span>)
-        Utilities.fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
-        myRobot.delay(<span class="dig">700</span>)
-        Utilities.fastClick(<span class="dig">1076</span>, <span class="dig">724</span>) <span class="cmt"># unit 4</span>
-        myRobot.delay(<span class="dig">100</span>)
-        Utilities.fastClick(<span class="dig">1065</span>, <span class="dig">830</span>) <span class="cmt"># unit 5</span>
-        myRobot.delay(<span class="dig">100</span>)
-        Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
-    <span class="kw">else</span>:
-        Utilities.fastClick(<span class="dig">1065</span>, <span class="dig">830</span>) <span class="cmt"># unit 5</span>
-        myRobot.delay(<span class="dig">3500</span>)
-        Utilities.fastClick(<span class="dig">1076</span>, <span class="dig">724</span>) <span class="cmt"># unit 4</span>
-        myRobot.delay(<span class="dig">100</span>)
-        Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
-        myRobot.delay(<span class="dig">100</span>)
-        Utilities.fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
-        myRobot.delay(<span class="dig">200</span>)
-        Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3   </span>
-        myRobot.delay(<span class="dig">500</span>)
+    Utilities.fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3   </span>
+    myRobot.delay(<span class="dig">200</span>)
+    Utilities.fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
+    myRobot.delay(<span class="dig">700</span>)
+    Utilities.fastClick(<span class="dig">1076</span>, <span class="dig">724</span>) <span class="cmt"># unit 4</span>
+    myRobot.delay(<span class="dig">100</span>)
+    Utilities.fastClick(<span class="dig">1065</span>, <span class="dig">830</span>) <span class="cmt"># unit 5</span>
+    myRobot.delay(<span class="dig">100</span>)
+    Utilities.fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
 
 
 <span class="kw">def</span> launchAttack_typical3magic():
@@ -522,6 +529,10 @@ myRobot = JRobot()
     myRobot.delay(<span class="dig">2000</span>)
     <span class="kw">print</span> <span class="str">"exitting doOneFight()"</span>
     <span class="kw">return</span> won
+<span class="kw">def</span> closeDailyMissionMessage():
+    dailyMissionCloseColor = Color(<span class="dig">0</span>, <span class="dig">6</span>, <span class="dig">38</span>) <span class="cmt"># (782,670)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">782</span>,<span class="dig">670</span>) == dailyMissionCloseColor:
+        Utilities.waitForColorAndDo(<span class="dig">782</span>,<span class="dig">670</span>,dailyMissionCloseColor)
 
 <span class="kw">def</span> consumeAllBalls():
     prepareColor = Color(<span class="dig">103</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
@@ -538,9 +549,11 @@ myRobot = JRobot()
     beforeCheckWorldColor = myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>)
     worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
     prepareColor = Color(<span class="dig">103</span>, <span class="dig">0</span>, <span class="dig">0</span>) <span class="cmt"># (866, 999)</span>
+
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>) != worldColor:
         <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">866</span>,<span class="dig">999</span>) == prepareColor:
             Utilities.fastClick(<span class="dig">706</span>, <span class="dig">209</span>)
+        closeDailyMissionMessage()
         <span class="kw">print</span>(<span class="str">"no more ball now, waiting for world color"</span>)
         Utilities.checkProtectionSettingMenu()
         myRobot.delay(<span class="dig">5000</span>)

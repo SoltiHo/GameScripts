@@ -80,8 +80,8 @@ selectFollower = True
 start_phase = <span class="dig">1</span> <span class="cmt"># 0: beginning, 1: phase 1, 2: phase 2</span>
 STEP_WAIT = <span class="dig">400</span>
 buyStrength = True
-toSummon = False
-summonIdx = <span class="dig">2</span>
+toSummon = True
+summonIdx = <span class="dig">5</span>
 num_LB_used = [<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>]
 num_summon = <span class="dig">0</span>
 num_round = <span class="dig">0</span>
@@ -267,7 +267,7 @@ alwaysSteal = False
     <span class="kw">if</span> <span class="kw">not</span> Utilities.lookHavingLB(<span class="dig">5</span>):
         Utilities.openMagicMenu(<span class="dig">5</span>)
         myRobot.delay(<span class="dig">1000</span>)
-        Utilities.fastClick(<span class="dig">1084</span>, <span class="dig">928</span>)
+        Utilities.fastClick(<span class="dig">1077</span>, <span class="dig">823</span>)
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> followerAttackOnly():
@@ -515,7 +515,7 @@ alwaysSteal = False
     <span class="kw">while</span> numBattle &gt; <span class="dig">0</span>:
         <span class="kw">while</span> True:
             Utilities.moveAround(direction)
-            <span class="kw">if</span> Utilities.isInBattle():
+            <span class="kw">if</span> Utilities.isWaitingForCommand():
                 doBattle()
                 <span class="kw">break</span>
         numBattle -= <span class="dig">1</span>
@@ -712,7 +712,7 @@ alwaysSteal = False
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
     <span class="cmt">#doRemainingBattles(15, 'LeftRight')</span>
     <span class="cmt">#walkThroughPhaseTwo()</span>
-    doRemainingBattles(<span class="dig">50</span>) <span class="cmt">#, direction='LeftRight')</span>
+    doRemainingBattles(<span class="dig">50</span>)<span class="cmt">#, direction='LeftRight')</span>
     process()
     <span class="cmt">#enterMission()</span>
     <span class="cmt">#setCommand()</span>

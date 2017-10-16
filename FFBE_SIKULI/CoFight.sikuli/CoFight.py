@@ -406,7 +406,7 @@ class CoFightRunner:
         myRobot.delay(1000)
     
         # back to front page
-        letterColor = Color(180,113,99) # (1150,175)
+        letterColor = Color(161,86,78) # (1150,175)
         while myRobot.getPixelColor(1150, 175) != letterColor:
             Utilities.fastClick(707, 1013)
             print("waiting for letter color, ", myRobot.getPixelColor(1150, 175))

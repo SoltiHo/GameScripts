@@ -105,6 +105,24 @@ def selectUnit2_twoMagic():
     #myRobot.delay(800)
     returnToFrontMenuIfOutOfMP()
 
+
+def selectUnit2_TwoUltima():
+    Utilities.openMagicMenu(2)
+    myRobot.delay(500)
+    Utilities.scrollMenuDown_fast()
+    myRobot.delay(500)
+    # double magic
+    Utilities.fastClick(785, 936)
+    myRobot.delay(700)
+    # select the skill
+    Utilities.fastClick(1058, 820) # Ultima
+    myRobot.delay(700)
+    Utilities.fastClick(1058, 820) # Ultima
+    #myRobot.delay(800)
+    returnToFrontMenuIfOutOfMP()
+
+
+
 def selectUnit2_StormRain():
     Utilities.openMagicMenu(2)
     myRobot.delay(500)
@@ -144,7 +162,7 @@ def selectUnit3_Shield():
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
     # select the skill
-    Utilities.fastClick(1048, 927)
+    Utilities.fastClick(1081, 907)
     returnToFrontMenuIfOutOfMP()
 
 def selectUnit3_HP():
@@ -157,7 +175,7 @@ def selectUnit3_HP():
     Utilities.scrollMenuDown_fast()
     myRobot.delay(1000)
     # select the skill
-    Utilities.fastClick(1052, 847)
+    Utilities.fastClick(1081, 805)
     myRobot.delay(1000)
     Utilities.fastClick(799, 932)
     returnToFrontMenuIfOutOfMP()
@@ -314,10 +332,10 @@ def setCommand(round):
             Utilities.isLBAvailable_BS(True)
             myRobot.delay(1000)
             returnToFrontMenuIfOutOfMP()
-        elif round <= 2:
+        elif round <= 20:
             selectUnit5_twoMagic()
         else:
-            selectUnit5_twoMagic()
+            selectUnit5_Stone()
         myRobot.delay(1000) 
 
 def launchAttack_2MirageWaterBonStormTimestop(round):
@@ -342,29 +360,18 @@ def launchAttack(round):
     Utilities.fastClick(1065, 830) # unit 5
     myRobot.delay(100)
     Utilities.fastClick(796, 831) # unit 2
+        
 
 def launchAttack_typical2Mirage3Magic(round):
-    if round <= 10:
-        Utilities.fastClick(809, 946) # unit 3   
-        myRobot.delay(200)
-        Utilities.fastClick(793, 720) # unit 1
-        myRobot.delay(700)
-        Utilities.fastClick(1076, 724) # unit 4
-        myRobot.delay(100)
-        Utilities.fastClick(1065, 830) # unit 5
-        myRobot.delay(100)
-        Utilities.fastClick(796, 831) # unit 2
-    else:
-        Utilities.fastClick(1065, 830) # unit 5
-        myRobot.delay(3500)
-        Utilities.fastClick(1076, 724) # unit 4
-        myRobot.delay(100)
-        Utilities.fastClick(796, 831) # unit 2
-        myRobot.delay(100)
-        Utilities.fastClick(793, 720) # unit 1
-        myRobot.delay(200)
-        Utilities.fastClick(809, 946) # unit 3   
-        myRobot.delay(500)
+    Utilities.fastClick(809, 946) # unit 3   
+    myRobot.delay(200)
+    Utilities.fastClick(793, 720) # unit 1
+    myRobot.delay(700)
+    Utilities.fastClick(1076, 724) # unit 4
+    myRobot.delay(100)
+    Utilities.fastClick(1065, 830) # unit 5
+    myRobot.delay(100)
+    Utilities.fastClick(796, 831) # unit 2
         
 
 def launchAttack_typical3magic():
@@ -450,6 +457,10 @@ def doOneFight():
     myRobot.delay(2000)
     print "exitting doOneFight()"
     return won
+def closeDailyMissionMessage():
+    dailyMissionCloseColor = Color(0, 6, 38) # (782,670)
+    if myRobot.getPixelColor(782,670) == dailyMissionCloseColor:
+        Utilities.waitForColorAndDo(782,670,dailyMissionCloseColor)
     
 def consumeAllBalls():
     prepareColor = Color(103, 0, 0) # (866, 999)
@@ -466,9 +477,11 @@ def consumeAllBalls():
     beforeCheckWorldColor = myRobot.getPixelColor(944, 808)
     worldColor = Color(248, 145, 65) # (944, 808)
     prepareColor = Color(103, 0, 0) # (866, 999)
+
     while myRobot.getPixelColor(944, 808) != worldColor:
         if myRobot.getPixelColor(866,999) == prepareColor:
             Utilities.fastClick(706, 209)
+        closeDailyMissionMessage()
         print("no more ball now, waiting for world color")
         Utilities.checkProtectionSettingMenu()
         myRobot.delay(5000)

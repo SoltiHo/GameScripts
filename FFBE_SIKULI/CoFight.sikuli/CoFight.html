@@ -478,7 +478,7 @@ myRobot = JRobot()
         myRobot.delay(<span class="dig">1000</span>)
 
         <span class="cmt"># back to front page</span>
-        letterColor = Color(<span class="dig">180</span>,<span class="dig">113</span>,<span class="dig">99</span>) <span class="cmt"># (1150,175)</span>
+        letterColor = Color(<span class="dig">161</span>,<span class="dig">86</span>,<span class="dig">78</span>) <span class="cmt"># (1150,175)</span>
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1150</span>, <span class="dig">175</span>) != letterColor:
             Utilities.fastClick(<span class="dig">707</span>, <span class="dig">1013</span>)
             <span class="kw">print</span>(<span class="str">"waiting for letter color, "</span>, myRobot.getPixelColor(<span class="dig">1150</span>, <span class="dig">175</span>))
