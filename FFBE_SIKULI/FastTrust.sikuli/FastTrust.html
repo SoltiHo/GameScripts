@@ -86,18 +86,18 @@ selectFollower = True
 
 setFilter = True
 sList = []
-eqList = [<span class="dig">13</span>,<span class="dig">14</span>,<span class="dig">15</span>,<span class="dig">16</span>,<span class="dig">17</span>,<span class="dig">18</span>,<span class="dig">21</span>,<span class="dig">22</span>,<span class="dig">23</span>,<span class="dig">24</span>,<span class="dig">26</span>,<span class="dig">27</span>,<span class="dig">28</span>,<span class="dig">32</span>,<span class="dig">38</span>]
+eqList = [<span class="dig">11</span>,<span class="dig">12</span>,<span class="dig">13</span>,<span class="dig">14</span>,<span class="dig">17</span>,<span class="dig">18</span>,<span class="dig">21</span>,<span class="dig">22</span>,<span class="dig">23</span>,<span class="dig">25</span>,<span class="dig">26</span>,<span class="dig">28</span>,<span class="dig">32</span>,<span class="dig">34</span>,<span class="dig">36</span>,<span class="dig">37</span>]
 genList = []
 
 buyStrength = True
 resetPeriod = <span class="dig">100</span>
-doBonusGame = True
-numBonusGame = <span class="dig">5</span>
+doBonusGame = False
+numBonusGame = <span class="dig">10</span>
 doFightClub = True
 doCoFight = False
 doExpedition = True
 
-targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">144</span>, <span class="dig">41</span>, <span class="dig">46</span>), <span class="str">'x'</span>: <span class="dig">1162</span>, <span class="str">'y'</span>: <span class="dig">401</span>}
+targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">155</span>,<span class="dig">82</span>,<span class="dig">40</span>), <span class="str">'x'</span>: <span class="dig">1082</span>, <span class="str">'y'</span>: <span class="dig">393</span>}
 
 <span class="kw">def</span> selectFollowerAndLaunch():
     <span class="kw">while</span> True:
@@ -123,6 +123,9 @@ targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">144
         completed = True
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1185</span>, <span class="dig">1054</span>) != menuColor:
             myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">913</span>,<span class="dig">951</span>) == launchColor:
+                Utilities.fastClick(<span class="dig">913</span>,<span class="dig">951</span>)
+
             <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">945</span>, <span class="dig">599</span>) == errorOColor:
                 Utilities.fastClick(<span class="dig">945</span>, <span class="dig">599</span>)
                 completed = False
@@ -361,28 +364,37 @@ targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">144
                 <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1214</span>,<span class="dig">225</span>) == gotoFrontPageColor:
                     Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'click gotoFrontPage'</span>)
                     Utilities.fastClick(<span class="dig">1214</span>, <span class="dig">225</span>)
-                BonusGame.BonusGame.checkProtectionSettingMenu()
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 myRobot.delay(<span class="dig">2000</span>)
                 <span class="cmt"># check info menu here</span>
             Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'saw world coor'</span>)
             myRobot.delay(<span class="dig">5000</span>)
             <span class="cmt"># play bonus game</span>
             <span class="kw">if</span> doFightClub:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do fight club'</span>)
                 FightClub.process()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'fight club completed'</span>)
                 myRobot.delay(<span class="dig">2000</span>)
             <span class="kw">if</span> doBonusGame:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do bonus game'</span>)
                 BonusGame.process(numBonusGame)
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'bonus game completed'</span>)
                 myRobot.delay(<span class="dig">2000</span>)
             <span class="kw">if</span> doCoFight:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do co-fight'</span>)
                 CoFight.CoFightRunner.process()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'co-fight completed'</span>)
                 myRobot.delay(<span class="dig">2000</span>)
             <span class="kw">if</span> doExpedition:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'do expedition'</span>)
                 Expedition.ExpeditionRunner.process()
                 Utilities.log(<span class="str">'FastTrustLog.csv'</span>, <span class="str">'reset'</span>, <span class="str">'expedition completed'</span>)
@@ -400,23 +412,26 @@ targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">144
     myRobot.delay(<span class="dig">2000</span>)
     <span class="kw">print</span>(<span class="str">"world seen"</span>)
 
-    <span class="cmt"># 1st level map, choose 1st island group</span>
-    myRobot.delay(<span class="dig">3000</span>)
-    mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
-    mouseDown(Button.LEFT)
-    mouseMove(-<span class="dig">400</span>, <span class="dig">100</span>)
-    mouseUp(Button.LEFT)
-    myRobot.delay(<span class="dig">2000</span>)
-    mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
-    mouseDown(Button.LEFT)
-    mouseMove(-<span class="dig">400</span>, <span class="dig">100</span>)
-    mouseUp(Button.LEFT)
-    myRobot.delay(<span class="dig">2000</span>)
-    firstIslandGroup = <img src="firstIslandGroup.png" />
-    firstGroupRegion = Region(<span class="dig">706</span>,<span class="dig">237</span>,<span class="dig">541</span>,<span class="dig">407</span>)
-    firstGroupRegion.<span class="skw">click</span>(firstIslandGroup)
-    myRobot.delay(<span class="dig">5000</span>)
-    <span class="kw">print</span>(<span class="str">"1st island done"</span>)
+    <span class="cmt"># check if 1st level map</span>
+    frontPageColor = Color(<span class="dig">235</span>, <span class="dig">207</span>, <span class="dig">207</span>) <span class="cmt"># (1211,224)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1211</span>,<span class="dig">224</span>) != frontPageColor:
+        <span class="cmt"># 1st level map, choose 1st island group</span>
+        myRobot.delay(<span class="dig">3000</span>)
+        mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
+        mouseDown(Button.LEFT)
+        mouseMove(-<span class="dig">400</span>, <span class="dig">100</span>)
+        mouseUp(Button.LEFT)
+        myRobot.delay(<span class="dig">2000</span>)
+        mouseMove(Location(<span class="dig">693</span>, <span class="dig">690</span>))
+        mouseDown(Button.LEFT)
+        mouseMove(-<span class="dig">400</span>, <span class="dig">100</span>)
+        mouseUp(Button.LEFT)
+        myRobot.delay(<span class="dig">2000</span>)
+        firstIslandGroup = <img src="firstIslandGroup.png" />
+        firstGroupRegion = Region(<span class="dig">706</span>,<span class="dig">237</span>,<span class="dig">541</span>,<span class="dig">407</span>)
+        firstGroupRegion.<span class="skw">click</span>(firstIslandGroup)
+        myRobot.delay(<span class="dig">5000</span>)
+        <span class="kw">print</span>(<span class="str">"1st island done"</span>)
 
     <span class="cmt"># 2nd level map, choose 1st island</span>
     firstIslandColor = Color(<span class="dig">115</span>, <span class="dig">147</span>, <span class="dig">105</span>)  <span class="cmt"># (1061, 462)</span>
@@ -447,11 +462,13 @@ targetTeamColor = {<span class="str">'color'</span>: Color(<span class="dig">144
     myRobot.delay(<span class="dig">1000</span>)
     Utilities.waitForBSFFBEDesktop()
     myRobot.delay(<span class="dig">2000</span>)
+    Utilities.checkProtectionSettingMenu()
     Utilities.changeToRightTeam(
             targetTeamColor[<span class="str">'x'</span>],
             targetTeamColor[<span class="str">'y'</span>],
             targetTeamColor[<span class="str">'color'</span>])
     myRobot.delay(<span class="dig">2000</span>)
+    Utilities.checkProtectionSettingMenu()
     goToEarthTemple()
     myRobot.delay(<span class="dig">1000</span>)
     Utilities.log(<span class="str">'RestartLog.txt'</span>, <span class="str">'Restart'</span>, <span class="str">'Restart the whole BS'</span>)

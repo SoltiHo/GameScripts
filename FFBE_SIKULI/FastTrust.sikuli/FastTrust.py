@@ -14,18 +14,18 @@ selectFollower = True
 
 setFilter = True
 sList = []
-eqList = [13,14,15,16,17,18,21,22,23,24,26,27,28,32,38]
+eqList = [11,12,13,14,17,18,21,22,23,25,26,28,32,34,36,37]
 genList = []
 
 buyStrength = True
 resetPeriod = 100
-doBonusGame = True
-numBonusGame = 5
+doBonusGame = False
+numBonusGame = 10
 doFightClub = True
 doCoFight = False
 doExpedition = True
 
-targetTeamColor = {'color': Color(144, 41, 46), 'x': 1162, 'y': 401}
+targetTeamColor = {'color': Color(155,82,40), 'x': 1082, 'y': 393}
 
 def selectFollowerAndLaunch():
     while True:
@@ -51,6 +51,9 @@ def selectFollowerAndLaunch():
         completed = True
         while myRobot.getPixelColor(1185, 1054) != menuColor:
             myRobot.delay(1000)
+            if myRobot.getPixelColor(913,951) == launchColor:
+                Utilities.fastClick(913,951)
+                
             if myRobot.getPixelColor(945, 599) == errorOColor:
                 Utilities.fastClick(945, 599)
                 completed = False
@@ -289,28 +292,37 @@ def main():
                 if myRobot.getPixelColor(1214,225) == gotoFrontPageColor:
                     Utilities.log('FastTrustLog.csv', 'reset', 'click gotoFrontPage')
                     Utilities.fastClick(1214, 225)
-                BonusGame.BonusGame.checkProtectionSettingMenu()
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 myRobot.delay(2000)
                 # check info menu here
             Utilities.log('FastTrustLog.csv', 'reset', 'saw world coor')
             myRobot.delay(5000)
             # play bonus game
             if doFightClub:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log('FastTrustLog.csv', 'reset', 'do fight club')
                 FightClub.process()
                 Utilities.log('FastTrustLog.csv', 'reset', 'fight club completed')
                 myRobot.delay(2000)
             if doBonusGame:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()                
                 Utilities.log('FastTrustLog.csv', 'reset', 'do bonus game')
                 BonusGame.process(numBonusGame)
                 Utilities.log('FastTrustLog.csv', 'reset', 'bonus game completed')
                 myRobot.delay(2000)
             if doCoFight:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log('FastTrustLog.csv', 'reset', 'do co-fight')
                 CoFight.CoFightRunner.process()
                 Utilities.log('FastTrustLog.csv', 'reset', 'co-fight completed')
                 myRobot.delay(2000)
             if doExpedition:
+                Utilities.checkProtectionSettingMenu()
+                Utilities.getDailyReward()
                 Utilities.log('FastTrustLog.csv', 'reset', 'do expedition')
                 Expedition.ExpeditionRunner.process()
                 Utilities.log('FastTrustLog.csv', 'reset', 'expedition completed')
@@ -328,23 +340,26 @@ def goToEarthTemple():
     myRobot.delay(2000)
     print("world seen")
 
-    # 1st level map, choose 1st island group
-    myRobot.delay(3000)
-    mouseMove(Location(693, 690))
-    mouseDown(Button.LEFT)
-    mouseMove(-400, 100)
-    mouseUp(Button.LEFT)
-    myRobot.delay(2000)
-    mouseMove(Location(693, 690))
-    mouseDown(Button.LEFT)
-    mouseMove(-400, 100)
-    mouseUp(Button.LEFT)
-    myRobot.delay(2000)
-    firstIslandGroup = "firstIslandGroup.png"
-    firstGroupRegion = Region(706,237,541,407)
-    firstGroupRegion.click(firstIslandGroup)
-    myRobot.delay(5000)
-    print("1st island done")
+    # check if 1st level map
+    frontPageColor = Color(235, 207, 207) # (1211,224)
+    if myRobot.getPixelColor(1211,224) != frontPageColor:
+        # 1st level map, choose 1st island group
+        myRobot.delay(3000)
+        mouseMove(Location(693, 690))
+        mouseDown(Button.LEFT)
+        mouseMove(-400, 100)
+        mouseUp(Button.LEFT)
+        myRobot.delay(2000)
+        mouseMove(Location(693, 690))
+        mouseDown(Button.LEFT)
+        mouseMove(-400, 100)
+        mouseUp(Button.LEFT)
+        myRobot.delay(2000)
+        firstIslandGroup = "firstIslandGroup.png"
+        firstGroupRegion = Region(706,237,541,407)
+        firstGroupRegion.click(firstIslandGroup)
+        myRobot.delay(5000)
+        print("1st island done")
 
     # 2nd level map, choose 1st island
     firstIslandColor = Color(115, 147, 105)  # (1061, 462)
@@ -375,11 +390,13 @@ def restartBSandTheMission():
     myRobot.delay(1000)
     Utilities.waitForBSFFBEDesktop()
     myRobot.delay(2000)
+    Utilities.checkProtectionSettingMenu()
     Utilities.changeToRightTeam(
             targetTeamColor['x'],
             targetTeamColor['y'],
             targetTeamColor['color'])
     myRobot.delay(2000)
+    Utilities.checkProtectionSettingMenu()
     goToEarthTemple()
     myRobot.delay(1000)
     Utilities.log('RestartLog.txt', 'Restart', 'Restart the whole BS')

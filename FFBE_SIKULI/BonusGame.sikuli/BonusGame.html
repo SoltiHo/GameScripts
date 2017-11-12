@@ -282,6 +282,7 @@ myRobot = JRobot()
                 <span class="kw">else</span>:
                     BonusGame.battleNormal()
             Utilities.fastClick(<span class="dig">1079</span>, <span class="dig">485</span>)
+            Utilities.handleCommunicationError()
             myRobot.delay(<span class="dig">2000</span>)
         Utilities.log(<span class="str">'BonusGame.txt'</span>, <span class="str">'round completed'</span>, str(battleCount) + <span class="str">' battles'</span>)
 
@@ -401,9 +402,11 @@ myRobot = JRobot()
         <span class="kw">print</span>(<span class="str">"process bonus game completed"</span>)
         myRobot.delay(<span class="dig">2000</span>)
         <span class="cmt"># return to front page</span>
-        worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944, 808)</span>
+        <span class="cmt">#worldColor = Color(248, 145, 65) # (944, 808)</span>
+        worldColor = Color(<span class="dig">209</span>, <span class="dig">188</span>, <span class="dig">158</span>) <span class="cmt"># (944, 808)  Halloween</span>
         <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>) != worldColor:
             Utilities.fastClick(<span class="dig">1214</span>, <span class="dig">233</span>)
+            Utilities.closeMissionMenu()
             BonusGame.checkProtectionSettingMenu()
             myRobot.delay(<span class="dig">2000</span>)
         myRobot.delay(<span class="dig">2000</span>)
@@ -425,6 +428,10 @@ myRobot = JRobot()
             Utilities.fastClick(<span class="dig">822</span>, <span class="dig">514</span>)
             myRobot.delay(<span class="dig">3000</span>)
 
+        <span class="kw">if</span> <span class="kw">not</span> BonusGame.targetGameBanner[<span class="str">'region'</span>].exists(BonusGame.targetGameBanner[<span class="str">'image'</span>]):
+            Utilities.scrollMenuDown_fast()
+        <span class="kw">if</span> <span class="kw">not</span> BonusGame.targetGameBanner[<span class="str">'region'</span>].exists(BonusGame.targetGameBanner[<span class="str">'image'</span>]):
+            Utilities.scrollMenuDown_fast()
         BonusGame.targetGameBanner[<span class="str">'region'</span>].<span class="skw">click</span>(BonusGame.targetGameBanner[<span class="str">'image'</span>])
         myRobot.delay(<span class="dig">1000</span>)
 
@@ -455,11 +462,11 @@ myRobot = JRobot()
     <span class="cmt">#BonusGame.battleBlueHorse()</span>
     <span class="cmt">#BonusGame.battleBlue() </span>
     <span class="cmt">#BonusGame.battleBoss()</span>
-    BonusGame.doOneRound()
-    exit(<span class="dig">1</span>)
+    <span class="cmt">#BonusGame.doOneRound()</span>
+    <span class="cmt">#exit(1)</span>
     <span class="kw">print</span>(BonusGame.isHard())
     <span class="kw">print</span>(BonusGame.isBoss())
-    process(<span class="dig">3</span>)
+    process(<span class="dig">10</span>)
 </pre>
 </body>
 </html>

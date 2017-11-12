@@ -207,8 +207,10 @@ myRobot = JRobot()
         worldColor = Color(<span class="dig">248</span>, <span class="dig">145</span>, <span class="dig">65</span>) <span class="cmt"># (944,808)</span>
         returnColor = Color(<span class="dig">137</span>, <span class="dig">149</span>, <span class="dig">184</span>) <span class="cmt"># (723,239)</span>
         Utilities.waitForColorAndDo(<span class="dig">723</span>,<span class="dig">239</span>,returnColor)
-        Utilities.waitForColor(<span class="dig">944</span>,<span class="dig">808</span>,worldColor, <span class="str">'waiting for world'</span>)
-
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">944</span>, <span class="dig">808</span>) != worldColor:
+            Utilities.checkProtectionSettingMenu()
+            Utilities.getDailyReward()
+            myRobot.delay(<span class="dig">2000</span>)
 
     @staticmethod
     <span class="kw">def</span> process():

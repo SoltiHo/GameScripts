@@ -633,6 +633,14 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     <span class="kw">else</span>:
         <span class="kw">print</span> <span class="str">"no comm error"</span>
 
+<span class="kw">def</span> closeMissionMenu():
+    goingRewardColor = Color(<span class="dig">78</span>, <span class="dig">9</span>, <span class="dig">17</span>) <span class="cmt">#(1053, 666)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1053</span>, <span class="dig">666</span>) == goingRewardColor:
+        myRobot.mouseMove(<span class="dig">810</span>, <span class="dig">673</span>)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+
 <span class="kw">def</span> log(log_filename, event_type, event_message, toDelete=False):
     log_file = <span class="str">'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\'</span> + log_filename
     log_msg = time.strftime(<span class="str">'%d/%m/%Y'</span>) + <span class="str">','</span> + time.strftime(<span class="str">'%H:%M:%S'</span>) + <span class="str">','</span> + event_type + <span class="str">','</span> + event_message + <span class="str">'\n'</span>
@@ -685,11 +693,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
         <span class="cmt"># Close Mission</span>
-        goingRewardColor = Color(<span class="dig">78</span>, <span class="dig">9</span>, <span class="dig">17</span>) <span class="cmt">#(1053, 666)</span>
-        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1053</span>, <span class="dig">666</span>) == goingRewardColor:
-            myRobot.mouseMove(<span class="dig">810</span>, <span class="dig">673</span>)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        closeMissionMenu()
 
         <span class="cmt"># click empty place to speed up</span>
         myRobot.mouseMove(<span class="dig">717</span>, <span class="dig">157</span>)
@@ -767,6 +771,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     getRewardColor = Color(<span class="dig">2</span>, <span class="dig">16</span>, <span class="dig">64</span>) <span class="cmt"># (918, 883)</span>
     <span class="kw">if</span> (myRobot.getPixelColor(<span class="dig">804</span>, <span class="dig">800</span>) == dailyRewardBoxColor) <span class="kw">and</span> (myRobot.getPixelColor(<span class="dig">918</span>, <span class="dig">883</span>) == getRewardColor):
         fastClick(<span class="dig">1223</span>, <span class="dig">149</span>)
+    getDailyReward()
 
 <span class="kw">def</span> buyStrength():
     buyStrengthColor = Color(<span class="dig">248</span>, <span class="dig">249</span>, <span class="dig">251</span>) <span class="cmt"># (1135, 541)</span>
@@ -895,7 +900,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> enterBSFFBE():
-    BSFFBEColor = Color(<span class="dig">254</span>, <span class="dig">246</span>, <span class="dig">237</span>) <span class="cmt"># (330, 196)</span>
+    BSFFBEColor = Color(<span class="dig">232</span>, <span class="dig">200</span>, <span class="dig">186</span>) <span class="cmt"># (330, 196)</span>
     waitForColorAndDo(<span class="dig">330</span>, <span class="dig">196</span>, BSFFBEColor,
             func_after_wait=fastClick, arg_after_wait=(<span class="dig">330</span>, <span class="dig">196</span>))
     <span class="kw">print</span> <span class="str">'entered BS FFBE'</span>
@@ -916,7 +921,7 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
         fastClick(<span class="dig">995</span>, <span class="dig">639</span>)
         myRobot.delay(<span class="dig">1000</span>)
         wait_count += <span class="dig">1</span>
-        <span class="kw">if</span> wait_count == <span class="dig">40</span>:
+        <span class="kw">if</span> wait_count == <span class="dig">60</span>:
             wait_count = <span class="dig">0</span>
             reopenBSFFBE()
     <span class="kw">print</span> <span class="str">'saw BS FFBE Desktop'</span>
@@ -1032,20 +1037,20 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     myRobot.delay(<span class="dig">1000</span>)
 
 <span class="kw">def</span> launchAttackManual():
-    fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
-    myRobot.delay(<span class="dig">400</span>)
-    fastClick(<span class="dig">1029</span>, <span class="dig">935</span>) <span class="cmt"># unit 6</span>
+    launch(<span class="dig">6</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    launch(<span class="dig">1</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    launch(<span class="dig">2</span>)
 
-    myRobot.delay(<span class="dig">400</span>)
-    fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
+<span class="kw">def</span> launchAttackManual2():
+    launch(<span class="dig">1</span>)
+    myRobot.delay(<span class="dig">100</span>)
+    launch(<span class="dig">2</span>)
+    myRobot.delay(<span class="dig">500</span>)
+    launch(<span class="dig">6</span>)
 
 
-<span class="kw">def</span> launchAttackManual_Mine():
-    fastClick(<span class="dig">809</span>, <span class="dig">946</span>) <span class="cmt"># unit 3  (400)</span>
-    myRobot.delay(<span class="dig">300</span>)
-    fastClick(<span class="dig">793</span>, <span class="dig">720</span>) <span class="cmt"># unit 1</span>
-    myRobot.delay(<span class="dig">2000</span>)
-    fastClick(<span class="dig">796</span>, <span class="dig">831</span>) <span class="cmt"># unit 2</span>
 
 <span class="kw">def</span> changeToRightTeam(targetX, targetY, targetColor):
     <span class="cmt"># select team</span>
@@ -1294,9 +1299,18 @@ MAGIC_MENU_REGION_BS = Region(<span class="dig">670</span>,<span class="dig">662
     skillRegion.<span class="skw">click</span>(Pattern(skillImage).similar(<span class="dig">0.9</span>))
     myRobot.delay(<span class="dig">1000</span>)
 
+<span class="kw">def</span> getDailyReward():
+    dailyRewardColor = Color(<span class="dig">1</span>, <span class="dig">24</span>, <span class="dig">94</span>) <span class="cmt"># (991,883)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">991</span>,<span class="dig">883</span>) == dailyRewardColor:
+        fastClick(<span class="dig">1225</span>, <span class="dig">150</span>)
+    expeditionRewardColor = Color(<span class="dig">0</span>, <span class="dig">10</span>, <span class="dig">49</span>) <span class="cmt"># (779,668)</span>
+    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">779</span>,<span class="dig">668</span>) == expeditionRewardColor:
+        fastClick(<span class="dig">779</span>,<span class="dig">668</span>)
+
+
 
 <span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
-    targetLocation = Location(<span class="dig">1162</span>, <span class="dig">401</span>)
+    targetLocation = Location(<span class="dig">1082</span>, <span class="dig">393</span>)
     hover(targetLocation)
     <span class="kw">print</span>(targetLocation)
     <span class="kw">print</span>(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

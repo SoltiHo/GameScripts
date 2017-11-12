@@ -135,8 +135,10 @@ class ExpeditionRunner:
         worldColor = Color(248, 145, 65) # (944,808)
         returnColor = Color(137, 149, 184) # (723,239)
         Utilities.waitForColorAndDo(723,239,returnColor)
-        Utilities.waitForColor(944,808,worldColor, 'waiting for world')
-
+        while myRobot.getPixelColor(944, 808) != worldColor:
+            Utilities.checkProtectionSettingMenu()
+            Utilities.getDailyReward()
+            myRobot.delay(2000)
 
     @staticmethod
     def process():

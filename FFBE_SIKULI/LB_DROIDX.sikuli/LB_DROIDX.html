@@ -87,46 +87,336 @@ doCoFight = True
 doBonusGame = False
 numBonusGame = <span class="dig">1</span>
 
-<span class="kw">def</span> isStillRunning():
-    FFBEColor = Color(<span class="dig">190</span>, <span class="dig">180</span>, <span class="dig">180</span>) <span class="cmt"># (1171, 234)</span>
-    <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1171</span>, <span class="dig">234</span>) == FFBEColor:
-        <span class="kw">return</span> False
-    <span class="kw">return</span> True
+<span class="kw">class</span> LBTrainner:
+    resetCycleInMin = <span class="dig">120</span>
+    targetTeamX = <span class="dig">0</span>
+    targetTeamY = <span class="dig">0</span>
+    targetTeamColor = Color(<span class="dig">0</span>, <span class="dig">0</span>, <span class="dig">0</span>)
+    FFBEIcon = <img src="FFBEIcon.png" />
+    FFBEIconRegion = Region(<span class="dig">762</span>,<span class="dig">160</span>,<span class="dig">469</span>,<span class="dig">265</span>)
+    IgnoreUpdate = <img src="IgnoreUpdate.png" />
+    IgnoreUpdateRegion = Region(<span class="dig">847</span>,<span class="dig">611</span>,<span class="dig">108</span>,<span class="dig">42</span>)
+    <span class="cmt"># ------------------------------------------------------------ #</span>
+    <span class="kw">def</span> run(self):
+        self.launch()
+        self.gotoTrainingMission()
+        self.enterMission()
+        self.preTrainingPrep()
+        self.startTraining()
+        self.monitorTraining()
+        self.stopTraining()
+        self.postTraining()
 
-<span class="kw">def</span> recover():
-    Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'recover'</span>, <span class="str">'recover'</span>)
-    <span class="kw">print</span> <span class="str">"recover"</span>
-    <span class="cmt">#myRobot.delay(10000)</span>
-    <span class="cmt"># first, go back to FFBE</span>
-    Utilities.fastClick(<span class="dig">1171</span>, <span class="dig">234</span>)
-    myRobot.delay(<span class="dig">5000</span>)
-    <span class="cmt"># wait for combat screen</span>
-    combatBackgroundColor = Color(<span class="dig">185</span>, <span class="dig">69</span>, <span class="dig">48</span>) <span class="cmt"># (1126, 161)</span>
-    playMissionYesColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (1087, 626)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1126</span>, <span class="dig">161</span>) != combatBackgroundColor:
-        Utilities.fastClick(<span class="dig">983</span>, <span class="dig">827</span>)
-        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1087</span>, <span class="dig">626</span>) == playMissionYesColor:
-            Utilities.fastClick(<span class="dig">1087</span>, <span class="dig">626</span>)
-        <span class="kw">print</span> <span class="str">"waiting for combat background"</span>
+    <span class="kw">def</span> getCombatBackgroundInfo(self):
+        <span class="kw">print</span>(<span class="str">'implement getCombatBackgroundInfo()'</span>)
+        exit(<span class="dig">1</span>)
 
+    <span class="kw">def</span> gotoTrainingMission(self):
+        <span class="kw">print</span>(<span class="str">'implement gotoTrainingMission()'</span>)
+        exit(<span class="dig">1</span>)
+
+    <span class="kw">def</span> enterMission(self):
+        <span class="kw">print</span>(<span class="str">'implement enterMissioniningMission()'</span>)
+        exit(<span class="dig">1</span>)
+
+    <span class="kw">def</span> preTrainingPrep(self):
+        <span class="kw">print</span>(<span class="str">'implement preTrainingPrep()'</span>)
+        exit(<span class="dig">1</span>)
+
+    <span class="kw">def</span> postTraining(self):
+        <span class="kw">print</span>(<span class="str">'implement postTraining()'</span>)
+        exit(<span class="dig">1</span>)
+
+    <span class="kw">def</span> startTraining(self):
+        <span class="cmt"># enable autokey</span>
+        Utilities.fastClick(<span class="dig">996</span>, <span class="dig">75</span>)
+        myRobot.delay(<span class="dig">3000</span>)
+        <span class="cmt"># click auto</span>
+        Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1046</span>)
         myRobot.delay(<span class="dig">3000</span>)
 
-    <span class="cmt"># pause speedup</span>
-    myRobot.delay(<span class="dig">1000</span>)
-    Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
-    myRobot.delay(<span class="dig">1000</span>)
-    Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
-    myRobot.delay(<span class="dig">1000</span>)
+    <span class="kw">def</span> monitorTraining(self):
+        minCount = <span class="dig">0</span>
+        <span class="kw">while</span> minCount &lt; self.resetCycleInMin:
+            <span class="kw">if</span> <span class="kw">not</span> self.isStillRunning():
+                self.recover()
+            myRobot.delay(<span class="dig">60000</span>)
+            minCount = minCount + <span class="dig">1</span>
 
-    <span class="cmt"># restart speedup</span>
-    Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
-    myRobot.delay(<span class="dig">1500</span>)
-    Utilities.fastClick(<span class="dig">996</span>, <span class="dig">82</span>)
-    myRobot.delay(<span class="dig">2000</span>)
+    <span class="kw">def</span> stopTraining(self):
+        <span class="cmt"># first stop autokey</span>
+        Utilities.fastClick(<span class="dig">1261</span>, <span class="dig">167</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">1261</span>, <span class="dig">167</span>)
+        myRobot.delay(<span class="dig">3000</span>)
+        <span class="cmt"># then, stop AUTO</span>
+        Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1033</span>)
+        swordColor = Color(<span class="dig">147</span>, <span class="dig">138</span>, <span class="dig">124</span>) <span class="cmt"># (718,674)</span>
+        Utilities.waitForColor(<span class="dig">718</span>,<span class="dig">674</span>, swordColor, <span class="str">'waiting for sword'</span>)
+        myRobot.delay(<span class="dig">3000</span>)
 
-    <span class="cmt"># click Auto</span>
-    Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1036</span>)
-    Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'recover'</span>, <span class="str">'recover completed'</span>)
+    <span class="kw">def</span> closeDroidX(self):
+        FFBEColor = Color(<span class="dig">213</span>, <span class="dig">177</span>, <span class="dig">169</span>) <span class="cmt"># (1171, 234)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1171</span>, <span class="dig">234</span>) != FFBEColor:
+            Utilities.fastClick(<span class="dig">1899</span>, <span class="dig">20</span>)
+            myRobot.delay(<span class="dig">10000</span>)
+
+    <span class="kw">def</span> isStillRunning(self):
+        FFBEColor = Color(<span class="dig">213</span>, <span class="dig">177</span>, <span class="dig">169</span>) <span class="cmt"># (1171, 234)</span>
+        <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1171</span>, <span class="dig">234</span>) == FFBEColor:
+            <span class="kw">return</span> False
+        <span class="kw">return</span> True
+
+    <span class="kw">def</span> recover(self):
+        Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'recover'</span>, <span class="str">'recover'</span>)
+        <span class="cmt"># first, go back to FFBE</span>
+        Utilities.fastClick(<span class="dig">1171</span>, <span class="dig">234</span>)
+        myRobot.delay(<span class="dig">5000</span>)
+        <span class="cmt"># wait for combat screen</span>
+
+        playMissionYesColor = Color(<span class="dig">255</span>, <span class="dig">255</span>, <span class="dig">255</span>) <span class="cmt"># (1087, 626)</span>
+        combatBackgroundX, combatBackgroundY, combatBackgroundColor = self.getCombatBackgroundInfo()
+        <span class="kw">while</span> myRobot.getPixelColor(combatBackgroundX, combatBackgroundY) != combatBackgroundColor:
+            Utilities.fastClick(<span class="dig">1054</span>, <span class="dig">911</span>)
+            <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">1087</span>, <span class="dig">626</span>) == playMissionYesColor:
+                Utilities.fastClick(<span class="dig">1087</span>, <span class="dig">626</span>)
+            <span class="kw">print</span> <span class="str">"waiting for combat background"</span>
+
+            myRobot.delay(<span class="dig">3000</span>)
+
+        <span class="cmt"># pause speedup</span>
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+
+        <span class="cmt"># restart speedup</span>
+        Utilities.fastClick(<span class="dig">1247</span>, <span class="dig">163</span>)
+        myRobot.delay(<span class="dig">1500</span>)
+        Utilities.fastClick(<span class="dig">996</span>, <span class="dig">82</span>)
+        myRobot.delay(<span class="dig">2000</span>)
+
+        <span class="cmt"># click Auto</span>
+        Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1036</span>)
+
+        <span class="cmt"># check if hanging</span>
+        AutoColor = Color(<span class="dig">0</span>, <span class="dig">46</span>, <span class="dig">63</span>) <span class="cmt"># (774,1042)</span>
+        checkCount = <span class="dig">0</span>
+        isHanging = False
+        <span class="kw">while</span> True:
+            <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">774</span>,<span class="dig">1042</span>) == AutoColor:
+                checkCount += <span class="dig">1</span>
+            <span class="kw">else</span>:
+                <span class="kw">break</span>
+            myRobot.delay(<span class="dig">500</span>)
+            <span class="kw">if</span> checkCount == <span class="dig">10</span>:
+                <span class="cmt"># it's hanging!!!! :(</span>
+                isHanging = True
+                <span class="kw">break</span>
+
+        <span class="kw">if</span> isHanging:
+            <span class="cmt"># close this DroidX</span>
+            self.closeDroidX()
+
+        <span class="kw">return</span> isHanging
+
+    <span class="kw">def</span> launch(self):
+        self.launchDroidX()
+        myRobot.delay(<span class="dig">30000</span>)
+        self.loadAutoKey()
+        myRobot.delay(<span class="dig">3000</span>)
+        self.launchFFBEToDesktop()
+        myRobot.delay(<span class="dig">5000</span>)
+        self.changeToRightTeam()
+        myRobot.delay(<span class="dig">3000</span>)
+
+    <span class="kw">def</span> launchDroidX(self):
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'launching DroidX'</span>)
+        myRobot.delay(<span class="dig">3000</span>)
+        droidXColor = Color(<span class="dig">234</span>, <span class="dig">132</span>, <span class="dig">132</span>) <span class="cmt"># (414, 1060)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">414</span>, <span class="dig">1060</span>) != droidXColor:
+            <span class="kw">print</span> <span class="str">"waiting for droidXColor"</span>
+            myRobot.delay(<span class="dig">1000</span>)
+        Utilities.fastClick(<span class="dig">414</span>,<span class="dig">1060</span>)
+        myRobot.delay(<span class="dig">7000</span>)
+
+        <span class="cmt"># click ignore</span>
+        <span class="kw">while</span> self.IgnoreUpdateRegion.exists(Pattern(self.IgnoreUpdate).similar(<span class="dig">0.9</span>)) <span class="kw">is</span> None:
+            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">print</span>(<span class="str">'waiting for Ignore Update'</span>)
+        self.IgnoreUpdateRegion.<span class="skw">click</span>(Pattern(self.IgnoreUpdate).similar(<span class="dig">0.9</span>))
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'update ignored'</span>)
+
+        <span class="cmt"># wait for Game Icon</span>
+        <span class="kw">while</span> self.FFBEIconRegion.exists(Pattern(self.FFBEIcon)) <span class="kw">is</span> None:
+            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">print</span>(<span class="str">'waiting for FFBE Icon'</span>)
+
+        <span class="cmt"># wait for 30 sec more</span>
+        myRobot.delay(<span class="dig">30000</span>)
+
+        <span class="cmt"># maximize window</span>
+        <span class="skw">type</span>(<span class="str">' '</span>, KeyModifier.ALT)
+        myRobot.delay(<span class="dig">3000</span>)
+        <span class="skw">type</span>(<span class="str">'x'</span>)
+        myRobot.delay(<span class="dig">10000</span>)
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'droidX maximized'</span>)
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'DroidX launch completed'</span>)
+
+    <span class="kw">def</span> loadAutoKey(self):
+        <span class="cmt"># open key auto</span>
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'loading autokey'</span>)
+        autoKeyColor = Color(<span class="dig">0</span>, <span class="dig">119</span>, <span class="dig">217</span>) <span class="cmt"># (811, 340)</span>
+        Utilities.waitForColorAndDo(<span class="dig">811</span>, <span class="dig">340</span>, autoKeyColor, wait_time_period=<span class="dig">6000</span>)
+
+        noCategoryColor = Color(<span class="dig">59</span>, <span class="dig">131</span>, <span class="dig">225</span>) <span class="cmt"># (754, 327)</span>
+        ignoreUpdateColor = Color(<span class="dig">68</span>, <span class="dig">68</span>, <span class="dig">68</span>) <span class="cmt"># (859, 1018)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">754</span>, <span class="dig">327</span>) != noCategoryColor:
+            <span class="kw">if</span> myRobot.getPixelColor(<span class="dig">859</span>, <span class="dig">1018</span>) == ignoreUpdateColor:
+                Utilities.fastClick(<span class="dig">859</span>, <span class="dig">1018</span>)
+            myRobot.delay(<span class="dig">3000</span>)
+
+        myScriptColor = Color(<span class="dig">59</span>, <span class="dig">131</span>, <span class="dig">225</span>) <span class="cmt"># (776, 210)</span>
+        Utilities.waitForColorAndDo(<span class="dig">776</span>, <span class="dig">210</span>, myScriptColor, wait_time_period=<span class="dig">3000</span>,
+                func_while_wait=Utilities.fastClick, arg_while_wait=(<span class="dig">754</span>, <span class="dig">327</span>))
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'autokey loaded'</span>)
+
+    <span class="kw">def</span> launchFFBEToDesktop(self):
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'launching FFBE in DroidX'</span>)
+        <span class="cmt"># launch FFBE</span>
+        <span class="kw">while</span> self.FFBEIconRegion.exists(Pattern(self.FFBEIcon)) <span class="kw">is</span> None:
+            myRobot.delay(<span class="dig">1000</span>)
+            <span class="kw">print</span>(<span class="str">'waiting for FFBE Icon'</span>)
+        self.FFBEIconRegion.<span class="skw">click</span>(Pattern(self.FFBEIcon))
+        desktopFriendColor = Color(<span class="dig">108</span>, <span class="dig">37</span>, <span class="dig">76</span>) <span class="cmt"># (1218, 1043)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1218</span>, <span class="dig">1043</span>) != desktopFriendColor:
+            Utilities.fastClick(<span class="dig">1037</span>, <span class="dig">653</span>)
+            myRobot.delay(<span class="dig">7000</span>)
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'saw desktop friend color'</span>)
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'launching FFBE in DroidX completed'</span>)
+
+    <span class="kw">def</span> changeToRightTeam(self):
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'changing to the right team'</span>)
+        <span class="cmt"># select team</span>
+        strengthenColor = Color(<span class="dig">136</span>, <span class="dig">30</span>, <span class="dig">7</span>) <span class="cmt"># 753, 857</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">753</span>, <span class="dig">857</span>) != strengthenColor:
+            Utilities.fastClick(<span class="dig">842</span>, <span class="dig">1023</span>)
+            myRobot.delay(<span class="dig">2000</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+
+        targetUnitColor = Color(<span class="dig">11</span>, <span class="dig">57</span>, <span class="dig">37</span>)  <span class="cmt"># (1023,397)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(self.targetTeamX, self.targetTeamY) != self.targetTeamColor:
+            Utilities.fastClick(<span class="dig">1268</span>, <span class="dig">423</span>)
+            myRobot.delay(<span class="dig">2000</span>)
+            <span class="kw">print</span>(<span class="str">"waiting for targetUnitColor"</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+
+        <span class="cmt"># back to front page</span>
+        <span class="cmt">#letterColor = Color(217, 186, 180) # (1164, 203)</span>
+        letterColor = Color(<span class="dig">134</span>, <span class="dig">93</span>, <span class="dig">91</span>) <span class="cmt"># (1164, 203) Halloween</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1164</span>, <span class="dig">203</span>) != letterColor:
+            Utilities.fastClick(<span class="dig">757</span>, <span class="dig">1013</span>)
+            <span class="kw">print</span>(<span class="str">"waiting for letter color, "</span>, myRobot.getPixelColor(<span class="dig">1164</span>, <span class="dig">203</span>))
+            myRobot.delay(<span class="dig">3000</span>)
+        myRobot.delay(<span class="dig">1000</span>)
+        Utilities.log(<span class="str">'DroidXNewLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'now at the right team'</span>)
+
+    <span class="kw">def</span> waitForFrontPage(self):
+        FriendsColor = Color(<span class="dig">250</span>, <span class="dig">92</span>, <span class="dig">191</span>)  <span class="cmt"># (1217,1024)</span>
+        Utilities.waitForColor(<span class="dig">1217</span>,<span class="dig">1024</span>,FriendsColor,<span class="str">"waiting for front page friends"</span>)
+
+
+
+<span class="kw">class</span> FireLB(LBTrainner):
+    targetTeamX = <span class="dig">1023</span>
+    targetTeamY = <span class="dig">397</span>
+    targetTeamColor = Color(<span class="dig">11</span>, <span class="dig">57</span>, <span class="dig">37</span>)
+    combatBackgroundX = <span class="dig">1126</span>
+    combatBackgroundY = <span class="dig">161</span>
+    combatBackgroundColor = Color(<span class="dig">185</span>, <span class="dig">69</span>, <span class="dig">48</span>)
+    <span class="cmt"># ------------------------------------------------------------ #</span>
+    <span class="kw">def</span> gotoTrainingMission(self):
+        worldColor = Color(<span class="dig">160</span>, <span class="dig">155</span>, <span class="dig">125</span>) <span class="cmt"># (944,808)</span>
+        Utilities.waitForColorAndDo(<span class="dig">944</span>,<span class="dig">808</span>, worldColor)
+        myRobot.delay(<span class="dig">2000</span>)
+        <span class="cmt"># find 1st island group</span>
+        islandRegion = Region(<span class="dig">822</span>,<span class="dig">290</span>,<span class="dig">459</span>,<span class="dig">342</span>)
+        island = <img src="island.png" />
+        <span class="kw">while</span> islandRegion.exists(Pattern(island).similar(<span class="dig">0.9</span>)) <span class="kw">is</span> None:
+            <span class="cmt"># scroll left down</span>
+            mouseMove(Location(<span class="dig">1093</span>, <span class="dig">690</span>))
+            mouseDown(Button.LEFT)
+            mouseMove(-<span class="dig">400</span>, <span class="dig">200</span>)
+            mouseUp(Button.LEFT)
+            myRobot.delay(<span class="dig">2000</span>)
+        islandRegion.<span class="skw">click</span>(Pattern(island).similar(<span class="dig">0.9</span>))
+        myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="kw">def</span> preTrainingPrep(self):
+        <span class="kw">print</span>(<span class="str">"no preTrainingPrep needed for fireLB"</span>)
+
+        <span class="cmt"># go to the 1st island</span>
+        firstIslandColor = Color(<span class="dig">112</span>, <span class="dig">151</span>, <span class="dig">81</span>) <span class="cmt"># (1130,469)</span>
+        Utilities.waitForColorAndDo(<span class="dig">1130</span>,<span class="dig">469</span>, firstIslandColor)
+        myRobot.delay(<span class="dig">2000</span>)
+
+        <span class="cmt"># go to moutain</span>
+        mountainRegion = Region(<span class="dig">825</span>,<span class="dig">281</span>,<span class="dig">456</span>,<span class="dig">183</span>)
+        mountain = <img src="mountain.png" />
+        <span class="kw">while</span> mountainRegion.exists(Pattern(mountain).similar(<span class="dig">0.9</span>)) <span class="kw">is</span> None:
+            <span class="cmt"># scroll left down</span>
+            mouseMove(Location(<span class="dig">1093</span>, <span class="dig">690</span>))
+            mouseDown(Button.LEFT)
+            mouseMove(-<span class="dig">400</span>, <span class="dig">200</span>)
+            mouseUp(Button.LEFT)
+            myRobot.delay(<span class="dig">2000</span>)
+        mountainRegion.<span class="skw">click</span>(Pattern(mountain).similar(<span class="dig">0.9</span>))
+        myRobot.delay(<span class="dig">2000</span>)
+
+    <span class="kw">def</span> getCombatBackgroundInfo(self):
+        <span class="kw">return</span> self.combatBackgroundX, self.combatBackgroundY, self.combatBackgroundColor
+
+    <span class="kw">def</span> enterMission(self):
+        missionColor = Color(<span class="dig">254</span>, <span class="dig">249</span>, <span class="dig">245</span>) <span class="cmt"># (752,538)</span>
+        Utilities.waitForColorAndDo(<span class="dig">752</span>, <span class="dig">538</span>, missionColor)
+
+        <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
+        missionDescNextStepColor = Color(<span class="dig">103</span>, <span class="dig">164</span>, <span class="dig">236</span>) <span class="cmt"># (954, 923)</span>
+        Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor)
+
+        <span class="cmt"># select follower</span>
+        followerColor = Color(<span class="dig">0</span>, <span class="dig">9</span>, <span class="dig">50</span>) <span class="cmt"># (1182,257)</span>
+        Utilities.waitForColorAndDo(<span class="dig">1182</span>, <span class="dig">257</span>, followerColor,
+            func_after_wait=selectNoFollower)
+
+        launchColor = Color(<span class="dig">0</span>, <span class="dig">55</span>, <span class="dig">90</span>)  <span class="cmt"># (913,951)</span>
+        Utilities.waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
+
+        <span class="cmt"># wait for skip</span>
+        skipColor = Color(<span class="dig">0</span>, <span class="dig">25</span>, <span class="dig">113</span>) <span class="cmt"># (799, 133)</span>
+        Utilities.waitForColorAndDo(<span class="dig">799</span>, <span class="dig">133</span>, skipColor, wait_time_period=<span class="dig">2000</span>)
+        <span class="cmt"># wait for battle start, wait for menu color</span>
+        menuColor = Color(<span class="dig">0</span>, <span class="dig">17</span>, <span class="dig">52</span>) <span class="cmt"># (1231, 1048)</span>
+        <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1231</span>,<span class="dig">1048</span>) != menuColor:
+            <span class="kw">print</span>(<span class="str">'waiting for menu color'</span>)
+            myRobot.delay(<span class="dig">2000</span>)
+        myRobot.delay(<span class="dig">2000</span>)
+        Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'entered the mission'</span>)
+
+    <span class="kw">def</span> postTraining(self):
+
+
+
+
+
+
+
+
+
+
+
+
 
 <span class="kw">def</span> launchDroidXToDesktop():
     Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'launchDroidXToDesktop'</span>)
@@ -161,8 +451,8 @@ numBonusGame = <span class="dig">1</span>
 
 <span class="kw">def</span> launchFFBEToDesktop():
     <span class="cmt"># launch FFBE</span>
-    FFBEColor = Color(<span class="dig">190</span>, <span class="dig">180</span>, <span class="dig">180</span>) <span class="cmt"># (1171, 234)</span>
-    Utilities.waitForColorAndDo(<span class="dig">1171</span>, <span class="dig">234</span>, FFBEColor, wait_time_period=<span class="dig">3000</span>)
+
+
     desktopFriendColor = Color(<span class="dig">108</span>, <span class="dig">37</span>, <span class="dig">76</span>) <span class="cmt"># (1218, 1043)</span>
     <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1218</span>, <span class="dig">1043</span>) != desktopFriendColor:
         Utilities.fastClick(<span class="dig">1037</span>, <span class="dig">653</span>)
@@ -255,40 +545,10 @@ numBonusGame = <span class="dig">1</span>
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">2000</span>)
 
-<span class="kw">def</span> enterMission():
-    missionColor = Color(<span class="dig">254</span>, <span class="dig">249</span>, <span class="dig">245</span>) <span class="cmt"># (752,538)</span>
-    Utilities.waitForColorAndDo(<span class="dig">752</span>, <span class="dig">538</span>, missionColor)
 
-    <span class="cmt"># wait for mission dismiss color and buy strength if necessary</span>
-    missionDescNextStepColor = Color(<span class="dig">103</span>, <span class="dig">164</span>, <span class="dig">236</span>) <span class="cmt"># (954, 923)</span>
-    Utilities.waitForColorAndDo(<span class="dig">954</span>, <span class="dig">923</span>, missionDescNextStepColor)
 
-    <span class="cmt"># select follower</span>
-    followerColor = Color(<span class="dig">0</span>, <span class="dig">9</span>, <span class="dig">50</span>) <span class="cmt"># (1182,257)</span>
-    Utilities.waitForColorAndDo(<span class="dig">1182</span>, <span class="dig">257</span>, followerColor,
-        func_after_wait=selectNoFollower)
 
-    launchColor = Color(<span class="dig">0</span>, <span class="dig">55</span>, <span class="dig">90</span>)  <span class="cmt"># (913,951)</span>
-    Utilities.waitForColorAndDo(<span class="dig">913</span>, <span class="dig">951</span>, launchColor)
 
-    <span class="cmt"># wait for skip</span>
-    skipColor = Color(<span class="dig">0</span>, <span class="dig">25</span>, <span class="dig">113</span>) <span class="cmt"># (799, 133)</span>
-    Utilities.waitForColorAndDo(<span class="dig">799</span>, <span class="dig">133</span>, skipColor, wait_time_period=<span class="dig">2000</span>)
-    <span class="cmt"># wait for battle start, wait for menu color</span>
-    menuColor = Color(<span class="dig">0</span>, <span class="dig">17</span>, <span class="dig">52</span>) <span class="cmt"># (1231, 1048)</span>
-    <span class="kw">while</span> myRobot.getPixelColor(<span class="dig">1231</span>,<span class="dig">1048</span>) != menuColor:
-        <span class="kw">print</span>(<span class="str">'waiting for menu color'</span>)
-        myRobot.delay(<span class="dig">2000</span>)
-    myRobot.delay(<span class="dig">2000</span>)
-    Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'launch'</span>, <span class="str">'entered the mission'</span>)
-
-<span class="kw">def</span> kickoff():
-    <span class="cmt"># enable autokey</span>
-    Utilities.fastClick(<span class="dig">996</span>, <span class="dig">75</span>)
-    myRobot.delay(<span class="dig">3000</span>)
-    <span class="cmt"># click auto</span>
-    Utilities.fastClick(<span class="dig">768</span>, <span class="dig">1046</span>)
-    myRobot.delay(<span class="dig">3000</span>)
 
 <span class="kw">def</span> setupAttackCmd():
     Utilities.openMagicMenu(<span class="dig">3</span>)
@@ -378,19 +638,20 @@ numBonusGame = <span class="dig">1</span>
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
     myRobot.delay(<span class="dig">1000</span>)
 
-<span class="kw">def</span> closeDroidX():
-    myRobot.delay(<span class="dig">3000</span>)
-    closeRegion = Region(<span class="dig">1850</span>,<span class="dig">0</span>,<span class="dig">70</span>,<span class="dig">79</span>)
-    closeIcon = <img src="closeIcon.png" />
-    closeRegion.<span class="skw">click</span>(closeIcon)
-    myRobot.delay(<span class="dig">3000</span>)
+    <span class="kw">def</span> closeDroidX():
+        myRobot.delay(<span class="dig">3000</span>)
+        closeRegion = Region(<span class="dig">1850</span>,<span class="dig">0</span>,<span class="dig">70</span>,<span class="dig">79</span>)
+        closeIcon = <img src="closeIcon.png" />
+        closeRegion.<span class="skw">click</span>(closeIcon)
+        myRobot.delay(<span class="dig">3000</span>)
 
 <span class="kw">def</span> main():
     <span class="kw">global</span> resetCycleInMin
     minCount = <span class="dig">0</span>
     <span class="kw">while</span> minCount &lt; resetCycleInMin:
         <span class="kw">if</span> <span class="kw">not</span> isStillRunning():
-            recover()
+            <span class="kw">while</span> recover():
+                <span class="kw">print</span>(<span class="str">"recovering"</span>)
         myRobot.delay(<span class="dig">60000</span>)
         minCount = minCount + <span class="dig">1</span>
 
@@ -437,7 +698,7 @@ numBonusGame = <span class="dig">1</span>
     terminateAndCloseMission()
     myRobot.delay(<span class="dig">5000</span>)
 
-<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+<span class="kw">def</span> old_main():
     <span class="kw">while</span> True:
         process(resetCycleInMin)
         Utilities.log(<span class="str">'LBDroidXLog.txt'</span>, <span class="str">'reset'</span>, <span class="str">'LB training completed'</span>)
@@ -479,6 +740,10 @@ numBonusGame = <span class="dig">1</span>
     <span class="cmt">#main()</span>
     <span class="cmt">#recover()</span>
 
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    trainer = FireLB()
+    trainer.monitorTraining()
 </pre>
 </body>
 </html>

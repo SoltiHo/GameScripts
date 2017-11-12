@@ -210,6 +210,7 @@ class BonusGame:
                 else:
                     BonusGame.battleNormal()
             Utilities.fastClick(1079, 485)
+            Utilities.handleCommunicationError()
             myRobot.delay(2000)
         Utilities.log('BonusGame.txt', 'round completed', str(battleCount) + ' battles')
     
@@ -329,9 +330,11 @@ class BonusGame:
         print("process bonus game completed")
         myRobot.delay(2000)
         # return to front page
-        worldColor = Color(248, 145, 65) # (944, 808)
+        #worldColor = Color(248, 145, 65) # (944, 808)
+        worldColor = Color(209, 188, 158) # (944, 808)  Halloween
         while myRobot.getPixelColor(944, 808) != worldColor:
             Utilities.fastClick(1214, 233)
+            Utilities.closeMissionMenu()
             BonusGame.checkProtectionSettingMenu()
             myRobot.delay(2000)
         myRobot.delay(2000)
@@ -353,6 +356,10 @@ class BonusGame:
             Utilities.fastClick(822, 514)
             myRobot.delay(3000)
 
+        if not BonusGame.targetGameBanner['region'].exists(BonusGame.targetGameBanner['image']):
+            Utilities.scrollMenuDown_fast()
+        if not BonusGame.targetGameBanner['region'].exists(BonusGame.targetGameBanner['image']):
+            Utilities.scrollMenuDown_fast()
         BonusGame.targetGameBanner['region'].click(BonusGame.targetGameBanner['image'])
         myRobot.delay(1000)
         
@@ -383,10 +390,10 @@ if __name__ == "__main__":
     #BonusGame.battleBlueHorse()
     #BonusGame.battleBlue() 
     #BonusGame.battleBoss()
-    BonusGame.doOneRound()
-    exit(1)
+    #BonusGame.doOneRound()
+    #exit(1)
     print(BonusGame.isHard())
     print(BonusGame.isBoss())
-    process(3)
+    process(10)
     
  

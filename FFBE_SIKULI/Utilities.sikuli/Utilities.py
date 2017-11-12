@@ -561,6 +561,14 @@ def handleCommunicationError():
     else:
         print "no comm error"
 
+def closeMissionMenu():
+    goingRewardColor = Color(78, 9, 17) #(1053, 666)
+    if myRobot.getPixelColor(1053, 666) == goingRewardColor:
+        myRobot.mouseMove(810, 673)
+        myRobot.mousePress(InputEvent.BUTTON1_MASK)
+        myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+
+
 def log(log_filename, event_type, event_message, toDelete=False):
     log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
     log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
@@ -613,11 +621,7 @@ def handleMissionEnd(targetX=1140, targetY=332, waitTargetColor=Color(249, 219, 
             myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
         # Close Mission
-        goingRewardColor = Color(78, 9, 17) #(1053, 666)
-        if myRobot.getPixelColor(1053, 666) == goingRewardColor:
-            myRobot.mouseMove(810, 673)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        closeMissionMenu()
 
         # click empty place to speed up
         myRobot.mouseMove(717, 157)
@@ -695,6 +699,7 @@ def checkProtectionSettingMenu():
     getRewardColor = Color(2, 16, 64) # (918, 883)
     if (myRobot.getPixelColor(804, 800) == dailyRewardBoxColor) and (myRobot.getPixelColor(918, 883) == getRewardColor):
         fastClick(1223, 149)
+    getDailyReward()
 
 def buyStrength():
     buyStrengthColor = Color(248, 249, 251) # (1135, 541)
@@ -823,7 +828,7 @@ def switchEmulator():
     myRobot.delay(1000)
 
 def enterBSFFBE():
-    BSFFBEColor = Color(254, 246, 237) # (330, 196)
+    BSFFBEColor = Color(232, 200, 186) # (330, 196)
     waitForColorAndDo(330, 196, BSFFBEColor,
             func_after_wait=fastClick, arg_after_wait=(330, 196))
     print 'entered BS FFBE'
@@ -844,7 +849,7 @@ def waitForBSFFBEDesktop():
         fastClick(995, 639)
         myRobot.delay(1000)
         wait_count += 1
-        if wait_count == 40:
+        if wait_count == 60:
             wait_count = 0
             reopenBSFFBE()
     print 'saw BS FFBE Desktop'
@@ -960,20 +965,20 @@ def select_defense(unitNum):
     myRobot.delay(1000)
 
 def launchAttackManual():
-    fastClick(793, 720) # unit 1
-    myRobot.delay(400)
-    fastClick(1029, 935) # unit 6
+    launch(6)
+    myRobot.delay(100)
+    launch(1)
+    myRobot.delay(100)
+    launch(2)
 
-    myRobot.delay(400)
-    fastClick(796, 831) # unit 2
+def launchAttackManual2():
+    launch(1)
+    myRobot.delay(100)
+    launch(2)
+    myRobot.delay(500)
+    launch(6)
 
 
-def launchAttackManual_Mine():
-    fastClick(809, 946) # unit 3  (400)
-    myRobot.delay(300)
-    fastClick(793, 720) # unit 1
-    myRobot.delay(2000)
-    fastClick(796, 831) # unit 2
 
 def changeToRightTeam(targetX, targetY, targetColor):
     # select team
@@ -1222,9 +1227,18 @@ def findSkill(skillImage):
     skillRegion.click(Pattern(skillImage).similar(0.9))
     myRobot.delay(1000)
 
-    
+def getDailyReward():
+    dailyRewardColor = Color(1, 24, 94) # (991,883)
+    if myRobot.getPixelColor(991,883) == dailyRewardColor:
+        fastClick(1225, 150)
+    expeditionRewardColor = Color(0, 10, 49) # (779,668)
+    if myRobot.getPixelColor(779,668) == expeditionRewardColor:
+        fastClick(779,668)    
+
+
+
 if __name__ == "__main__":
-    targetLocation = Location(1162, 401)
+    targetLocation = Location(1082, 393)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))

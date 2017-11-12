@@ -305,7 +305,7 @@ def isInBattle():
 
 def setCommand(round):
     if Utilities.isUnitAlive(1):
-        if round <= 1:
+        if round <= 2:
             selectUnit1_Shield()
         else:
             selectUnit1_ReduceDamage()
@@ -314,7 +314,7 @@ def setCommand(round):
         selectUnit2_twoMagic()
         myRobot.delay(1000)
     if Utilities.isUnitAlive(3):
-        if round <= 1:
+        if round <= 2:
             selectUnit3_Shield()
         else:
             selectUnit3_HP()
@@ -332,7 +332,7 @@ def setCommand(round):
             Utilities.isLBAvailable_BS(True)
             myRobot.delay(1000)
             returnToFrontMenuIfOutOfMP()
-        elif round <= 20:
+        elif round <= 3:
             selectUnit5_twoMagic()
         else:
             selectUnit5_Stone()
@@ -422,6 +422,7 @@ def doOneFight():
     # Battle End
     endOColor = Color(244, 246, 250) # (944, 904)
     while myRobot.getPixelColor(944, 904) != endOColor:
+        Utilities.handleCommunicationError()
         print("waiting for end ok")
         myRobot.delay(1000)
         Utilities.fastClick(1012, 724)
@@ -457,6 +458,7 @@ def doOneFight():
     myRobot.delay(2000)
     print "exitting doOneFight()"
     return won
+
 def closeDailyMissionMessage():
     dailyMissionCloseColor = Color(0, 6, 38) # (782,670)
     if myRobot.getPixelColor(782,670) == dailyMissionCloseColor:
@@ -468,7 +470,7 @@ def consumeAllBalls():
         print("waiting for preparation sign")
         myRobot.delay(1000)
 
-    firstBallColor = Color(0, 238, 197) # (910, 980)
+    firstBallColor = Color(0,238,197) # (910, 980)
     while myRobot.getPixelColor(910, 980) == firstBallColor:
         result = doOneFight()
         print("One fight done, result = " + str(result))
@@ -484,6 +486,7 @@ def consumeAllBalls():
         closeDailyMissionMessage()
         print("no more ball now, waiting for world color")
         Utilities.checkProtectionSettingMenu()
+        Utilities.getDailyReward()
         myRobot.delay(5000)
     myRobot.delay(1000)
 
@@ -492,6 +495,7 @@ def process():
     while myRobot.getPixelColor(747, 758) != fightClubColor:
         print("waiting for fight club")
         BonusGame.BonusGame.checkProtectionSettingMenu()
+        Utilities.getDailyReward()
         myRobot.delay(1000)
     myRobot.delay(1000)
 
