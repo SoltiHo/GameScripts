@@ -43,5 +43,44 @@ def moveRightDeprecated(step_size=50):
     myRobot.mouseMove(959 + step_size, 882)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
+def waitForColorAndDo(
+        x, y, color, 
+        func_while_wait=None, arg_while_wait=[], 
+        func_after_wait=None, arg_after_wait=[], 
+        wait_time_period=500, wait_max_count=20,
+        func_wait_too_long=None, arg_wait_too_long=[]):
+    print 'x = ', x, ', y = ', y, ', color = ', color
+    wait_count = 0
+    while not myRobot.getPixelColor(x, y) == color:
+        print myRobot.getPixelColor(x, y), x, y
+        if func_while_wait != None:
+            func_while_wait(*arg_while_wait)
+        wait_count += 1
+        if wait_count == wait_max_count:
+            wait_count = 0
+            if func_wait_too_long != None:
+                func_wait_too_long(*arg_wait_too_long)
+        myRobot.delay(wait_time_period)
+    while myRobot.getPixelColor(x, y) == color:
+        print myRobot.getPixelColor(x, y), x, y, 'after wait'
+        if func_after_wait != None:
+            func_after_wait(*arg_after_wait)
+        else:
+            myRobot.mouseMove(x, y)
+            myRobot.mousePress(InputEvent.BUTTON1_MASK)
+            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+        myRobot.delay(wait_time_period)
+
+def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
+    while not myRobot.getPixelColor(x, y) == color:
+        print wait_msg
+        myRobot.delay(wait_time_period)
 
 
+
+if __name__ == "__main__":
+    targetLocation = Location(959, 1017)
+    hover(targetLocation)
+    print(targetLocation)
+    print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
+    myRobot.delay(3000)
