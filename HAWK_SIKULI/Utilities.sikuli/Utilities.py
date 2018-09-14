@@ -23,8 +23,6 @@ def moveRight(interval=1000, num_steps = 10):
         myRobot.mouseMove(leftX+(rightX-leftX)/num_steps*(i+1), 882)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-
-
 def moveLeftDeprecated(step_size=50):
     myRobot.mouseMove(959, 882)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
@@ -76,10 +74,13 @@ def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
         print wait_msg
         myRobot.delay(wait_time_period)
 
-
+def fastClick(x, y):
+    myRobot.mouseMove(x, y)
+    myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 if __name__ == "__main__":
-    targetLocation = Location(959, 1017)
+    targetLocation = Location(1115, 1029)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
