@@ -79,8 +79,18 @@ def fastClick(x, y):
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
+
+def log(log_filename, event_type, event_message, toDelete=False):
+    log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
+    log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
+    open_mode = 'a'
+    if toDelete:
+        open_mode = 'w'
+    with open(log_file, open_mode) as f:
+        f.write(log_msg)
+
 if __name__ == "__main__":
-    targetLocation = Location(1115, 1029)
+    targetLocation =  Location(1099, 729)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
