@@ -1,6 +1,7 @@
 import java.awt.Color as Color
 import Utilities as util
 from Utilities import myRobot
+from sikuli import *
 reload(util)
 
 def hasMegaAds():
@@ -29,6 +30,7 @@ def hasSmallAds():
     watchIcon = "watchIcon.png"
 
     if not watchRegion.exists(Pattern(watchIcon).similar(0.9), 5):
+        collectDailyRewardIfAny()
         # in the daily reward menu, need to go back
         goBackToHomePage()
         return False
@@ -40,9 +42,37 @@ def collectDailyRewardIfAny():
     util.log('WatchAds.txt', 'DailyReward', 'collecting daily reward')
     rewardRegion = Region(1105,257,105,691)
     rewardIcon = "rewardIcon.png"
-    while rewardRegion.exists(Pattern(rewardIcon).similar(0.9), 5):
-        rewardRegion.click(Pattern(rewardIcon).similar(0.9))
-        myRobot.delay(5000)
+
+    notFoundCount = 0
+    while True:
+        if rewardRegion.exists(Pattern(rewardIcon).similar(0.9), 5):
+            rewardRegion.click(Pattern(rewardIcon).similar(0.9))
+            notFoundCount = 0
+            myRobot.delay(5000)
+        else:
+            notFoundCount += 1
+            # check if it is daily login reward
+            loginRewardLocation = Location(902, 1033)
+            loginRewardColor = Color(255, 134, 46)
+            if myRobot.getPixelColor(loginRewardLocation.x, loginRewardLocation.y) == loginRewardColor:
+                util.fastClick(loginRewardLocation.x, loginRewardLocation.y)
+                myRobot.delay(3000)
+                confirmRewardLocation = Location(1089, 483)
+                util.fastClick(confirmRewardLocation.x, confirmRewardLocation.y)
+                myRobot.delay(3000)
+
+                # make sure closing completed
+                closeLoginRewardMenuLocation = Location(1209, 135)
+                rewardListLocation = Location(739, 171)
+                rewardListColor = Color(0, 156, 177)
+                while myRobot.getPixelColor(rewardListLocation.x, rewardListLocation.y) != rewardListColor:
+                    util.fastClick(closeLoginRewardMenuLocation.x, closeLoginRewardMenuLocation.y)
+                    myRobot.delay(2000)
+                myRobot.delay(2000)
+                notFoundCount = 0
+            if notFoundCount == 3:
+                break
+            myRobot.delay(2000)
 
 
 def watchSmallAdsAndReturnHome():
@@ -59,10 +89,18 @@ def watchSmallAdsAndReturnHome():
     goBackToHomePage()
     
 
-def waitForAdsToEndAndClose():
+def waitForAdsToEndAndClose():   
     myRobot.delay(60*1000)  # 2 min ads time
     myRobot.delay(60*1000)
-    closeAds()
+    closeAds_x()
+    myRobot.delay(10000)
+
+    # do not wait for Ads to end, just click it
+    #clickAdsLocation = Location(957, 612)
+    #myRobot.delay(5000)
+    #util.fastClick(clickAdsLocation.x, clickAdsLocation.y)
+    #myRobot.delay(5000)
+    #closeAds_clickThrough()
 
 
 def watchMegaAds():
@@ -88,19 +126,37 @@ def adsClosed():
     else:
         return False
 
-def closeAds():
+def closeAds_clickThrough():
+    # click through
+    util.log('WatchAds.txt', 'CloseAds', 'click through close ads')
+    tabClosedLocation = Location(563, 25)
+    tabClosedColor = Color(88, 90, 108)
+    closeTabLocation = Location(719, 10)
+    while myRobot.getPixelColor(tabClosedLocation.x, tabClosedLocation.y) != tabClosedColor:
+        util.fastClick(closeTabLocation.x, closeTabLocation.y)
+        myRobot.delay(5000)
+
+def closeAds_x():
     util.log('WatchAds.txt', 'CloseAds', 'trying to close ads')
+    attempCount = 0
     while True:
-        topRightCloseLocation = Location(1246, 79)
-        util.fastClick(topRightCloseLocation.x, topRightCloseLocation.y)
-        myRobot.delay(3000)
+        attempCount += 1
+        possibleCloseAdsLocations = [
+            Location(1246, 79),
+            Location(1185, 293),
+            Location(1824, 129),
+        ]
+        for loc in possibleCloseAdsLocations:
+            util.fastClick(loc.x, loc.y)
+            myRobot.delay(3000)
+            if adsClosed():
+                break  # break the for loop
+        # to break the while loop
         if adsClosed():
             break
-        topRightCloseLocation2 = Location(1185, 293)
-        util.fastClick(topRightCloseLocation2.x, topRightCloseLocation2.y)
-        myRobot.delay(3000)
-        if adsClosed():
-            break
+        if attempCount == 20:
+            closeAds_clickThrough()
+            attempCount = 0
     myRobot.delay(5000)
 
 
@@ -122,6 +178,29 @@ def openChest():
     myRobot.delay(1000)
 
 
+def closeHawk():
+    HawkRegion = Region(11,112,621,167)
+    HawkIcon = "HawkIcon.png"
+    util.log('WatchAds.txt', 'close', 'trying to close Hawk')
+    while not HawkRegion.exists(HawkIcon):
+        util.log('WatchAds.txt', 'close', 'click close x')
+        hawkCloseXLocation = Location(517, 10)
+        util.fastClick(hawkCloseXLocation.x, hawkCloseXLocation.y)
+        myRobot.delay(10000)
+    util.log('WatchAds.txt', 'close', 'Hawk closed')
+
+def launchHawk():
+    HawkRegion = Region(11,112,621,167)
+    HawkIcon = "HawkIcon.png"
+    while not HawkRegion.exists(HawkIcon):
+        util.log('WatchAds.txt', 'launch', 'waiting for HawkIcon')
+        myRobot.delay(5000)
+    HawkRegion.click(HawkIcon)
+    myRobot.delay(10000)
+    goBackToHomePage()
+    util.log('WatchAds.txt', 'launch', 'launch completed')
+    
+
 def goBackToHomePage():
     util.log('WatchAds.txt', 'Go Home', 'trying to get home')
     homePageLocation = Location(961, 1024)
@@ -132,23 +211,37 @@ def goBackToHomePage():
     myRobot.delay(1000)
     
 
+def checkAdsOneRound():
+    # start checking ads
+    util.log('WatchAds.txt', 'Monitor', 'Checking for Ads')
+    if hasMegaAds():
+        watchMegaAds()
+        util.log('WatchAds.txt', 'MegaReward', 'finished watching mega ads')
+        myRobot.delay(10000)
+    if hasSmallAds():
+        watchSmallAdsAndReturnHome()
+        util.log('WatchAds.txt', 'DailyReward', 'finished watching daily ads')
+        myRobot.delay(10000)
+
+
 def monitorAds():
     while True:
-        util.log('WatchAds.txt', 'Monitor', 'Checking for Ads')
-        if hasMegaAds():
-            watchMegaAds()
-            util.log('WatchAds.txt', 'MegaReward', 'finished watching mega ads')
-            myRobot.delay(10000)
-        if hasSmallAds():
-            watchSmallAdsAndReturnHome()
-            util.log('WatchAds.txt', 'DailyReward', 'finished watching daily ads')
-            myRobot.delay(10000)
+        # launch the game
+        launchHawk()
+        checkAdsOneRound() 
+        # close hawk
+        closeHawk()
+
         for i in range(0, 10):  # check every 10 min
             myRobot.delay(60*1000)  # 1 min
+        
         
             
 
 if __name__ == "__main__":
+    hasSmallAds()
+    exit(1)
+    #collectDailyRewardIfAny()
     #openChest()
     #print(hasMegaAds())
     #goBackToHomePage()

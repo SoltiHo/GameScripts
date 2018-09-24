@@ -7,20 +7,95 @@ myRobot = JRobot()
 
 leftX = 660 
 rightX = 1258
-def moveLeft(interval=1000, num_steps = 10):
-    myRobot.mouseMove(rightX, 882)
+
+def getGameResult():
+    log('util.txt', 'debug', 'getting game result')
+    while not isGameFinished():
+        log('util.txt', 'debug', 'confirming game ended')
+        closeItemDescIfAny()
+        myRobot.delay(1000)
+    log('util.txt', 'debug', 'game end confirmed')
+    loseResultLocation = Location(727, 187)
+    loseResultColor = Color(42, 155, 175)
+    winResultLocation = Location(727, 187)
+    winResultColor = Color(253, 150, 26)
+    if myRobot.getPixelColor(loseResultLocation.x, loseResultLocation.y) == loseResultColor:
+        return 'lose'
+    elif myRobot.getPixelColor(winResultLocation.x, winResultLocation.y) == winResultColor:
+        return 'win'
+    else:
+        return 'unknown'
+    
+
+def isInGame():
+    inGameLocation = Location(708, 87)
+    inGameColor = Color(255, 255, 102)
+    return myRobot.getPixelColor(inGameLocation.x, inGameLocation.y) == inGameColor
+
+def clickPlayIfAvailable():
+    playLocation = Location(908, 1067)
+    playColor = Color(255, 135, 45)
+    if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
+        waitForColorAndDo(playLocation.x, playLocation.y, playColor)
+        
+def isGameFinished():
+    gameFinishedLocation = Location(807, 1065)
+    gameFinishedColor = Color(21, 145, 170)
+    return myRobot.getPixelColor(gameFinishedLocation.x, gameFinishedLocation.y) == gameFinishedColor
+
+
+def clickAbility(num=0):
+    abilityLocations = [Location(718, 873), Location(719, 999)]
+    if num == 1:
+        fastClick(abilityLocations[0].x, abilityLocations[0].y)
+    elif num == 2:
+        fastClick(abilityLocations[1].x, abilityLocations[1].y)
+    else:
+        for loc in abilityLocations:
+            fastClick(loc.x, loc.y)
+
+def closeItemDescIfAny():
+    itemDescLocations = [Location(1205, 500), Location(1206, 435)]
+    itemDescColor = Color(255, 102, 20)
+    for loc in itemDescLocations:
+        if myRobot.getPixelColor(loc.x, loc.y) == itemDescColor:
+            waitForColorAndDo(loc.x, loc.y, itemDescColor)
+            myRobot.delay(1000)
+
+def leaveGameResultPage():
+    backgroundLocation = Location(721, 345)
+    backgroundColor = Color(248, 255, 223)
+    while myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) != backgroundColor:
+        myRobot.delay(1000)
+        closeItemDescIfAny()
+        # reconnect
+        log('util.txt', 'debug', 'waiting for result bar')
+    while myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) == backgroundColor:
+        leaveButtonLocation = Location(712, 1069)
+        leaveButtonColor = Color(247, 255, 223)
+        closeItemDescIfAny()
+        if myRobot.getPixelColor(leaveButtonLocation.x, leaveButtonLocation.y) == leaveButtonColor:
+            fastClick(leaveButtonLocation.x, leaveButtonLocation.y)
+        else:
+            type(Key.ESC)
+        log('util.txt', 'debug', 'leaving result page')
+        myRobot.delay(2000)
+    log('util.txt', 'debug', 'left result page')
+
+def moveLeft(interval=1000, num_steps = 10, ratio=1.0):
+    myRobot.mouseMove(rightX, 354)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     for i in range(0, num_steps):
         myRobot.delay(interval/num_steps)
-        myRobot.mouseMove(rightX-(rightX-leftX)/num_steps*(i+1), 882)
+        myRobot.mouseMove(int(rightX-(rightX-leftX)*ratio/float(num_steps)*(i+1)), 354)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
-def moveRight(interval=1000, num_steps = 10):
-    myRobot.mouseMove(leftX, 882)
+def moveRight(interval=1000, num_steps = 10, ratio=1.0):
+    myRobot.mouseMove(leftX, 354)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     for i in range(0, num_steps):
         myRobot.delay(interval/num_steps)
-        myRobot.mouseMove(leftX+(rightX-leftX)/num_steps*(i+1), 882)
+        myRobot.mouseMove(int(leftX+(rightX-leftX)*ratio/float(num_steps)*(i+1)), 354)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveLeftDeprecated(step_size=50):
@@ -89,8 +164,82 @@ def log(log_filename, event_type, event_message, toDelete=False):
     with open(log_file, open_mode) as f:
         f.write(log_msg)
 
-if __name__ == "__main__":
-    targetLocation =  Location(1099, 729)
+
+def selectWorldPlay():
+    worldLocation = Location(1135, 706)
+    unselectedWorldColor = Color(229, 227, 181)
+    waitForColorAndDo(worldLocation.x, worldLocation.y, unselectedWorldColor)
+
+def selectFriendPlay():
+    friendLocation = Location(942, 705)
+    unselectedFriendColor = Color(229, 227, 181)
+    if myRobot.getPixelColor(friendLocation.x, friendLocation.y) == unselectedFriendColor:
+        waitForColorAndDo(friendLocation.x, friendLocation.y, unselectedFriendColor)
+
+def hasFriendSelected():
+    unselectSelectedFriendRegion = Region(1231,213,23,815)
+    unselectSelectedIcon = "unselectSelectedIcon.png"
+    return unselectSelectedFriendRegion.exists(Pattern(unselectSelectedIcon).similar(0.9), 3)
+
+
+def unselectedFriends():
+    unselectSelectedFriendRegion = Region(1231,213,23,815)
+    unselectSelectedIcon = "unselectSelectedIcon.png"
+    while unselectSelectedFriendRegion.exists(Pattern(unselectSelectedIcon).similar(0.9), 3):
+        unselectSelectedFriendRegion.click(Pattern(unselectSelectedIcon).similar(0.9))
+        myRobot.delay(1000)
+    
+    
+def selectFriendToPlay(friendIcon):
+    selectFriendPlay()
+    myRobot.delay(1000)
+    chooseFriendRegion = Region(851,148,219,64)
+    chooseFriendIcon = "chooseFriendIcon.png"
+    chooseFriendLocation = Location(909, 179)
+    chooseFriendColor = Color(255, 254, 249)
+    #while not chooseFriendRegion.exists(Pattern(chooseFriendIcon).similar(0.9)):
+    while myRobot.getPixelColor(chooseFriendLocation.x, chooseFriendLocation.y) != chooseFriendColor:
+        # click play
+        myRobot.delay(2000)
+        playLocation = Location(908, 1067)
+        playColor = Color(255, 135, 45)
+        if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
+            fastClick(playLocation.x, playLocation.y)
+        myRobot.delay(1000)
+    myRobot.delay(1500)
+
+    # entered friend list
+    playLocation = Location(908, 1067)
+    playColor = Color(255, 135, 45)
+    #myRobot.delay(1000)
+    if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
+        unselectedFriends()
+        myRobot.delay(1000)
+ 
+
+    friendRegion = Region(667,212,267,808)
+    count = 0
+    while not friendRegion.exists(Pattern(friendIcon).similar(0.9)):
+        myRobot.delay(1000)
+        count += 1
+        if count == 2:
+            return False
+
+    friendRegion.click(Pattern(friendIcon).similar(0.9))
+    myRobot.delay(1000)
+    return hasFriendSelected()
+
+def goBackToHomePage():
+    homePageLocation = Location(961, 1024)
+    homePageColor = Color(152, 169, 4)
+    while myRobot.getPixelColor(homePageLocation.x, homePageLocation.y) != homePageColor:
+        type(Key.ESC)
+        myRobot.delay(3000)
+    myRobot.delay(1000)
+
+
+if __name__ == "__main__": 
+    targetLocation = Location(1206, 435)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
