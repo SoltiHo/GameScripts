@@ -12,6 +12,9 @@ def enterStage123(isWorldPlay=True):
     while not stage123Region.exists(Pattern(stage123Icon).similar(0.9)):
         wheel(stage123Region, WHEEL_DOWN, 70)
         util.log('stage123.txt', 'enter', 'scroll down for stage 123')
+        # somehow during the process, it might click into a certain stage.
+        # so want to go back to stage menu
+        util.leaveStageDetailPage()
         myRobot.delay(1500)
     util.log('stage123.txt', 'enter', 'saw stage 123')
     
@@ -30,7 +33,7 @@ def selectWorldToPlay():
     myRobot.delay(1000)
 
     while not util.isInGame():   
-        util.clickPlayIfAvailable()
+        util.spendEnergyPlayIfAvailable()
         myRobot.delay(1000)
     util.log('stage123.txt', 'enter', 'entered stage 123')
     
@@ -56,6 +59,8 @@ def selectFriendToPlay():
 def playStage123():
     util.log('stage123.txt', 'play', 'start playing stage 123')
     moveCount = 0
+    start_time = time.time()
+    stopped = False
     while not util.isGameFinished():       
         util.moveRight(interval=500, num_steps=15)
         util.myRobot.delay(100)
@@ -64,15 +69,17 @@ def playStage123():
         if moveCount > 5:
             util.clickAbility()
         moveCount += 1
-        if moveCount == 18:
+        if not stopped and time.time() - start_time > 26.0:
+            stopped = True
             util.moveLeft(interval=500, num_steps=15)
             util.moveRight(interval=500, num_steps=15, ratio=0.13)
-            myRobot.delay(7000)
+            myRobot.delay(7200)
     #myRobot.delay(3000)
     util.log('stage123.txt', 'play', 'completed stage 123')
 
 
-if __name__ == "__main__":
+
+def play():
     countWin = 0
     countLose = 0
     countUnknown = 0
@@ -111,3 +118,13 @@ if __name__ == "__main__":
             bigPlayLocation = Location(876, 894)
             bigPlayColor = Color(255, 186, 38)
             util.waitForColorAndDo(bigPlayLocation.x, bigPlayLocation.y, bigPlayColor)
+
+
+if __name__ == "__main__":
+    play()
+    exit(0)
+    util.launchHawk()
+    bigPlayLocation = Location(876, 894)
+    bigPlayColor = Color(255, 186, 38)
+    util.waitForColorAndDo(bigPlayLocation.x, bigPlayLocation.y, bigPlayColor)
+    play()

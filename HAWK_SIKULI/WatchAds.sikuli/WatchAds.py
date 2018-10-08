@@ -8,6 +8,10 @@ def hasMegaAds():
     megaAdsLocation = Location(1237, 272)
     megaAdsColor = Color(255, 102, 20)
     return myRobot.getPixelColor(megaAdsLocation.x, megaAdsLocation.y) == megaAdsColor
+def hasNewMegaAds():
+    megaAdsLocation = Location(1239, 390)
+    megaAdsColor = Color(255, 102, 20)
+    return myRobot.getPixelColor(megaAdsLocation.x, megaAdsLocation.y) == megaAdsColor
 
 
 def hasSmallAds():
@@ -117,6 +121,19 @@ def watchMegaAds():
     openChest()
     goBackToHomePage()
 
+def watchNewMegaAds():
+    util.log('WatchAds.txt', 'NewMegaReward', 'watching new mega ads')
+    megaAdsLocation = Location(1239, 390)
+    megaAdsColor = Color(255, 102, 20)
+    util.waitForColorAndDo(megaAdsLocation.x, megaAdsLocation.y, megaAdsColor)
+
+    watchLocation = Location(1085, 481)
+    watchColor = Color(150, 100, 195)
+    util.waitForColorAndDo(watchLocation.x, watchLocation.y, watchColor)
+
+    waitForAdsToEndAndClose()
+    openNewChest()
+    goBackToHomePage()
 
 def adsClosed():
     crystalLocation = Location(1085, 87)
@@ -154,12 +171,22 @@ def closeAds_x():
         # to break the while loop
         if adsClosed():
             break
-        if attempCount == 20:
+        if attempCount == 5:
             closeAds_clickThrough()
+            myRobot.delay(5000)
             attempCount = 0
     myRobot.delay(5000)
 
-
+def openNewChest():
+    util.log('WatchAds.txt', 'NewMegaReward', 'opening new chest')
+    openLocation = Location(1091, 482)
+    openColor = Color(255, 135, 44)
+    util.waitForColorAndDo(openLocation.x, openLocation.y, openColor)
+    myRobot.delay(3000)
+    util.fastClick(1139, 361)
+    myRobot.delay(500)
+    util.fastClick(1139, 361)
+    myRobot.delay(2000)
 
 def openChest():
     util.log('WatchAds.txt', 'MegaReward', 'opening chest')
@@ -218,6 +245,10 @@ def checkAdsOneRound():
         watchMegaAds()
         util.log('WatchAds.txt', 'MegaReward', 'finished watching mega ads')
         myRobot.delay(10000)
+    if hasNewMegaAds():
+        watchNewMegaAds()
+        util.log('WatchAds.txt', 'NewMegaReward', 'finished watching new mega ads')
+        myRobot.delay(10000)
     if hasSmallAds():
         watchSmallAdsAndReturnHome()
         util.log('WatchAds.txt', 'DailyReward', 'finished watching daily ads')
@@ -227,7 +258,7 @@ def checkAdsOneRound():
 def monitorAds():
     while True:
         # launch the game
-        launchHawk()
+        util.launchHawk()
         checkAdsOneRound() 
         # close hawk
         closeHawk()
@@ -239,8 +270,8 @@ def monitorAds():
             
 
 if __name__ == "__main__":
-    hasSmallAds()
-    exit(1)
+    #openNewChest()
+    #checkAdsOneRound()
     #collectDailyRewardIfAny()
     #openChest()
     #print(hasMegaAds())

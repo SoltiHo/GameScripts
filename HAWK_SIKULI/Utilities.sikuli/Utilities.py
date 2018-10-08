@@ -37,7 +37,11 @@ def clickPlayIfAvailable():
     playColor = Color(255, 135, 45)
     if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
         waitForColorAndDo(playLocation.x, playLocation.y, playColor)
-        
+def spendEnergyPlayIfAvailable():
+    playLocation = Location(884, 1051)
+    playColor = Color(255, 135, 45)
+    if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
+        waitForColorAndDo(playLocation.x, playLocation.y, playColor)
 def isGameFinished():
     gameFinishedLocation = Location(807, 1065)
     gameFinishedColor = Color(21, 145, 170)
@@ -237,9 +241,59 @@ def goBackToHomePage():
         myRobot.delay(3000)
     myRobot.delay(1000)
 
+def leaveStageDetailPage():
+    stageTitleBarLocation = Location(950, 180)
+    stageTitleBarColor = Color(42, 155, 175)
+    stageLeavingAarowLocation = Location(706, 1063)
+    stageLeavingAarowColor = Color(247, 255, 223)
+    if myRobot.getPixelColor(stageTitleBarLocation.x, stageTitleBarLocation.y) == stageTitleBarColor and \
+            myRobot.getPixelColor(stageLeavingAarowLocation.x, stageLeavingAarowLocation.y) == stageLeavingAarowColor:
+        waitForColorAndDo(
+                stageTitleBarLocation.x, stageTitleBarLocation.y, stageTitleBarColor,
+                func_after_wait=fastClick, arg_after_wait=[stageLeavingAarowLocation.x, stageLeavingAarowLocation.y],
+                wait_time_period=1000)
 
-if __name__ == "__main__": 
-    targetLocation = Location(1206, 435)
+
+def handleOpeningNoise():
+    log('util.txt', 'launch', 'enter handleOpeningNoise')
+    noiseRegions = [
+        Region(841,715,235,79),
+        Region(1129,98,143,177)
+    ]
+    noiseIcons = [
+         "continueIcon.png",
+         "announcementCloseIcon.png"
+    ]
+    for i in range(0, len(noiseIcons)):
+        if noiseRegions[i].exists(Pattern(noiseIcons[i]).similar(0.9)):
+            noiseRegions[i].click(Pattern(noiseIcons[i]).similar(0.9))
+            myRobot.delay(3000)
+    log('util.txt', 'launch', 'finish handleOpeningNoise')
+
+def launchHawk():
+    gameIconRegion = Region(7,101,1796,378)
+    gmaeIcon = "gmaeIcon.png"
+    while not gameIconRegion.exists(Pattern(gmaeIcon).similar(0.9)):
+        log('util.txt', 'launch', 'waiting for hawk icon')
+        myRobot.delay(5000)
+    
+    while gameIconRegion.exists(Pattern(gmaeIcon).similar(0.9)):
+        log('util.txt', 'launch', 'click hawk icon')
+        gameIconRegion.click(Pattern(gmaeIcon).similar(0.9))
+        myRobot.delay(5000)
+
+    # wait for hawk menu
+    homePageLocation = Location(961, 1024)
+    homePageColor = Color(152, 169, 4)
+    while myRobot.getPixelColor(homePageLocation.x, homePageLocation.y) != homePageColor:
+        log('util.txt', 'launch', 'wait for reaching home page')
+        handleOpeningNoise()
+        myRobot.delay(5000)
+    log('util.txt', 'launch', 'arrived home page')
+
+
+if __name__ == "__main__":
+    targetLocation = Location(1091, 482)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
