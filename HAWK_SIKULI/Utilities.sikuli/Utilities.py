@@ -270,6 +270,20 @@ def handleOpeningNoise():
             myRobot.delay(3000)
     log('util.txt', 'launch', 'finish handleOpeningNoise')
 
+
+def closeHawk():
+    HawkRegion = Region(7,101,1796,378)
+    HawkIcon = "HawkIcon.png"
+    log('util.txt', 'close', 'trying to close Hawk')
+    while not HawkRegion.exists(HawkIcon):
+        log('util.txt', 'close', 'click close x')
+        hawkCloseXLocation = Location(517, 10)
+        fastClick(hawkCloseXLocation.x, hawkCloseXLocation.y)
+        myRobot.delay(10000)
+    log('util.txt', 'close', 'Hawk closed')    
+
+
+
 def launchHawk():
     gameIconRegion = Region(7,101,1796,378)
     gmaeIcon = "gmaeIcon.png"

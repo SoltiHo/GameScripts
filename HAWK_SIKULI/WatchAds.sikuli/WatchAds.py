@@ -205,28 +205,6 @@ def openChest():
     myRobot.delay(1000)
 
 
-def closeHawk():
-    HawkRegion = Region(11,112,621,167)
-    HawkIcon = "HawkIcon.png"
-    util.log('WatchAds.txt', 'close', 'trying to close Hawk')
-    while not HawkRegion.exists(HawkIcon):
-        util.log('WatchAds.txt', 'close', 'click close x')
-        hawkCloseXLocation = Location(517, 10)
-        util.fastClick(hawkCloseXLocation.x, hawkCloseXLocation.y)
-        myRobot.delay(10000)
-    util.log('WatchAds.txt', 'close', 'Hawk closed')
-
-def launchHawk():
-    HawkRegion = Region(11,112,621,167)
-    HawkIcon = "HawkIcon.png"
-    while not HawkRegion.exists(HawkIcon):
-        util.log('WatchAds.txt', 'launch', 'waiting for HawkIcon')
-        myRobot.delay(5000)
-    HawkRegion.click(HawkIcon)
-    myRobot.delay(10000)
-    goBackToHomePage()
-    util.log('WatchAds.txt', 'launch', 'launch completed')
-    
 
 def goBackToHomePage():
     util.log('WatchAds.txt', 'Go Home', 'trying to get home')
@@ -261,7 +239,7 @@ def monitorAds():
         util.launchHawk()
         checkAdsOneRound() 
         # close hawk
-        closeHawk()
+        util.closeHawk()
 
         for i in range(0, 10):  # check every 10 min
             myRobot.delay(60*1000)  # 1 min
