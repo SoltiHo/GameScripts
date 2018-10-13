@@ -258,11 +258,13 @@ def handleOpeningNoise():
     log('util.txt', 'launch', 'enter handleOpeningNoise')
     noiseRegions = [
         Region(841,715,235,79),
-        Region(1129,98,143,177)
+        Region(1129,98,143,177),
+        Region(956,614,244,105)
     ]
     noiseIcons = [
          "continueIcon.png",
-         "announcementCloseIcon.png"
+         "announcementCloseIcon.png",
+         "1539211321242.png"
     ]
     for i in range(0, len(noiseIcons)):
         if noiseRegions[i].exists(Pattern(noiseIcons[i]).similar(0.9)):

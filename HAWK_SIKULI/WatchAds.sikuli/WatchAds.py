@@ -254,4 +254,6 @@ if __name__ == "__main__":
     #openChest()
     #print(hasMegaAds())
     #goBackToHomePage()
+    #for i in range(0,90):
+    #    myRobot.delay(60000)
     monitorAds()
