@@ -5,8 +5,8 @@ import time
 from sikuli import *
 myRobot = JRobot()
 
-leftX = 660 
-rightX = 1258
+leftX = 10
+rightX = 440
 
 def getGameResult():
     log('util.txt', 'debug', 'getting game result')
@@ -15,10 +15,10 @@ def getGameResult():
         closeItemDescIfAny()
         myRobot.delay(1000)
     log('util.txt', 'debug', 'game end confirmed')
-    loseResultLocation = Location(727, 187)
-    loseResultColor = Color(42, 155, 175)
-    winResultLocation = Location(727, 187)
-    winResultColor = Color(253, 150, 26)
+    loseResultLocation = Location(56, 185)
+    loseResultColor = Color(37, 138, 159)
+    winResultLocation = Location(55, 155)
+    winResultColor = Color(250, 131, 22)
     if myRobot.getPixelColor(loseResultLocation.x, loseResultLocation.y) == loseResultColor:
         return 'lose'
     elif myRobot.getPixelColor(winResultLocation.x, winResultLocation.y) == winResultColor:
@@ -28,8 +28,8 @@ def getGameResult():
     
 
 def isInGame():
-    inGameLocation = Location(708, 87)
-    inGameColor = Color(255, 255, 102)
+    inGameLocation = Location(41, 89)
+    inGameColor = Color(255, 255, 88)
     return myRobot.getPixelColor(inGameLocation.x, inGameLocation.y) == inGameColor
 
 def clickPlayIfAvailable():
@@ -38,18 +38,29 @@ def clickPlayIfAvailable():
     if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
         waitForColorAndDo(playLocation.x, playLocation.y, playColor)
 def spendEnergyPlayIfAvailable():
-    playLocation = Location(884, 1051)
-    playColor = Color(255, 135, 45)
+    playLocation = Location(180, 817)
+    playColor = Color(252, 113, 34)
     if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
         waitForColorAndDo(playLocation.x, playLocation.y, playColor)
 def isGameFinished():
-    gameFinishedLocation = Location(807, 1065)
-    gameFinishedColor = Color(21, 145, 170)
+    gameFinishedLocation = Location(322, 90) # the crystal   
+    gameFinishedColor = Color(41, 230, 203)
     return myRobot.getPixelColor(gameFinishedLocation.x, gameFinishedLocation.y) == gameFinishedColor
 
+def clickOD():
+    ODLocation = Location(50, 590)
+    fastClick(ODLocation.x, ODLocation.y)
+
+
+def isAbilityAvailable(num):
+    if num == 1:
+        abilityEdgeLocation = Location(77, 683)
+        abilityEdgeColor = Color(50, 102, 132)
+        return myRobot.getPixelColor(abilityEdgeLocation.x, abilityEdgeLocation.y) == abilityEdgeColor 
+    return False
 
 def clickAbility(num=0):
-    abilityLocations = [Location(718, 873), Location(719, 999)]
+    abilityLocations = [Location(50, 685), Location(49, 773)]
     if num == 1:
         fastClick(abilityLocations[0].x, abilityLocations[0].y)
     elif num == 2:
@@ -143,9 +154,7 @@ def waitForColorAndDo(
         if func_after_wait != None:
             func_after_wait(*arg_after_wait)
         else:
-            myRobot.mouseMove(x, y)
-            myRobot.mousePress(InputEvent.BUTTON1_MASK)
-            myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
+            fastClick(x, y)
         myRobot.delay(wait_time_period)
 
 def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
@@ -155,12 +164,14 @@ def waitForColor(x, y, color, wait_msg,  wait_time_period=500):
 
 def fastClick(x, y):
     myRobot.mouseMove(x, y)
+    myRobot.delay(100)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
+    myRobot.delay(100)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 
 def log(log_filename, event_type, event_message, toDelete=False):
-    log_file = 'C:\\Users\\Solti\\Dropbox\\Misc\GameLogs\\' + log_filename
+    log_file = '/Users/soltiho/Dropbox (Personal)/Misc/GameLogs/' + log_filename
     log_msg = time.strftime('%d/%m/%Y') + ',' + time.strftime('%H:%M:%S') + ',' + event_type + ',' + event_message + '\n'
     open_mode = 'a'
     if toDelete:
@@ -170,8 +181,8 @@ def log(log_filename, event_type, event_message, toDelete=False):
 
 
 def selectWorldPlay():
-    worldLocation = Location(1135, 706)
-    unselectedWorldColor = Color(229, 227, 181)
+    worldLocation = Location(353, 550)
+    unselectedWorldColor = Color(223, 222, 166)
     waitForColorAndDo(worldLocation.x, worldLocation.y, unselectedWorldColor)
 
 def selectFriendPlay():
@@ -307,14 +318,7 @@ def launchHawk():
 
 
 if __name__ == "__main__":
-    myRobot.delay(15000)
-    while True:
-        moveRight(interval=500, num_steps=15)
-        myRobot.delay(1000)
-        moveLeft(interval=500, num_steps=15)
-        myRobot.delay(1000)
-    
-    targetLocation = Location(1091, 482)
+    targetLocation = Location(180, 817)
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
