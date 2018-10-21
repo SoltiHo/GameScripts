@@ -212,6 +212,8 @@ def goBackToHomePage():
     homePageColor = Color(152, 169, 4)
     while myRobot.getPixelColor(homePageLocation.x, homePageLocation.y) != homePageColor:
         type(Key.ESC)
+        # check "Reconnect"
+        
         myRobot.delay(3000)
     myRobot.delay(1000)
     
@@ -254,6 +256,6 @@ if __name__ == "__main__":
     #openChest()
     #print(hasMegaAds())
     #goBackToHomePage()
-    #for i in range(0,90):
+    #for i in range(0,60):
     #    myRobot.delay(60000)
     monitorAds()

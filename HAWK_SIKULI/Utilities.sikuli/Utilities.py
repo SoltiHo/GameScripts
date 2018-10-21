@@ -259,12 +259,14 @@ def handleOpeningNoise():
     noiseRegions = [
         Region(841,715,235,79),
         Region(1129,98,143,177),
-        Region(956,614,244,105)
+        Region(956,614,244,105),
+        Region(1170,97,71,72)
     ]
     noiseIcons = [
          "continueIcon.png",
          "announcementCloseIcon.png",
-         "1539211321242.png"
+         "1539211321242.png",
+         "1540132313595.png"
     ]
     for i in range(0, len(noiseIcons)):
         if noiseRegions[i].exists(Pattern(noiseIcons[i]).similar(0.9)):
@@ -309,6 +311,8 @@ def launchHawk():
 
 
 if __name__ == "__main__":
+    handleOpeningNoise()
+    exit(0)
     targetLocation = Location(1091, 482)
     hover(targetLocation)
     print(targetLocation)
