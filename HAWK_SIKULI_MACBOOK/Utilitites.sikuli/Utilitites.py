@@ -9,12 +9,12 @@ leftX = 10
 rightX = 440
 
 def getGameResult():
-    log('util.txt', 'debug', 'getting game result')
+    log('util_macbook.txt', 'debug', 'getting game result')
     while not isGameFinished():
-        log('util.txt', 'debug', 'confirming game ended')
+        log('util_macbook.txt', 'debug', 'confirming game ended')
         closeItemDescIfAny()
         myRobot.delay(1000)
-    log('util.txt', 'debug', 'game end confirmed')
+    log('util_macbook.txt', 'debug', 'game end confirmed')
     loseResultLocation = Location(56, 185)
     loseResultColor = Color(37, 138, 159)
     winResultLocation = Location(55, 155)
@@ -40,8 +40,14 @@ def clickPlayIfAvailable():
 def spendEnergyPlayIfAvailable():
     playLocation = Location(180, 817)
     playColor = Color(252, 113, 34)
-    if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
-        waitForColorAndDo(playLocation.x, playLocation.y, playColor)
+    playColorUnlimited = Color(252, 114, 34)
+    targetColor = myRobot.getPixelColor(playLocation.x, playLocation.y)
+    targetRed = targetColor.getRed()
+    targetBlue = targetColor.getBlue()
+    targetGreen = targetColor.getGreen()
+    if targetRed > 248 and targetGreen > 110 and targetBlue < 40:
+        waitForColorAndDo(playLocation.x, playLocation.y, targetColor)
+
 def isGameFinished():
     gameFinishedLocation = Location(322, 90) # the crystal   
     gameFinishedColor = Color(41, 230, 203)
@@ -60,14 +66,20 @@ def isAbilityAvailable(num):
     return False
 
 def clickAbility(num=0):
+    # make sure the battle is not ended already
+    backgroundLocation = Location(27, 302)
+    backgroundColor = Color(247, 255, 215)
+    if myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) == backgroundColor:
+        return
+    
     abilityLocations = [Location(50, 685), Location(49, 773)]
-    if num == 1:
+    # check if 1st ability looks available
+    if num != 2 and myRobot.getPixelColor(46,654).getBlue() > 140:
         fastClick(abilityLocations[0].x, abilityLocations[0].y)
-    elif num == 2:
+
+    if num != 1 and myRobot.getPixelColor(46,748).getBlue() > 140:
         fastClick(abilityLocations[1].x, abilityLocations[1].y)
-    else:
-        for loc in abilityLocations:
-            fastClick(loc.x, loc.y)
+
 
 def closeItemDescIfAny():
     itemDescLocations = [Location(1205, 500), Location(1206, 435)]
@@ -78,39 +90,39 @@ def closeItemDescIfAny():
             myRobot.delay(1000)
 
 def leaveGameResultPage():
-    backgroundLocation = Location(721, 345)
-    backgroundColor = Color(248, 255, 223)
+    backgroundLocation = Location(98, 135)
+    backgroundColor = Color(247, 255, 215)
     while myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) != backgroundColor:
         myRobot.delay(1000)
         closeItemDescIfAny()
         # reconnect
-        log('util.txt', 'debug', 'waiting for result bar')
+        log('util_macbook.txt', 'debug', 'waiting for result bar')
     while myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) == backgroundColor:
-        leaveButtonLocation = Location(712, 1069)
-        leaveButtonColor = Color(247, 255, 223)
-        closeItemDescIfAny()
+        leaveButtonLocation = Location(35, 820)
+        leaveButtonColor = Color(205, 237, 209)
+        # closeItemDescIfAny()
         if myRobot.getPixelColor(leaveButtonLocation.x, leaveButtonLocation.y) == leaveButtonColor:
             fastClick(leaveButtonLocation.x, leaveButtonLocation.y)
         else:
             type(Key.ESC)
-        log('util.txt', 'debug', 'leaving result page')
+        log('util_macbook.txt', 'debug', 'leaving result page')
         myRobot.delay(2000)
-    log('util.txt', 'debug', 'left result page')
+    log('util_macbook.txt', 'debug', 'left result page')
 
 def moveLeft(interval=1000, num_steps = 10, ratio=1.0):
-    myRobot.mouseMove(rightX, 354)
+    myRobot.mouseMove(rightX, 779)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     for i in range(0, num_steps):
         myRobot.delay(interval/num_steps)
-        myRobot.mouseMove(int(rightX-(rightX-leftX)*ratio/float(num_steps)*(i+1)), 354)
+        myRobot.mouseMove(int(rightX-(rightX-leftX)*ratio/float(num_steps)*(i+1)), 779)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveRight(interval=1000, num_steps = 10, ratio=1.0):
-    myRobot.mouseMove(leftX, 354)
+    myRobot.mouseMove(leftX, 779)
     myRobot.mousePress(InputEvent.BUTTON1_MASK)
     for i in range(0, num_steps):
         myRobot.delay(interval/num_steps)
-        myRobot.mouseMove(int(leftX+(rightX-leftX)*ratio/float(num_steps)*(i+1)), 354)
+        myRobot.mouseMove(int(leftX+(rightX-leftX)*ratio/float(num_steps)*(i+1)), 779)
     myRobot.mouseRelease(InputEvent.BUTTON1_MASK)
 
 def moveLeftDeprecated(step_size=50):
@@ -179,7 +191,17 @@ def log(log_filename, event_type, event_message, toDelete=False):
     with open(log_file, open_mode) as f:
         f.write(log_msg)
 
-
+def selectGameLevel(level):
+    if level == 'easy':
+        easyLocation = Location(17, 397)
+        easySelectedColor = Color(254, 195, 52)
+        while myRobot.getPixelColor(easyLocation.x, easyLocation.y) != easySelectedColor:
+            fastClick(88, 358)
+            myRobot.delay(500)
+    else:
+        print('not implemented for "' + level + '" yet')
+        exit(-1)
+        
 def selectWorldPlay():
     worldLocation = Location(353, 550)
     unselectedWorldColor = Color(223, 222, 166)
@@ -266,7 +288,7 @@ def leaveStageDetailPage():
 
 
 def handleOpeningNoise():
-    log('util.txt', 'launch', 'enter handleOpeningNoise')
+    log('util_macbook.txt', 'launch', 'enter handleOpeningNoise')
     noiseRegions = [
         Region(841,715,235,79),
         Region(1129,98,143,177)
@@ -279,19 +301,19 @@ def handleOpeningNoise():
         if noiseRegions[i].exists(Pattern(noiseIcons[i]).similar(0.9)):
             noiseRegions[i].click(Pattern(noiseIcons[i]).similar(0.9))
             myRobot.delay(3000)
-    log('util.txt', 'launch', 'finish handleOpeningNoise')
+    log('util_macbook.txt', 'launch', 'finish handleOpeningNoise')
 
 
 def closeHawk():
     HawkRegion = Region(7,101,1796,378)
     HawkIcon = "HawkIcon.png"
-    log('util.txt', 'close', 'trying to close Hawk')
+    log('util_macbook.txt', 'close', 'trying to close Hawk')
     while not HawkRegion.exists(HawkIcon):
-        log('util.txt', 'close', 'click close x')
+        log('util_macbook.txt', 'close', 'click close x')
         hawkCloseXLocation = Location(517, 10)
         fastClick(hawkCloseXLocation.x, hawkCloseXLocation.y)
         myRobot.delay(10000)
-    log('util.txt', 'close', 'Hawk closed')    
+    log('util_macbook.txt', 'close', 'Hawk closed')    
 
 
 
@@ -299,11 +321,11 @@ def launchHawk():
     gameIconRegion = Region(7,101,1796,378)
     gmaeIcon = "gmaeIcon.png"
     while not gameIconRegion.exists(Pattern(gmaeIcon).similar(0.9)):
-        log('util.txt', 'launch', 'waiting for hawk icon')
+        log('util_macbook.txt', 'launch', 'waiting for hawk icon')
         myRobot.delay(5000)
     
     while gameIconRegion.exists(Pattern(gmaeIcon).similar(0.9)):
-        log('util.txt', 'launch', 'click hawk icon')
+        log('util_macbook.txt', 'launch', 'click hawk icon')
         gameIconRegion.click(Pattern(gmaeIcon).similar(0.9))
         myRobot.delay(5000)
 
@@ -311,10 +333,10 @@ def launchHawk():
     homePageLocation = Location(961, 1024)
     homePageColor = Color(152, 169, 4)
     while myRobot.getPixelColor(homePageLocation.x, homePageLocation.y) != homePageColor:
-        log('util.txt', 'launch', 'wait for reaching home page')
+        log('util_macbook.txt', 'launch', 'wait for reaching home page')
         handleOpeningNoise()
         myRobot.delay(5000)
-    log('util.txt', 'launch', 'arrived home page')
+    log('util_macbook.txt', 'launch', 'arrived home page')
 
 
 if __name__ == "__main__":

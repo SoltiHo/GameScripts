@@ -25,7 +25,7 @@ def enterStage8(isWorldPlay=True):
         selectWorldToPlay()
     else:
         selectFriendToPlay()
-        
+
 
 def selectWorldToPlay():
     util.selectWorldPlay()
@@ -100,7 +100,7 @@ def play():
         else:
             countUnknown += 1
         util.log(
-                'stage123.txt',
+                'stage8_server.txt',
                 'result', 
                 'win: ' + str(countWin) + \
                 ', lose: ' + str(countLose) + \
@@ -110,22 +110,20 @@ def play():
         util.leaveGameResultPage()
         myRobot.delay(2000)
 
-        if countTotal % checkPeriod == 0:
-            util.log('stage8_server.txt', 'result', 'check rewards and ads')
-            util.goBackToHomePage()
-            myRobot.delay(2000)
-            WatchAds.checkAdsOneRound()
+        #if countTotal % checkPeriod == 0:
+        #    util.log('stage8_server.txt', 'result', 'check rewards and ads')
+        #    util.goBackToHomePage()
+        #    myRobot.delay(2000)
+        #    WatchAds.checkAdsOneRound()
 
             # go back to stage menu
-            bigPlayLocation = Location(876, 894)
-            bigPlayColor = Color(255, 186, 38)
-            util.waitForColorAndDo(bigPlayLocation.x, bigPlayLocation.y, bigPlayColor)
+        #    bigPlayLocation = Location(876, 894)
+        #    bigPlayColor = Color(255, 186, 38)
+        #    util.waitForColorAndDo(bigPlayLocation.x, bigPlayLocation.y, bigPlayColor)
 
 
 if __name__ == "__main__":
-    myRobot.delay(1000)
-    enterStage8(isWorldPlay=True)
-    playStage8()
+    play()
     exit(0)
     util.launchHawk()
     bigPlayLocation = Location(876, 894)
