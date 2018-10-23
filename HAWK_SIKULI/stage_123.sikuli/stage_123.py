@@ -29,6 +29,7 @@ def enterStage123(isWorldPlay=True):
         
 
 def selectWorldToPlay():
+    util.selectGameLevel('easy')
     util.selectWorldPlay()
     myRobot.delay(1000)
 
@@ -64,16 +65,23 @@ def playStage123():
     while not util.isGameFinished():       
         util.moveRight(interval=500, num_steps=15)
         util.myRobot.delay(100)
+        if stopped:
+            util.clickAbility()
         util.moveLeft(interval=500, num_steps=15)
         util.myRobot.delay(100)
-        if moveCount > 5:
-            util.clickAbility()
         moveCount += 1
-        if not stopped and time.time() - start_time > 26.0:
+        if not stopped and time.time() - start_time > 40.0:
             stopped = True
             util.moveLeft(interval=500, num_steps=15)
-            util.moveRight(interval=500, num_steps=15, ratio=0.13)
-            myRobot.delay(7200)
+            util.moveRight(interval=500, num_steps=15, ratio=0.87)
+            myRobot.delay(4000)
+            util.clickAbility(2)
+            myRobot.delay(4000)
+            util.clickAbility()
+            myRobot.delay(4000)
+        # handle if crash, choose backup
+        util.clickBackupIfAvailable()
+            
     #myRobot.delay(3000)
     util.log('stage123.txt', 'play', 'completed stage 123')
 

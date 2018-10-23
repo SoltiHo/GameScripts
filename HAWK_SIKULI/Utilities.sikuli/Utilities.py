@@ -39,9 +39,13 @@ def clickPlayIfAvailable():
         waitForColorAndDo(playLocation.x, playLocation.y, playColor)
 def spendEnergyPlayIfAvailable():
     playLocation = Location(884, 1051)
-    playColor = Color(255, 135, 45)
-    if myRobot.getPixelColor(playLocation.x, playLocation.y) == playColor:
+    playColor = myRobot.getPixelColor(playLocation.x, playLocation.y) # Color(255, 135, 45)
+    playColorRed = playColor.getRed()
+    playColorGreen = playColor.getGreen()
+    playColorBlue = playColor.getBlue()
+    if playColorRed > 250 and playColorGreen > 130 and playColorBlue > 40:
         waitForColorAndDo(playLocation.x, playLocation.y, playColor)
+
 def isGameFinished():
     gameFinishedLocation = Location(807, 1065)
     gameFinishedColor = Color(21, 145, 170)
@@ -49,6 +53,21 @@ def isGameFinished():
 
 
 def clickAbility(num=0):
+    # make sure the battle is not ended already
+    backgroundLocation = Location(27, 302)
+    backgroundColor = Color(248, 255, 223)
+    if myRobot.getPixelColor(backgroundLocation.x, backgroundLocation.y) == backgroundColor:
+        return
+
+    abilityLocations = [Location(719, 871), Location(718, 996)]
+    # check if 1st ability looks available
+    if num != 2 and myRobot.getPixelColor(717, 836).getBlue() > 140:
+        fastClick(abilityLocations[0].x, abilityLocations[0].y)
+
+    if num != 1 and myRobot.getPixelColor(716, 959).getBlue() > 140:
+        fastClick(abilityLocations[1].x, abilityLocations[1].y)
+
+def clickAbilityOld(num=0):
     abilityLocations = [Location(718, 873), Location(719, 999)]
     if num == 1:
         fastClick(abilityLocations[0].x, abilityLocations[0].y)
@@ -168,6 +187,28 @@ def log(log_filename, event_type, event_message, toDelete=False):
     with open(log_file, open_mode) as f:
         f.write(log_msg)
 
+def selectGameLevel(level):
+    if level == 'easy':
+        easyLocation = Location(17, 397)
+        easySelectedColor = Color(254, 195, 52)
+        while myRobot.getPixelColor(easyLocation.x, easyLocation.y) != easySelectedColor:
+            fastClick(88, 358)
+            myRobot.delay(500)
+    else:
+        print('not implemented for "' + level + '" yet')
+        exit(-1)
+
+
+def selectGameLevel(level):
+    if level == 'easy':
+        easyLocation = Location(679, 483)
+        easySelectedColor = Color(255, 210, 74)
+        while myRobot.getPixelColor(easyLocation.x, easyLocation.y) != easySelectedColor:
+            fastClick(770, 430)
+            myRobot.delay(500)
+    else:
+        print('not implemented for "' + level + '" yet')
+        exit(-1)
 
 def selectWorldPlay():
     worldLocation = Location(1135, 706)
@@ -254,6 +295,18 @@ def leaveStageDetailPage():
                 wait_time_period=1000)
 
 
+def clickBackupIfAvailable():
+    backupLocation = Location(1005, 856)
+    backupColor = myRobot.getPixelColor(backupLocation.x, backupLocation.y) # Color(255, 135, 48)
+    hasBackup = backupColor.getRed() > 250 and backupColor.getGreen() > 130 and backupColor.getBlue() > 40
+    if hasBackup:
+        # first choose the plan
+        bestPlaneLocation = Location(775, 633)
+        util.fastClick(bestPlaneLocation.x, bestPlaneLocation.y)
+        myRobot.delay(700)
+        waitForColorAndDo(backupLocation.x, backupLocation.y, backupColor)
+
+
 def handleOpeningNoise():
     log('util.txt', 'launch', 'enter handleOpeningNoise')
     noiseRegions = [
@@ -311,9 +364,10 @@ def launchHawk():
 
 
 if __name__ == "__main__":
-    handleOpeningNoise()
+    clickBackupIfAvailable()
     exit(0)
-    targetLocation = Location(1091, 482)
+    targetLocation = Location(1005, 856)
+
     hover(targetLocation)
     print(targetLocation)
     print(myRobot.getPixelColor(targetLocation.x, targetLocation.y))
